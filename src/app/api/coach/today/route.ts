@@ -150,15 +150,26 @@ Responde SOLO con un JSON con esta forma exacta (3-5 ejercicios):
       justification: `Día de yoga con instructora (no se programa). Complemento de Kettlebell Flow generado para hoy: ${kbFlow.justification}`,
     };
   } else {
+    // Friday with no planned session → athletic/conditioning day (structural rule).
+    const isFriday = new Date(today + "T12:00:00Z").getUTCDay() === 5;
+    const isAthleticDay = !plannedDay && isFriday;
+
+    const sessionContext = isAthleticDay
+      ? `Hoy (${today}, día ${dayOffset}, semana ${weekNumber}) es VIERNES — día atlético/conditioning/flow según la estructura semanal del atleta. No hay fuerza pesada. Genera una sesión de tipo "atletico": warm up de movilidad (5-10 min) → bloque principal de 20-25 min (KB flow, movimientos atléticos, trabajo explosivo de bajo impacto, o capacidad aeróbica corta) → cooldown. RPE objetivo: 6-7.`
+      : plannedDay
+      ? `El bloque activo indica que hoy (día ${dayOffset}, semana ${plannedDay.week_number}) es una sesión de tipo "${plannedDay.type}": ${plannedDay.summary}`
+      : `No hay un día exacto definido en el bloque para hoy; usa el contexto general del bloque y la semana ${weekNumber}.`;
+
+    const fuerzaKbReminder =
+      plannedDay?.type === "fuerza" || (!plannedDay && !isFriday)
+        ? `\nREGLA ESTRUCTURAL — DÍAS DE FUERZA: toda sesión de fuerza incluye obligatoriamente un bloque final de KB conditioning (10-15 min): KB flow, EMOM, circuit corto, o carry work. Nunca omitir. En semana de deload reducir a 1-2 movimientos ligeros.\n`
+        : "";
+
     const prompt = `
 Genera la sesión de entrenamiento de HOY (${today}) para este atleta.
 
-${
-  plannedDay
-    ? `El bloque activo indica que hoy (día ${dayOffset}, semana ${plannedDay.week_number}) es una sesión de tipo "${plannedDay.type}": ${plannedDay.summary}`
-    : `No hay un día exacto definido en el bloque para hoy; usa el contexto general del bloque y la semana ${weekNumber}.`
-}
-
+${sessionContext}
+${fuerzaKbReminder}
 ${checkinBlock(checkin)}
 
 Perfil del atleta (JSON):
@@ -170,11 +181,11 @@ ${JSON.stringify(block.raw_plan ?? {}, null, 2)}
 Logs de los últimos 14 días (RPE, dolor, sueño, rendimiento real):
 ${JSON.stringify(recentLogs ?? [], null, 2)}
 
-Genera el detalle de ejercicios SOLO si el tipo de sesión es "fuerza" u "running" (running puede llevar
-indicaciones de ritmo/atención articular, no una lista de ejercicios). Responde SOLO con un JSON con
+Genera el detalle de ejercicios para sesiones de tipo "fuerza" y "atletico". Running puede llevar
+indicaciones de ritmo/atención articular en lugar de lista de ejercicios. Responde SOLO con un JSON con
 esta forma exacta:
 {
-  "type": "fuerza" | "running" | "otro",
+  "type": "fuerza" | "running" | "atletico" | "otro",
   "week_number": number,
   "exercises": [{ "name": string, "sets": number, "reps": string, "notes": string }],
   "justification": string
@@ -232,6 +243,8 @@ function defaultTitleFor(type: string): string {
       return "Running";
     case "yoga":
       return "Yoga + Kettlebell Flow";
+    case "atletico":
+      return "Día Atlético";
     default:
       return "Sesión del día";
   }

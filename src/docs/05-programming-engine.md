@@ -22,8 +22,18 @@
   sesiones de fuerza de tren inferior pesado cuando sea posible.
 - **Yoga:** días fijos (p. ej. lunes y miércoles), funciona como recuperación activa
   y trabajo de movilidad, no se trata como "día libre".
-- **Kettlebells:** se integran como accesorio/skill dentro de sesiones de fuerza o
-  como sesión específica corta (kettlebell flow), progresando en complejidad gradual.
+- **Kettlebells:** se incluyen de forma **obligatoria** en toda sesión de fuerza como
+  bloque final de acondicionamiento (10-15 min, nunca omitir). Formato: KB flow,
+  EMOM, circuit corto, o carry work — elegido según fatiga acumulada del día y semana
+  del bloque. Progresión en complejidad gradual (movimientos actuales de referencia:
+  TGU 16 kg, Windmill 24 kg). En semana de deload (semana 4), el bloque KB se reduce
+  a 1-2 movimientos de baja intensidad o se sustituye por carries ligeros.
+- **Día atlético (viernes):** sesión dedicada a conditioning/athletics/flow, sin fuerza
+  pesada. Estructura base: 5-10 min warm up de movilidad → 20-25 min de trabajo
+  principal (KB flow complejo, movimientos atléticos, trabajo explosivo de bajo impacto,
+  o capacidad aeróbica corta) → 5-10 min cooldown. Intensidad: RPE 6-7. Este día
+  complementa los días de fuerza sin competir con su recuperación. En semana de deload,
+  puede eliminarse o reducirse a movilidad + KB ligero.
 
 ## Progresión y selección de ejercicios
 
