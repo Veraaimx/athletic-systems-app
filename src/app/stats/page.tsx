@@ -11,6 +11,7 @@ import {
 } from "recharts";
 import { Scale, Target, Activity, Moon, Dumbbell } from "lucide-react";
 import { Collapsible } from "@/components/Collapsible";
+import { CoachSynthesis } from "@/components/CoachSynthesis";
 
 type Period = "day" | "week" | "month";
 
@@ -234,6 +235,8 @@ export default function StatsPage() {
           sparkKey="v"
         />
       </div>
+
+      <CoachSynthesis />
 
       {/* Peso detalle */}
       <div className="card">

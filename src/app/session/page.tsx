@@ -39,6 +39,7 @@ interface PerformanceExercise {
   name: string;
   done: boolean;
   skip_reason?: string;
+  notes?: string;
   unit: Unit;
   sets: SetEntry[];
 }
@@ -252,6 +253,12 @@ function ExerciseCard({
                 </div>
               ))}
             </div>
+            <input
+              placeholder="Notas de este ejercicio (opcional): cómo se sintió, técnica, dolor puntual…"
+              value={perf!.notes ?? ""}
+              onChange={(e) => onPatch!({ notes: e.target.value })}
+              style={{ marginTop: 8 }}
+            />
           </div>
         ))}
     </div>
