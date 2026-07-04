@@ -51,6 +51,14 @@
 - RPE 8-9: zona de intensificación, usar con moderación y solo en semanas indicadas.
 - RPE 10: evitar como práctica habitual; señal de revisión si aparece fuera de contexto.
 
+## Descansos entre series
+
+Todo ejercicio programado especifica su tiempo de descanso entre series: 60-90s en
+accesorios/unilaterales, 2-3 min en compuestos pesados (sentadilla, peso muerto,
+press), 30-45s en bloques de conditioning/KB (EMOM, circuit, flow). Se ajusta a la
+baja en semana de deload y al alza si el RPE reportado sugiere que el atleta llega
+fatigado a la siguiente serie.
+
 ## Warm ups y cooldowns
 
 - Warm up: movilidad articular específica para la sesión del día + activación +

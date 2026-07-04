@@ -3,10 +3,21 @@ import { supabase } from "@/lib/supabase";
 import { askEngine, parseJsonResponse } from "@/lib/claude";
 import { todayISO } from "@/lib/dates";
 
+interface PlannedExercise {
+  name: string;
+  measure?: "reps" | "time" | "distance";
+  sets?: number;
+  reps?: string;
+  time_seconds?: number;
+  distance_m?: number;
+  rest_seconds?: number;
+  notes?: string;
+}
+
 interface PlannedSession {
-  type: "fuerza" | "running" | "yoga" | "otro";
+  type: "fuerza" | "running" | "yoga" | "otro" | "atletico";
   week_number: number;
-  exercises: Array<{ name: string; sets?: number; reps?: string; notes?: string }>;
+  exercises: PlannedExercise[];
   justification: string;
 }
 
@@ -130,9 +141,23 @@ ${JSON.stringify(profile?.data ?? {}, null, 2)}
 Logs de los últimos 14 días (RPE, dolor, sueño, rendimiento real):
 ${JSON.stringify(recentLogs ?? [], null, 2)}
 
+Para cada ejercicio indica también el tiempo de descanso entre series (rest_seconds) y la forma en que
+se mide (measure: "reps" para repeticiones, "time" para tiempo sostenido como planchas/holds, "distance"
+para carries/desplazamientos). Usa el campo correspondiente a esa medida (reps, time_seconds o
+distance_m) y omite los otros dos.
+
 Responde SOLO con un JSON con esta forma exacta (3-5 ejercicios):
 {
-  "exercises": [{ "name": string, "sets": number, "reps": string, "notes": string }],
+  "exercises": [{
+    "name": string,
+    "sets": number,
+    "measure": "reps" | "time" | "distance",
+    "reps": string,
+    "time_seconds": number,
+    "distance_m": number,
+    "rest_seconds": number,
+    "notes": string
+  }],
   "justification": string
 }
 `.trim();
@@ -182,12 +207,27 @@ Logs de los últimos 14 días (RPE, dolor, sueño, rendimiento real):
 ${JSON.stringify(recentLogs ?? [], null, 2)}
 
 Genera el detalle de ejercicios para sesiones de tipo "fuerza" y "atletico". Running puede llevar
-indicaciones de ritmo/atención articular en lugar de lista de ejercicios. Responde SOLO con un JSON con
-esta forma exacta:
+indicaciones de ritmo/atención articular en lugar de lista de ejercicios.
+
+Para cada ejercicio indica también el tiempo de descanso entre series (rest_seconds) y la forma en que
+se mide (measure: "reps" para repeticiones, "time" para tiempo sostenido como planchas/holds, "distance"
+para carries/desplazamientos). Usa el campo correspondiente a esa medida (reps, time_seconds o
+distance_m) y omite los otros dos.
+
+Responde SOLO con un JSON con esta forma exacta:
 {
   "type": "fuerza" | "running" | "atletico" | "otro",
   "week_number": number,
-  "exercises": [{ "name": string, "sets": number, "reps": string, "notes": string }],
+  "exercises": [{
+    "name": string,
+    "sets": number,
+    "measure": "reps" | "time" | "distance",
+    "reps": string,
+    "time_seconds": number,
+    "distance_m": number,
+    "rest_seconds": number,
+    "notes": string
+  }],
   "justification": string
 }
 `.trim();
@@ -196,13 +236,16 @@ esta forma exacta:
     planned = parseJsonResponse<PlannedSession>(raw);
   }
 
+  // "atletico" is a semantic label from the engine; DB constraint only allows the 4 canonical types.
+  const dbType = planned.type === "atletico" ? "otro" : planned.type;
+
   const { data: session, error } = await supabase
     .from("sessions")
     .insert({
       block_id: block.id,
       date: today,
       week_number: planned.week_number,
-      type: planned.type,
+      type: dbType,
       title: defaultTitleFor(planned.type),
       planned_exercises: planned.exercises,
       justification: planned.justification,

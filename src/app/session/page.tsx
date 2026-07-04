@@ -2,15 +2,20 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, Pencil, Flame, Clock, Activity } from "lucide-react";
+import { ArrowLeft, Pencil, Flame, Clock, Activity, PlayCircle, Timer } from "lucide-react";
 import { Collapsible, Badge, TYPE_COLORS, TYPE_LABELS } from "@/components/Collapsible";
 
 type Unit = "kg" | "lbs";
+type Measure = "reps" | "time" | "distance";
 
 interface Exercise {
   name: string;
+  measure?: Measure;
   sets?: number;
   reps?: string;
+  time_seconds?: number;
+  distance_m?: number;
+  rest_seconds?: number;
   notes?: string;
 }
 
@@ -76,6 +81,23 @@ function lastEntryFor(stats: StatsData | null, exerciseName: string) {
   return { weight: maxSet, unit: last.unit ?? defaultUnitFor(exerciseName) };
 }
 
+function valueLabelFor(measure: Measure): string {
+  return measure === "time" ? "seg" : measure === "distance" ? "m" : "reps";
+}
+
+function targetLabelFor(ex: Exercise): string | null {
+  if (!ex.sets) return null;
+  const measure = ex.measure ?? "reps";
+  if (measure === "time" && ex.time_seconds) return `${ex.sets} × ${ex.time_seconds}s`;
+  if (measure === "distance" && ex.distance_m) return `${ex.sets} × ${ex.distance_m}m`;
+  if (ex.reps) return `${ex.sets} × ${ex.reps}`;
+  return `${ex.sets} series`;
+}
+
+function tutorialUrlFor(name: string): string {
+  return `https://www.youtube.com/results?search_query=${encodeURIComponent(`${name} tecnica ejercicio`)}`;
+}
+
 function EditableTitle({ title, onSave }: { title: string; onSave: (next: string) => void }) {
   const [editing, setEditing] = useState(false);
   const [value, setValue] = useState(title);
@@ -113,141 +135,124 @@ function EditableTitle({ title, onSave }: { title: string; onSave: (next: string
   );
 }
 
-function ExercisePerformanceForm({
-  exercises,
+function ExerciseCard({
+  ex,
   stats,
-  initial,
-  onChange,
+  perf,
+  onPatch,
+  onUpdateSet,
 }: {
-  exercises: Exercise[];
+  ex: Exercise;
   stats: StatsData | null;
-  initial?: PerformanceExercise[];
-  onChange: (perf: { exercises: PerformanceExercise[] }) => void;
+  perf?: PerformanceExercise;
+  onPatch?: (patch: Partial<PerformanceExercise>) => void;
+  onUpdateSet?: (setIdx: number, field: keyof SetEntry, value: number) => void;
 }) {
-  const loggable = exercises.filter((ex) => typeof ex.sets === "number");
-
-  const [data, setData] = useState<PerformanceExercise[]>(() =>
-    loggable.map((ex) => {
-      const existing = initial?.find((e) => e.name === ex.name);
-      if (existing) return existing;
-      const last = lastEntryFor(stats, ex.name);
-      return {
-        name: ex.name,
-        done: true,
-        unit: last?.unit ?? defaultUnitFor(ex.name),
-        sets: Array.from({ length: ex.sets ?? 3 }, () => ({ reps: 0, weight: last?.weight ?? 0 })),
-      };
-    })
-  );
-
-  function patch(exIdx: number, patchObj: Partial<PerformanceExercise>) {
-    const next = data.map((ex, i) => (i !== exIdx ? ex : { ...ex, ...patchObj }));
-    setData(next);
-    onChange({ exercises: next });
-  }
-
-  function updateSet(exIdx: number, setIdx: number, field: keyof SetEntry, value: number) {
-    const next = data.map((ex, i) =>
-      i !== exIdx ? ex : { ...ex, sets: ex.sets.map((s, j) => (j !== setIdx ? s : { ...s, [field]: value })) }
-    );
-    setData(next);
-    onChange({ exercises: next });
-  }
-
-  if (loggable.length === 0) return null;
-
-  return (
-    <div>
-      {data.map((ex, exIdx) => {
-        const last = lastEntryFor(stats, ex.name);
-        return (
-          <div key={exIdx} className="exercise-card" style={{ marginBottom: 10 }}>
-            <div className="exercise-card-header" style={{ marginBottom: 6 }}>
-              <label style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 0 }}>
-                <input
-                  type="checkbox"
-                  checked={ex.done}
-                  onChange={(e) => patch(exIdx, { done: e.target.checked })}
-                  style={{ width: "auto" }}
-                />
-                <strong>{ex.name}</strong>
-              </label>
-              {ex.done && last != null && (
-                <span className="chip">
-                  última vez: {last.weight}
-                  {last.unit}
-                </span>
-              )}
-            </div>
-
-            {!ex.done ? (
-              <input
-                placeholder="¿Por qué no lo hiciste? (opcional)"
-                value={ex.skip_reason ?? ""}
-                onChange={(e) => patch(exIdx, { skip_reason: e.target.value })}
-              />
-            ) : (
-              <>
-                <div className="energy-picker" style={{ marginBottom: 6, maxWidth: 140 }}>
-                  {(["kg", "lbs"] as Unit[]).map((u) => (
-                    <button
-                      key={u}
-                      type="button"
-                      className={ex.unit === u ? "selected" : ""}
-                      onClick={() => patch(exIdx, { unit: u })}
-                    >
-                      {u}
-                    </button>
-                  ))}
-                </div>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6 }}>
-                  {ex.sets.map((s, setIdx) => (
-                    <div key={setIdx} style={{ display: "flex", gap: 4, alignItems: "center" }}>
-                      <span className="muted" style={{ width: 32 }}>
-                        S{setIdx + 1}
-                      </span>
-                      <input
-                        type="number"
-                        placeholder={ex.unit}
-                        value={s.weight || ""}
-                        onChange={(e) => updateSet(exIdx, setIdx, "weight", Number(e.target.value))}
-                        style={{ width: 60 }}
-                      />
-                      <span className="muted">×</span>
-                      <input
-                        type="number"
-                        placeholder="reps"
-                        value={s.reps || ""}
-                        onChange={(e) => updateSet(exIdx, setIdx, "reps", Number(e.target.value))}
-                        style={{ width: 55 }}
-                      />
-                    </div>
-                  ))}
-                </div>
-              </>
-            )}
-          </div>
-        );
-      })}
-    </div>
-  );
-}
-
-function ExerciseCard({ ex }: { ex: Exercise }) {
+  const measure = ex.measure ?? "reps";
   const hasDetail = !!ex.notes && ex.notes.length > 60;
+  const loggable = typeof ex.sets === "number" && !!perf && !!onPatch && !!onUpdateSet;
+  const last = lastEntryFor(stats, ex.name);
+  const target = targetLabelFor(ex);
+
   return (
     <div className="exercise-card">
       <div className="exercise-card-header">
-        <strong>{ex.name}</strong>
-        {ex.sets && ex.reps && <span className="chip">{ex.sets} × {ex.reps}</span>}
+        <label style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 0 }}>
+          {loggable && (
+            <input
+              type="checkbox"
+              checked={perf!.done}
+              onChange={(e) => onPatch!({ done: e.target.checked })}
+              style={{ width: "auto" }}
+            />
+          )}
+          <strong>{ex.name}</strong>
+        </label>
+        <div style={{ display: "flex", gap: 6, alignItems: "center", flexWrap: "wrap" }}>
+          {target && <span className="chip">{target}</span>}
+          {ex.rest_seconds ? (
+            <span className="chip">
+              <Timer size={11} style={{ verticalAlign: "middle", marginRight: 3 }} />
+              {ex.rest_seconds}s descanso
+            </span>
+          ) : null}
+          {loggable && perf!.done && last != null && (
+            <span className="chip">
+              última vez: {last.weight}
+              {last.unit}
+            </span>
+          )}
+        </div>
       </div>
+
+      <a
+        href={tutorialUrlFor(ex.name)}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="muted"
+        style={{ display: "inline-flex", alignItems: "center", gap: 4, fontSize: "0.8rem", marginTop: 4 }}
+      >
+        <PlayCircle size={13} /> Ver tutorial
+      </a>
+
       {ex.notes &&
         (hasDetail ? (
-          <Collapsible label="ver detalle">
+          <Collapsible label="Leer más">
             <p>{ex.notes}</p>
           </Collapsible>
         ) : (
-          <p className="muted" style={{ marginTop: 4 }}>{ex.notes}</p>
+          <p className="muted" style={{ marginTop: 4 }}>
+            {ex.notes}
+          </p>
+        ))}
+
+      {loggable &&
+        (!perf!.done ? (
+          <input
+            placeholder="¿Por qué no lo hiciste? (opcional)"
+            value={perf!.skip_reason ?? ""}
+            onChange={(e) => onPatch!({ skip_reason: e.target.value })}
+            style={{ marginTop: 8 }}
+          />
+        ) : (
+          <div style={{ marginTop: 8 }}>
+            <div className="energy-picker" style={{ marginBottom: 6, maxWidth: 140 }}>
+              {(["kg", "lbs"] as Unit[]).map((u) => (
+                <button
+                  key={u}
+                  type="button"
+                  className={perf!.unit === u ? "selected" : ""}
+                  onClick={() => onPatch!({ unit: u })}
+                >
+                  {u}
+                </button>
+              ))}
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6 }}>
+              {perf!.sets.map((s, setIdx) => (
+                <div key={setIdx} style={{ display: "flex", gap: 4, alignItems: "center" }}>
+                  <span className="muted" style={{ width: 32 }}>
+                    S{setIdx + 1}
+                  </span>
+                  <input
+                    type="number"
+                    placeholder={perf!.unit}
+                    value={s.weight || ""}
+                    onChange={(e) => onUpdateSet!(setIdx, "weight", Number(e.target.value))}
+                    style={{ width: 60 }}
+                  />
+                  <span className="muted">×</span>
+                  <input
+                    type="number"
+                    placeholder={valueLabelFor(measure)}
+                    value={s.reps || ""}
+                    onChange={(e) => onUpdateSet!(setIdx, "reps", Number(e.target.value))}
+                    style={{ width: 55 }}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
         ))}
     </div>
   );
@@ -263,7 +268,7 @@ export default function SessionPage() {
   const [sleepHours, setSleepHours] = useState("7");
   const [painNotes, setPainNotes] = useState("");
   const [readinessNotes, setReadinessNotes] = useState("");
-  const [actualPerformance, setActualPerformance] = useState<object | null>(null);
+  const [perfData, setPerfData] = useState<PerformanceExercise[]>([]);
   const [benchmarkName, setBenchmarkName] = useState("");
   const [benchmarkResult, setBenchmarkResult] = useState("");
   const [benchmarkNotes, setBenchmarkNotes] = useState("");
@@ -284,6 +289,19 @@ export default function SessionPage() {
 
   useEffect(() => {
     if (!session) return;
+    const loggable = session.planned_exercises.filter((ex) => typeof ex.sets === "number");
+    setPerfData(
+      loggable.map((ex) => {
+        const last = lastEntryFor(stats, ex.name);
+        return {
+          name: ex.name,
+          done: true,
+          unit: last?.unit ?? defaultUnitFor(ex.name),
+          sets: Array.from({ length: ex.sets ?? 3 }, () => ({ reps: 0, weight: last?.weight ?? 0 })),
+        };
+      })
+    );
+
     fetch(`/api/logs?session_id=${session.id}`)
       .then((r) => r.json())
       .then((log: ExistingLog | null) => {
@@ -295,7 +313,7 @@ export default function SessionPage() {
         setReadinessNotes(log.readiness_notes ?? "");
         setDurationMin(log.duration_min != null ? String(log.duration_min) : "");
         setCalories(log.calories != null ? String(log.calories) : "");
-        if (log.actual_performance?.exercises) setActualPerformance({ exercises: log.actual_performance.exercises });
+        if (log.actual_performance?.exercises) setPerfData(log.actual_performance.exercises);
         if (log.actual_performance?.distance_km != null) setDistanceKm(String(log.actual_performance.distance_km));
         if (log.actual_performance?.benchmark_name) {
           setBenchmarkName(log.actual_performance.benchmark_name);
@@ -304,7 +322,20 @@ export default function SessionPage() {
         }
       })
       .catch(() => {});
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session?.id]);
+
+  function patchExercise(name: string, patch: Partial<PerformanceExercise>) {
+    setPerfData((prev) => prev.map((ex) => (ex.name !== name ? ex : { ...ex, ...patch })));
+  }
+
+  function updateExerciseSet(name: string, setIdx: number, field: keyof SetEntry, value: number) {
+    setPerfData((prev) =>
+      prev.map((ex) =>
+        ex.name !== name ? ex : { ...ex, sets: ex.sets.map((s, j) => (j !== setIdx ? s : { ...s, [field]: value })) }
+      )
+    );
+  }
 
   async function renameSession(title: string) {
     if (!session) return;
@@ -316,14 +347,18 @@ export default function SessionPage() {
     });
   }
 
-  const logsExercisesFor = session?.type === "fuerza" || session?.type === "yoga";
+  const hasLoggableExercises = perfData.length > 0;
 
-  function buildPerformance() {
-    if (logsExercisesFor) return actualPerformance;
-    if (session?.type === "running") return distanceKm ? { distance_km: Number(distanceKm) } : null;
-    if (session?.type === "otro")
-      return benchmarkName ? { benchmark_name: benchmarkName, result: benchmarkResult, notes: benchmarkNotes } : null;
-    return null;
+  function buildPerformance(): object | null {
+    const parts: Record<string, unknown> = {};
+    if (hasLoggableExercises) parts.exercises = perfData;
+    if (session?.type === "running" && distanceKm) parts.distance_km = Number(distanceKm);
+    if (session?.type === "otro" && benchmarkName) {
+      parts.benchmark_name = benchmarkName;
+      parts.result = benchmarkResult;
+      parts.notes = benchmarkNotes;
+    }
+    return Object.keys(parts).length ? parts : null;
   }
 
   async function submitLog() {
@@ -406,9 +441,22 @@ export default function SessionPage() {
       </div>
 
       <div className="card">
-        {session.planned_exercises.map((ex, i) => (
-          <ExerciseCard key={i} ex={ex} />
-        ))}
+        <p className="muted" style={{ marginBottom: 8 }}>
+          Marca lo que sí hiciste y captura el peso/tiempo/distancia real. Lo que no hiciste, déjalo sin marcar.
+        </p>
+        {session.planned_exercises.map((ex, i) => {
+          const perf = perfData.find((p) => p.name === ex.name);
+          return (
+            <ExerciseCard
+              key={i}
+              ex={ex}
+              stats={stats}
+              perf={perf}
+              onPatch={perf ? (patch) => patchExercise(ex.name, patch) : undefined}
+              onUpdateSet={perf ? (setIdx, field, value) => updateExerciseSet(ex.name, setIdx, field, value) : undefined}
+            />
+          );
+        })}
         <Collapsible label="¿Por qué esta sesión?">
           <p className="muted">{session.justification}</p>
         </Collapsible>
@@ -424,20 +472,6 @@ export default function SessionPage() {
       {showLogForm && (
         <div className="card">
           <h2>{editingLog ? "Editar registro" : "Registrar sesión"}</h2>
-
-          {logsExercisesFor && (
-            <div style={{ marginBottom: 16 }}>
-              <p className="muted" style={{ marginBottom: 8 }}>
-                Marca lo que sí hiciste y captura el peso real. Lo que no hiciste, déjalo sin marcar.
-              </p>
-              <ExercisePerformanceForm
-                exercises={session.planned_exercises}
-                stats={stats}
-                initial={existingLog?.actual_performance?.exercises}
-                onChange={setActualPerformance}
-              />
-            </div>
-          )}
 
           {session.type === "running" && (
             <div className="field">
