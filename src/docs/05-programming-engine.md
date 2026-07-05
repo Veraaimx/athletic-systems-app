@@ -44,6 +44,15 @@
 - Cambio de ejercicio ocurre por: estancamiento sostenido, dolor articular, aburrimiento
   declarado por el atleta, o necesidad de variación dentro del mismo patrón.
 
+## Tipo de carga por ejercicio
+
+Cada ejercicio se clasifica por cómo se resiste, para que el registro le pida al
+atleta el dato correcto: **con peso** (barra/mancuerna/kettlebell/máquina — se
+registra el peso de trabajo), **peso corporal** (pull-up, push-up, dip, plancha —
+no se pide peso por defecto; solo un peso extra opcional si el atleta agrega
+cinto/chaleco/mancuerna) o **banda** (resistencia elástica no cuantificable en
+kg/lbs — solo se registran reps/tiempo/distancia, nunca un peso).
+
 ## Interpretación de RPE
 
 - RPE 1-5: estímulo insuficiente para progreso — válido solo en reentrada/deload.

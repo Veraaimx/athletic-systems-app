@@ -7,10 +7,12 @@ import { Collapsible, Badge, TYPE_COLORS, TYPE_LABELS } from "@/components/Colla
 
 type Unit = "kg" | "lbs";
 type Measure = "reps" | "time" | "distance";
+type LoadType = "weighted" | "bodyweight" | "band";
 
 interface Exercise {
   name: string;
   measure?: Measure;
+  load_type?: LoadType;
   sets?: number;
   reps?: string;
   time_seconds?: number;
@@ -150,6 +152,7 @@ function ExerciseCard({
   onUpdateSet?: (setIdx: number, field: keyof SetEntry, value: number) => void;
 }) {
   const measure = ex.measure ?? "reps";
+  const loadType = ex.load_type ?? "weighted";
   const hasDetail = !!ex.notes && ex.notes.length > 60;
   const loggable = typeof ex.sets === "number" && !!perf && !!onPatch && !!onUpdateSet;
   const last = lastEntryFor(stats, ex.name);
@@ -177,9 +180,10 @@ function ExerciseCard({
               {ex.rest_seconds}s descanso
             </span>
           ) : null}
-          {loggable && perf!.done && last != null && (
+          {loggable && perf!.done && loadType !== "band" && last != null && (
             <span className="chip">
-              última vez: {last.weight}
+              última vez: {loadType === "bodyweight" ? "+" : ""}
+              {last.weight}
               {last.unit}
             </span>
           )}
@@ -217,32 +221,42 @@ function ExerciseCard({
           />
         ) : (
           <div style={{ marginTop: 8 }}>
-            <div className="energy-picker" style={{ marginBottom: 6, maxWidth: 140 }}>
-              {(["kg", "lbs"] as Unit[]).map((u) => (
-                <button
-                  key={u}
-                  type="button"
-                  className={perf!.unit === u ? "selected" : ""}
-                  onClick={() => onPatch!({ unit: u })}
-                >
-                  {u}
-                </button>
-              ))}
-            </div>
+            {loadType !== "band" && (
+              <div className="energy-picker" style={{ marginBottom: 6, maxWidth: 140 }}>
+                {(["kg", "lbs"] as Unit[]).map((u) => (
+                  <button
+                    key={u}
+                    type="button"
+                    className={perf!.unit === u ? "selected" : ""}
+                    onClick={() => onPatch!({ unit: u })}
+                  >
+                    {u}
+                  </button>
+                ))}
+              </div>
+            )}
+            {loadType === "bodyweight" && (
+              <p className="muted" style={{ marginBottom: 6, fontSize: "0.8rem" }}>
+                Solo peso corporal: deja el peso en blanco. Si le agregaste cinto/chaleco/mancuerna, pon
+                ese peso extra (no tu peso corporal).
+              </p>
+            )}
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6 }}>
               {perf!.sets.map((s, setIdx) => (
                 <div key={setIdx} style={{ display: "flex", gap: 4, alignItems: "center" }}>
                   <span className="muted" style={{ width: 32 }}>
                     S{setIdx + 1}
                   </span>
-                  <input
-                    type="number"
-                    placeholder={perf!.unit}
-                    value={s.weight || ""}
-                    onChange={(e) => onUpdateSet!(setIdx, "weight", Number(e.target.value))}
-                    style={{ width: 60 }}
-                  />
-                  <span className="muted">×</span>
+                  {loadType !== "band" && (
+                    <input
+                      type="number"
+                      placeholder={loadType === "bodyweight" ? `+${perf!.unit}` : perf!.unit}
+                      value={s.weight || ""}
+                      onChange={(e) => onUpdateSet!(setIdx, "weight", Number(e.target.value))}
+                      style={{ width: 60 }}
+                    />
+                  )}
+                  {loadType !== "band" && <span className="muted">×</span>}
                   <input
                     type="number"
                     placeholder={valueLabelFor(measure)}

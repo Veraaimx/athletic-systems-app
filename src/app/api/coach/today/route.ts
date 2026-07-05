@@ -6,6 +6,7 @@ import { todayISO } from "@/lib/dates";
 interface PlannedExercise {
   name: string;
   measure?: "reps" | "time" | "distance";
+  load_type?: "weighted" | "bodyweight" | "band";
   sets?: number;
   reps?: string;
   time_seconds?: number;
@@ -146,12 +147,21 @@ se mide (measure: "reps" para repeticiones, "time" para tiempo sostenido como pl
 para carries/desplazamientos). Usa el campo correspondiente a esa medida (reps, time_seconds o
 distance_m) y omite los otros dos.
 
+Indica también load_type según cómo se resiste el ejercicio — esto determina si la app le pide al
+atleta un peso o no al registrar:
+- "weighted": barra, mancuerna, kettlebell, máquina — el atleta registra el peso de trabajo.
+- "bodyweight": el cuerpo es la resistencia principal (pull-up, push-up, dip, plancha) — la app no pide
+  peso por defecto; solo permite registrar peso EXTRA opcional (cinto, chaleco, mancuerna colgada).
+- "band": banda elástica u otra resistencia no cuantificable en kg/lbs (band pull-apart, band rotation,
+  band-resisted row) — la app no pide ningún peso, solo reps/tiempo/distancia.
+
 Responde SOLO con un JSON con esta forma exacta (3-5 ejercicios):
 {
   "exercises": [{
     "name": string,
     "sets": number,
     "measure": "reps" | "time" | "distance",
+    "load_type": "weighted" | "bodyweight" | "band",
     "reps": string,
     "time_seconds": number,
     "distance_m": number,
@@ -214,6 +224,14 @@ se mide (measure: "reps" para repeticiones, "time" para tiempo sostenido como pl
 para carries/desplazamientos). Usa el campo correspondiente a esa medida (reps, time_seconds o
 distance_m) y omite los otros dos.
 
+Indica también load_type según cómo se resiste el ejercicio — esto determina si la app le pide al
+atleta un peso o no al registrar:
+- "weighted": barra, mancuerna, kettlebell, máquina — el atleta registra el peso de trabajo.
+- "bodyweight": el cuerpo es la resistencia principal (pull-up, push-up, dip, plancha) — la app no pide
+  peso por defecto; solo permite registrar peso EXTRA opcional (cinto, chaleco, mancuerna colgada).
+- "band": banda elástica u otra resistencia no cuantificable en kg/lbs (band pull-apart, band rotation,
+  band-resisted row) — la app no pide ningún peso, solo reps/tiempo/distancia.
+
 Responde SOLO con un JSON con esta forma exacta:
 {
   "type": "fuerza" | "running" | "atletico" | "otro",
@@ -222,6 +240,7 @@ Responde SOLO con un JSON con esta forma exacta:
     "name": string,
     "sets": number,
     "measure": "reps" | "time" | "distance",
+    "load_type": "weighted" | "bodyweight" | "band",
     "reps": string,
     "time_seconds": number,
     "distance_m": number,
