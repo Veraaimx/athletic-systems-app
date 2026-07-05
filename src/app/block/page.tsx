@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { ChevronRight } from "lucide-react";
@@ -123,6 +123,14 @@ function DayView({ weeks, startDate }: { weeks: BlockWeek[]; startDate: string }
 }
 
 export default function BlockPage() {
+  return (
+    <Suspense fallback={<p className="muted">Cargando…</p>}>
+      <BlockPageContent />
+    </Suspense>
+  );
+}
+
+function BlockPageContent() {
   const searchParams = useSearchParams();
   const [activeBlock, setActiveBlock] = useState<ActiveBlock | null | undefined>(undefined);
   const [view, setView] = useState<View>(searchParams.get("propose") ? "month" : "week");
