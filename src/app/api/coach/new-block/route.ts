@@ -75,6 +75,13 @@ real para decidir progresión, mantenimiento o regresión de carga — no asumas
 bloque anterior salió como se planeó si los logs dicen lo contrario:
 ${JSON.stringify(blockHistory, null, 2)}
 
+Antes de fijar la Semana 1, sigue la sección "Cuándo la Semana 1 no es Reentrada" de
+tu metodología de programación: evalúa con la evidencia de arriba (adherencia, dolor
+pendiente, tendencia de RPE, experiencia del atleta) si la Semana 1 debe ser Reentrada
+o si hay evidencia suficiente para proponer que empiece en nivel de Carga. Cualquiera
+que sea tu decisión, explica en "focus_notes" la evidencia concreta que la sostiene —
+esto se le muestra al atleta como propuesta antes de que decida activarla.
+
 Responde SOLO con un JSON con esta forma exacta:
 {
   "focus_notes": string,

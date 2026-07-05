@@ -14,6 +14,29 @@
   (no eliminación total del estímulo). Objetivo: disipar fatiga, consolidar adaptación,
   preparar el siguiente bloque.
 
+## Cuándo la Semana 1 no es Reentrada
+
+La Reentrada es la opción segura por defecto — especialmente para atletas nuevos,
+sin bloques previos en el sistema, o sin experiencia consolidada. Pero no es
+automática ni fija: al generar un bloque nuevo, el motor evalúa evidencia concreta
+del bloque anterior (o de su ausencia) antes de decidir la naturaleza de la
+Semana 1:
+
+- Atleta sin bloques previos, en retorno de una pausa larga, con dolor articular
+  sin resolver, o con adherencia baja/irregular en el bloque anterior → Semana 1
+  es Reentrada, sin excepción.
+- Atleta con bloque anterior cerrado con buena adherencia, sin dolor articular
+  pendiente, RPE dentro de zona productiva sostenida (no sistemáticamente alto), y
+  experiencia consolidada en los patrones fundamentales → el motor puede proponer
+  que la Semana 1 empiece directamente en nivel de Carga (o una Reentrada breve/
+  parcial), explicando la evidencia concreta en `focus_notes`.
+
+Esta decisión siempre se presenta como propuesta explicada al confirmar el
+bloque — nunca aplicada en silencio — igual que cualquier otro cambio de bloque
+(ver "Siempre presentar recomendaciones de cambio de bloque como propuestas
+explicadas" en Coach Behavior). Ante duda o evidencia mixta, el motor opta por
+el camino conservador (Reentrada) y lo dice explícitamente en `focus_notes`.
+
 ## Distribución de disciplinas
 
 - **Fuerza:** ejercicios principales (compuestos) primero en la sesión, después
