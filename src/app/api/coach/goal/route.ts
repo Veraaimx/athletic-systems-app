@@ -12,6 +12,8 @@ interface CoachTurn {
   content: string;
   ready_to_finalize: boolean;
   proposed_goal_text: string | null;
+  suggested_program_weeks: 4 | 8 | 12 | null;
+  program_weeks_reasoning: string | null;
 }
 
 type ConversationTurn = AthleteTurn | CoachTurn;
@@ -20,6 +22,8 @@ interface GoalRow {
   id: string;
   status: "draft" | "active" | "closed";
   goal_text: string | null;
+  suggested_program_weeks: number | null;
+  program_weeks_reasoning: string | null;
   conversation: ConversationTurn[];
   created_at: string;
   updated_at: string;
@@ -95,22 +99,38 @@ resolver entre pilares, pregunta específicamente qué falta — no inventes el 
 Si ya hay claridad suficiente, propón una formulación concreta y con horizonte de
 tiempo, y márcalo como listo para guardar.
 
+Cuando marques ready_to_finalize, sigue también la sección "Duración de programa
+según la meta" de tu metodología de programación: sugiere cuántas semanas (4, 8 o
+12) razonablemente toma esta meta, con el razonamiento concreto en
+program_weeks_reasoning. Mientras la meta siga en discusión, deja ambos campos en
+null.
+
 Responde SOLO con un JSON con esta forma exacta:
 {
   "coach_message": string,
   "ready_to_finalize": boolean,
-  "proposed_goal_text": string
+  "proposed_goal_text": string,
+  "suggested_program_weeks": 4 | 8 | 12 | null,
+  "program_weeks_reasoning": string
 }
 `.trim();
 
   const raw = await askEngine(prompt, 2048);
-  const parsed = parseJsonResponse<{ coach_message: string; ready_to_finalize: boolean; proposed_goal_text: string | null }>(raw);
+  const parsed = parseJsonResponse<{
+    coach_message: string;
+    ready_to_finalize: boolean;
+    proposed_goal_text: string | null;
+    suggested_program_weeks: 4 | 8 | 12 | null;
+    program_weeks_reasoning: string | null;
+  }>(raw);
 
   const coachTurn: CoachTurn = {
     role: "coach",
     content: parsed.coach_message,
     ready_to_finalize: !!parsed.ready_to_finalize,
     proposed_goal_text: parsed.proposed_goal_text ?? null,
+    suggested_program_weeks: parsed.suggested_program_weeks ?? null,
+    program_weeks_reasoning: parsed.program_weeks_reasoning ?? null,
   };
 
   const nextConversation = [...conversationSoFar, coachTurn];
@@ -156,11 +176,23 @@ export async function PUT(request: Request) {
     return NextResponse.json({ error: "No hay una conversación de meta en curso para finalizar." }, { status: 400 });
   }
 
+  // Pull the program-duration suggestion from the last coach turn, if any —
+  // the athlete finalizes the goal text, but the duration came from the coach's
+  // own reasoning during the conversation, not something the client sends.
+  const conversation = (draft.conversation as ConversationTurn[] | undefined) ?? [];
+  const lastCoachTurn = [...conversation].reverse().find((t): t is CoachTurn => t.role === "coach");
+
   await supabase.from("athlete_goals").update({ status: "closed" }).eq("status", "active");
 
   const { data: saved, error } = await supabase
     .from("athlete_goals")
-    .update({ status: "active", goal_text, updated_at: new Date().toISOString() })
+    .update({
+      status: "active",
+      goal_text,
+      suggested_program_weeks: lastCoachTurn?.suggested_program_weeks ?? null,
+      program_weeks_reasoning: lastCoachTurn?.program_weeks_reasoning ?? null,
+      updated_at: new Date().toISOString(),
+    })
     .eq("id", draft.id)
     .select()
     .single();

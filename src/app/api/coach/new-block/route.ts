@@ -49,11 +49,24 @@ export async function POST() {
 
   const { data: activeGoal } = await supabase
     .from("athlete_goals")
-    .select("goal_text")
+    .select("goal_text, suggested_program_weeks, program_weeks_reasoning, created_at")
     .eq("status", "active")
     .order("updated_at", { ascending: false })
     .limit(1)
     .maybeSingle();
+
+  // Informational only — lets the engine mention where this block sits within
+  // the goal's suggested horizon (e.g. "bloque 2 de 2"), no rigid scheduler.
+  let goalProgressNote = "";
+  if (activeGoal?.suggested_program_weeks) {
+    const { count } = await supabase
+      .from("blocks")
+      .select("id", { count: "exact", head: true })
+      .gte("start_date", activeGoal.created_at.slice(0, 10));
+    const totalBlocks = activeGoal.suggested_program_weeks / 4;
+    const blockNumber = (count ?? 0) + 1;
+    goalProgressNote = `Este sería el bloque ${blockNumber} de ~${totalBlocks} sugeridos para esta meta (duración sugerida: ${activeGoal.suggested_program_weeks} semanas — ${activeGoal.program_weeks_reasoning ?? "sin razonamiento adicional guardado"}). Es una referencia orientativa, no una cuenta rígida — ajusta según la evidencia real de progreso.`;
+  }
 
   // Pull every real session + log from the block that's closing, so the proposal
   // is grounded in what actually happened (RPE, dolor, sueño, rendimiento real),
@@ -78,6 +91,7 @@ Perfil del atleta (JSON):
 ${JSON.stringify(profile?.data ?? {}, null, 2)}
 
 ${activeGoal?.goal_text ? `Meta vigente del atleta (concreta el ciclo actual, no reemplaza los objetivos de vida del perfil): ${activeGoal.goal_text}\n` : "No hay una meta vigente declarada — usa los objetivos de vida del perfil como referencia.\n"}
+${goalProgressNote}
 
 Bloque anterior: lo que se planificó, lo que realmente se hizo, y los logs reales
 (RPE, dolor, sueño, rendimiento) de cada sesión registrada. Usa esto como evidencia
@@ -93,6 +107,8 @@ Reentrada cuando el resto de la evidencia lo permite) si la Semana 1 debe ser
 Reentrada o si hay evidencia suficiente para proponer que empiece en nivel de Carga.
 Cualquiera que sea tu decisión, explica en "focus_notes" la evidencia concreta que la
 sostiene — esto se le muestra al atleta como propuesta antes de que decida activarla.
+Sé concreto y conciso (máximo ~200 palabras): evidencia y decisión, no un ensayo — el
+resto del presupuesto de la respuesta es para las 4 semanas completas de sesiones.
 
 Responde SOLO con un JSON con esta forma exacta:
 {
@@ -107,7 +123,7 @@ Responde SOLO con un JSON con esta forma exacta:
 }
 `.trim();
 
-  const raw = await askEngine(prompt, 8192);
+  const raw = await askEngine(prompt, 16000);
   const plan = parseJsonResponse<BlockPlan>(raw);
 
   // Returned as a proposal, NOT inserted into `blocks` yet.

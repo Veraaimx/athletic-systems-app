@@ -14,6 +14,30 @@
   (no eliminación total del estímulo). Objetivo: disipar fatiga, consolidar adaptación,
   preparar el siguiente bloque.
 
+## Duración de programa según la meta
+
+El bloque es siempre de 4 semanas (ver estructura arriba); la **duración de
+programa** es un horizonte más largo — 1, 2 o 3 bloques (4, 8 o 12 semanas) —
+que el coach sugiere al cerrar la meta vigente con el atleta, para que sepa
+cuánto tiempo razonable toma lo que está priorizando:
+
+- **4 semanas (1 bloque):** meta puntual y acotada — consolidar técnica de un
+  patrón nuevo, ajuste de calibración tras un cambio de contexto, o una meta que
+  es en realidad solo el siguiente bloque natural sin necesidad de planear más
+  allá.
+- **8 semanas (2 bloques):** meta de magnitud moderada — progresión de fuerza
+  visible en 1-2 movimientos principales, avance real de recomposición corporal,
+  o consolidación + intensificación de un patrón atlético nuevo (ej. kettlebell).
+- **12 semanas (3 bloques):** meta de transformación mayor o rendimiento
+  significativo — cambio sustancial de composición corporal, preparar un evento/
+  hito específico, o desarrollo integral que requiere una fase de base, una de
+  acumulación y una de intensificación real antes de evaluar resultado.
+
+Esta duración es siempre una **sugerencia con razonamiento explícito** en el
+momento de guardar la meta — nunca una promesa rígida. Se revisa cada vez que el
+atleta define una meta nueva o la meta vigente cambia sustancialmente; no se
+recalcula bloque a bloque salvo que el contexto lo amerite.
+
 ## Cuándo la Semana 1 no es Reentrada
 
 La Reentrada es la opción segura por defecto — especialmente para atletas nuevos,

@@ -14,6 +14,8 @@ interface CoachTurn {
   content: string;
   ready_to_finalize: boolean;
   proposed_goal_text: string | null;
+  suggested_program_weeks: number | null;
+  program_weeks_reasoning: string | null;
 }
 
 type ConversationTurn = AthleteTurn | CoachTurn;
@@ -22,6 +24,8 @@ interface GoalRow {
   id: string;
   status: "draft" | "active" | "closed";
   goal_text: string | null;
+  suggested_program_weeks: number | null;
+  program_weeks_reasoning: string | null;
   conversation: ConversationTurn[];
 }
 
@@ -108,6 +112,16 @@ export default function GoalPage() {
         <div className="card">
           <p className="muted" style={{ marginBottom: 4 }}>Meta vigente</p>
           <p>{active.goal_text}</p>
+          {active.suggested_program_weeks && (
+            <div style={{ marginTop: 8 }}>
+              <span className="chip">Programa sugerido: {active.suggested_program_weeks} semanas</span>
+              {active.program_weeks_reasoning && (
+                <p className="muted" style={{ marginTop: 6 }}>
+                  {active.program_weeks_reasoning}
+                </p>
+              )}
+            </div>
+          )}
           <button style={{ marginTop: 12 }} onClick={() => setEditing(true)}>
             Editar / pulir meta
           </button>
@@ -153,6 +167,16 @@ export default function GoalPage() {
             <div className="card" style={{ marginTop: 4 }}>
               <p className="muted" style={{ marginBottom: 4 }}>Propuesta del coach para guardar como meta vigente:</p>
               <p>{lastCoachTurn.proposed_goal_text}</p>
+              {lastCoachTurn.suggested_program_weeks && (
+                <div style={{ marginTop: 8 }}>
+                  <span className="chip">Programa sugerido: {lastCoachTurn.suggested_program_weeks} semanas</span>
+                  {lastCoachTurn.program_weeks_reasoning && (
+                    <p className="muted" style={{ marginTop: 6 }}>
+                      {lastCoachTurn.program_weeks_reasoning}
+                    </p>
+                  )}
+                </div>
+              )}
               <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
                 <button className="btn-primary" onClick={() => finalize(lastCoachTurn.proposed_goal_text!)}>
                   Guardar esta meta
