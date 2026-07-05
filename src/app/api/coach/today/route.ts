@@ -232,6 +232,11 @@ atleta un peso o no al registrar:
 - "band": banda elástica u otra resistencia no cuantificable en kg/lbs (band pull-apart, band rotation,
   band-resisted row) — la app no pide ningún peso, solo reps/tiempo/distancia.
 
+Antes de escribir "justification", compara lo planeado en el bloque contra lo que los logs recientes
+dicen que realmente pasó (RPE, notas por ejercicio, dolor, sensación reportada) y decide explícitamente
+si esta sesión mantiene el plan del bloque intacto o si ajusta algo puntual (peso, volumen, ejercicio) —
+di cuál de las dos y por qué, con evidencia concreta de los logs, no una frase genérica.
+
 Responde SOLO con un JSON con esta forma exacta:
 {
   "type": "fuerza" | "running" | "atletico" | "otro",
