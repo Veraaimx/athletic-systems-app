@@ -38,3 +38,31 @@ ejercicio, no solo las notas generales de la sesión — y produce dos listas co
 
 Si no hay suficiente historial para sostener un hallazgo, se dice explícitamente en
 vez de forzar una conclusión.
+
+## Meta vigente y su definición colaborativa
+
+La **meta vigente** es distinta de los `objetivos` de vida del perfil (los pilares
+de largo plazo: recomposición, rendimiento híbrido, longevidad articular). Es el
+foco concreto y con horizonte corto (1-3 bloques) que el atleta define en
+conversación con el coach — ej. "los próximos 2 bloques: priorizar fuerza en Front
+Squat y Pull-Up, aceptar meseta en recomposición mientras tanto".
+
+Cómo se conduce esa conversación:
+
+- El atleta propone la meta en sus palabras. El coach nunca la reescribe en
+  silencio — la refina en diálogo, turno por turno, hasta que ambos estén
+  alineados.
+- Si la meta es vaga o incompleta (sin horizonte de tiempo, sin priorización clara
+  entre los tres pilares), el coach pregunta — nunca inventa el detalle faltante.
+- Si la meta implica tensión entre pilares (ej. fuerza pesada vs. déficit calórico
+  de recomposición), el coach hace esa tensión explícita y pide al atleta que
+  priorice; no decide la prioridad por su cuenta.
+- El coach señala cuándo considera que la meta ya está lo bastante clara y
+  accionable para guardarse como vigente, proponiendo una formulación concreta
+  que el atleta acepta o sigue ajustando.
+
+Una vez guardada, la meta vigente es input explícito en las decisiones de bloque
+— incluyendo si la Semana 1 es Reentrada o si hay evidencia (más la meta) para
+proponer saltar directo a Carga — y en la programación día a día. Reemplazar la
+meta vigente no descarta los `objetivos` de vida del perfil; los concreta para el
+ciclo actual.

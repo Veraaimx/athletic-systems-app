@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { ChevronRight } from "lucide-react";
 import { Collapsible, Badge, TYPE_COLORS, TYPE_LABELS } from "@/components/Collapsible";
 
@@ -122,8 +123,9 @@ function DayView({ weeks, startDate }: { weeks: BlockWeek[]; startDate: string }
 }
 
 export default function BlockPage() {
+  const searchParams = useSearchParams();
   const [activeBlock, setActiveBlock] = useState<ActiveBlock | null | undefined>(undefined);
-  const [view, setView] = useState<View>("week");
+  const [view, setView] = useState<View>(searchParams.get("propose") ? "month" : "week");
   const [proposal, setProposal] = useState<BlockProposal | null>(null);
   const [loading, setLoading] = useState(false);
   const [activated, setActivated] = useState(false);
@@ -137,6 +139,10 @@ export default function BlockPage() {
 
   useEffect(() => {
     loadActiveBlock();
+    // Coming from the goal page's "generar propuesta con esta meta" CTA —
+    // skip the extra click, the athlete already asked for this explicitly there.
+    if (searchParams.get("propose")) generateProposal();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   async function generateProposal() {

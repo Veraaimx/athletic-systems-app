@@ -2,11 +2,12 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Dumbbell, CalendarRange, BarChart3, UserRound, History } from "lucide-react";
+import { Dumbbell, CalendarRange, BarChart3, UserRound, History, Target } from "lucide-react";
 
 const LINKS = [
   { href: "/", label: "Inicio", icon: Dumbbell, matchExtra: ["/session"] },
   { href: "/block", label: "Workouts", icon: CalendarRange },
+  { href: "/goal", label: "Meta", icon: Target },
   { href: "/stats", label: "Activity", icon: BarChart3 },
   { href: "/profile", label: "Perfil", icon: UserRound },
   { href: "/history", label: "Historial", icon: History },

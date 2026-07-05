@@ -47,6 +47,14 @@ export async function POST() {
     .limit(1)
     .maybeSingle();
 
+  const { data: activeGoal } = await supabase
+    .from("athlete_goals")
+    .select("goal_text")
+    .eq("status", "active")
+    .order("updated_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
   // Pull every real session + log from the block that's closing, so the proposal
   // is grounded in what actually happened (RPE, dolor, sueño, rendimiento real),
   // not just the plan that was originally drawn up.
@@ -69,6 +77,8 @@ Genera la propuesta del SIGUIENTE bloque de 4 semanas para este atleta.
 Perfil del atleta (JSON):
 ${JSON.stringify(profile?.data ?? {}, null, 2)}
 
+${activeGoal?.goal_text ? `Meta vigente del atleta (concreta el ciclo actual, no reemplaza los objetivos de vida del perfil): ${activeGoal.goal_text}\n` : "No hay una meta vigente declarada — usa los objetivos de vida del perfil como referencia.\n"}
+
 Bloque anterior: lo que se planificó, lo que realmente se hizo, y los logs reales
 (RPE, dolor, sueño, rendimiento) de cada sesión registrada. Usa esto como evidencia
 real para decidir progresión, mantenimiento o regresión de carga — no asumas que el
@@ -77,10 +87,12 @@ ${JSON.stringify(blockHistory, null, 2)}
 
 Antes de fijar la Semana 1, sigue la sección "Cuándo la Semana 1 no es Reentrada" de
 tu metodología de programación: evalúa con la evidencia de arriba (adherencia, dolor
-pendiente, tendencia de RPE, experiencia del atleta) si la Semana 1 debe ser Reentrada
-o si hay evidencia suficiente para proponer que empiece en nivel de Carga. Cualquiera
-que sea tu decisión, explica en "focus_notes" la evidencia concreta que la sostiene —
-esto se le muestra al atleta como propuesta antes de que decida activarla.
+pendiente, tendencia de RPE, experiencia del atleta) Y con la meta vigente si existe
+(si la meta pide maximizar algo concreto en este ciclo, eso pesa a favor de saltar
+Reentrada cuando el resto de la evidencia lo permite) si la Semana 1 debe ser
+Reentrada o si hay evidencia suficiente para proponer que empiece en nivel de Carga.
+Cualquiera que sea tu decisión, explica en "focus_notes" la evidencia concreta que la
+sostiene — esto se le muestra al atleta como propuesta antes de que decida activarla.
 
 Responde SOLO con un JSON con esta forma exacta:
 {
