@@ -1,10 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ChevronRight, ListChecks, Activity, Moon } from "lucide-react";
 import { Badge, TYPE_COLORS, TYPE_LABELS } from "@/components/Collapsible";
+import { Card } from "@/components/ui/Card";
+import { Button } from "@/components/ui/Button";
+import { Field } from "@/components/ui/Field";
+import { HintBanner } from "@/components/ui/HintBanner";
+import { SegmentedControl } from "@/components/ui/SegmentedControl";
+import { ProgressRingTiles, ProgressRingTile } from "@/components/ui/ProgressRing";
 
 interface Exercise {
   name: string;
@@ -56,6 +61,8 @@ function estimateMinutes(session: Session): number {
   if (session.type === "yoga") return 45 + count * 5;
   return Math.max(20, count * 8);
 }
+
+const ENERGY_OPTIONS = [1, 2, 3, 4, 5].map((n) => ({ value: n, label: n }));
 
 export default function HomePage() {
   const router = useRouter();
@@ -146,52 +153,42 @@ export default function HomePage() {
   return (
     <div>
       <div className="hero-header">
-        <div className="hero-greeting">Hola, {name ?? "👋"}</div>
+        <div className="heading-impact" style={{ fontSize: "2.3rem" }}>Hola, {name ?? "👋"}</div>
         <p className="hero-quote">{quoteOfDay()}</p>
       </div>
 
       {error && <p className="card">⚠️ {error}</p>}
 
       {!session && (
-        <div className="card">
+        <Card>
           <h2>¿Cómo te sientes hoy?</h2>
-          {trendHint && <div className="hint-banner">{trendHint}</div>}
+          {trendHint && <HintBanner>{trendHint}</HintBanner>}
 
-          <div className="field">
-            <label>Energía</label>
-            <div className="energy-picker">
-              {[1, 2, 3, 4, 5].map((n) => (
-                <button key={n} type="button" className={n === energy ? "selected" : ""} onClick={() => setEnergy(n)}>
-                  {n}
-                </button>
-              ))}
-            </div>
-          </div>
-          <div className="field">
-            <label>Horas de sueño anoche</label>
+          <Field label="Energía">
+            <SegmentedControl options={ENERGY_OPTIONS} value={energy} onChange={setEnergy} />
+          </Field>
+          <Field label="Horas de sueño anoche">
             <input type="number" value={checkinSleep} onChange={(e) => setCheckinSleep(e.target.value)} min={0} max={14} />
-          </div>
-          <div className="field">
-            <label>Dolor / molestias ahora (opcional)</label>
+          </Field>
+          <Field label="Dolor / molestias ahora (opcional)">
             <input value={sorenessPain} onChange={(e) => setSorenessPain(e.target.value)} placeholder="Ej: rodilla un poco sensible" />
-          </div>
-          <div className="field">
-            <label>Contexto especial (opcional)</label>
+          </Field>
+          <Field label="Contexto especial (opcional)">
             <input
               value={specialContext}
               onChange={(e) => setSpecialContext(e.target.value)}
               placeholder="Ej: solo tengo 30 min, me perdí la clase de yoga…"
             />
-          </div>
+          </Field>
 
-          <button className="btn-primary" onClick={generateToday} disabled={generating} style={{ marginTop: 8 }}>
+          <Button variant="primary" onClick={generateToday} disabled={generating} style={{ marginTop: 8 }}>
             {generating ? "Generando…" : "Generar sesión de hoy"}
-          </button>
-        </div>
+          </Button>
+        </Card>
       )}
 
       {session && (
-        <div className="card" onClick={() => router.push("/session")} style={{ cursor: "pointer" }}>
+        <Card onClick={() => router.push("/session")}>
           <div className="exercise-card-header" style={{ marginBottom: 6 }}>
             <span className="muted">Entrenamiento de hoy</span>
             <Badge color={TYPE_COLORS[session.type]}>{TYPE_LABELS[session.type] ?? session.type}</Badge>
@@ -200,59 +197,40 @@ export default function HomePage() {
           <p className="muted" style={{ marginTop: 4 }}>
             {session.planned_exercises.length} ejercicios · ~{estimateMinutes(session)} min
           </p>
-          <button className="btn-primary" style={{ marginTop: 14, display: "flex", alignItems: "center", gap: 6 }}>
-            {session.status === "completed" ? "Ver / editar" : "Start workout"} <ChevronRight size={16} />
-          </button>
-        </div>
+          <Button variant="primary" style={{ marginTop: 14, display: "flex", alignItems: "center", gap: 6 }}>
+            {session.status === "completed" ? "Ver / editar" : "Empezar entrenamiento"} <ChevronRight size={16} />
+          </Button>
+        </Card>
       )}
 
       {weekSummary && (
-        <Link href="/stats" className="card" style={{ display: "block" }}>
+        <Card href="/stats">
           <div className="exercise-card-header" style={{ marginBottom: 10 }}>
             <h2>Mi actividad</h2>
             <span className="muted" style={{ display: "flex", alignItems: "center", gap: 2 }}>
               esta semana <ChevronRight size={14} />
             </span>
           </div>
-          <div className="progress-ring-tiles">
-            <div className="progress-ring-tile">
-              <div className="progress-ring-tile-value">
-                <ListChecks size={14} style={{ verticalAlign: "middle", marginRight: 4 }} />
-                {weekSummary.adherencia.pct ?? "—"}%
-              </div>
-              <div className="progress-ring-tile-label">adherencia</div>
-            </div>
-            <div className="progress-ring-tile">
-              <div className="progress-ring-tile-value">
-                <Activity size={14} style={{ verticalAlign: "middle", marginRight: 4 }} />
-                {weekSummary.avgRpe ?? "—"}
-              </div>
-              <div className="progress-ring-tile-label">RPE prom.</div>
-            </div>
-            <div className="progress-ring-tile">
-              <div className="progress-ring-tile-value">
-                <Moon size={14} style={{ verticalAlign: "middle", marginRight: 4 }} />
-                {weekSummary.avgSleep ?? "—"}h
-              </div>
-              <div className="progress-ring-tile-label">sueño prom.</div>
-            </div>
-          </div>
-        </Link>
+          <ProgressRingTiles>
+            <ProgressRingTile icon={ListChecks} value={`${weekSummary.adherencia.pct ?? "—"}%`} label="adherencia" />
+            <ProgressRingTile icon={Activity} value={weekSummary.avgRpe ?? "—"} label="RPE prom." />
+            <ProgressRingTile icon={Moon} value={`${weekSummary.avgSleep ?? "—"}h`} label="sueño prom." />
+          </ProgressRingTiles>
+        </Card>
       )}
 
-      <div className="card">
+      <Card>
         <h2>Registrar peso</h2>
         <div style={{ display: "flex", gap: 8, alignItems: "flex-end" }}>
-          <div className="field" style={{ flex: 1, marginBottom: 0 }}>
-            <label>Peso hoy (kg)</label>
+          <Field label="Peso hoy (kg)" style={{ flex: 1, marginBottom: 0 }}>
             <input value={weightKg} onChange={(e) => setWeightKg(e.target.value)} type="number" step="0.1" placeholder="91.0" />
-          </div>
-          <button onClick={logWeight} disabled={!weightKg}>
+          </Field>
+          <Button onClick={logWeight} disabled={!weightKg}>
             Guardar
-          </button>
+          </Button>
         </div>
         {weightSaved && <p className="muted" style={{ marginTop: 6 }}>Peso guardado ✓</p>}
-      </div>
+      </Card>
     </div>
   );
 }

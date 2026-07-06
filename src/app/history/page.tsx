@@ -23,18 +23,31 @@ interface LogRow {
 
 export default function HistoryPage() {
   const [logs, setLogs] = useState<LogRow[] | null>(null);
+  const [adherencePct, setAdherencePct] = useState<number | null>(null);
 
   useEffect(() => {
     fetch("/api/logs")
       .then((res) => res.json())
       .then(setLogs);
+
+    fetch("/api/stats?period=month")
+      .then((res) => res.json())
+      .then((s) => setAdherencePct(s?.adherencia?.pct ?? null))
+      .catch(() => {});
   }, []);
 
   if (!logs) return <p className="muted">Cargando historial…</p>;
 
   return (
     <div>
-      <h1>Historial de sesiones</h1>
+      {adherencePct != null ? (
+        <>
+          <div className="heading-impact" style={{ fontSize: "2.4rem", marginBottom: 2 }}>{adherencePct}%</div>
+          <p className="muted" style={{ marginBottom: 16 }}>Adherencia del bloque activo</p>
+        </>
+      ) : (
+        <h1 style={{ marginBottom: 16 }}>Historial de sesiones</h1>
+      )}
 
       <CoachSynthesis />
 

@@ -112,6 +112,8 @@ function EditableTitle({ title, onSave }: { title: string; onSave: (next: string
           value={value}
           onChange={(e) => setValue(e.target.value)}
           autoFocus
+          className="heading-impact"
+          style={{ fontSize: "1.6rem" }}
           onKeyDown={(e) => {
             if (e.key === "Enter") {
               setEditing(false);
@@ -132,8 +134,8 @@ function EditableTitle({ title, onSave }: { title: string; onSave: (next: string
   }
 
   return (
-    <button className="title-edit-trigger" onClick={() => setEditing(true)}>
-      {title} <Pencil size={14} style={{ verticalAlign: "middle", opacity: 0.5 }} />
+    <button className="title-edit-trigger heading-impact" style={{ fontSize: "1.6rem" }} onClick={() => setEditing(true)}>
+      {title} <Pencil size={16} style={{ verticalAlign: "middle", opacity: 0.5 }} />
     </button>
   );
 }
@@ -253,7 +255,7 @@ function ExerciseCard({
                       placeholder={loadType === "bodyweight" ? `+${perf!.unit}` : perf!.unit}
                       value={s.weight || ""}
                       onChange={(e) => onUpdateSet!(setIdx, "weight", Number(e.target.value))}
-                      style={{ width: 60 }}
+                      style={{ width: 68 }}
                     />
                   )}
                   {loadType !== "band" && <span className="muted">×</span>}
@@ -262,7 +264,7 @@ function ExerciseCard({
                     placeholder={valueLabelFor(measure)}
                     value={s.reps || ""}
                     onChange={(e) => onUpdateSet!(setIdx, "reps", Number(e.target.value))}
-                    style={{ width: 55 }}
+                    style={{ width: 76 }}
                   />
                 </div>
               ))}

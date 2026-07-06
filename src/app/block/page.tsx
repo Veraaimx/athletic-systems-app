@@ -111,10 +111,26 @@ function DayView({ weeks, startDate }: { weeks: BlockWeek[]; startDate: string }
   if (!today) {
     return <p className="muted">Hoy no hay un día planificado explícito en el bloque (posible descanso).</p>;
   }
+  const long = today.summary.length > 70;
   return (
     <div>
-      <DaySessionCard s={today} startDate={startDate} />
-      <Link href="/session" className="card" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
+        <span className="badge-dot" style={{ background: TYPE_COLORS[today.type] }} />
+        <span className="muted" style={{ fontSize: "0.74rem", fontWeight: 600, letterSpacing: "0.05em", textTransform: "uppercase" }}>
+          Hoy
+        </span>
+      </div>
+      <div className="heading-impact" style={{ fontSize: "1.9rem", marginBottom: 8 }}>
+        {TYPE_LABELS[today.type] ?? today.type}
+      </div>
+      {long ? (
+        <Collapsible label="ver detalle">
+          <p>{today.summary}</p>
+        </Collapsible>
+      ) : (
+        <p className="muted" style={{ marginBottom: 14 }}>{today.summary}</p>
+      )}
+      <Link href="/session" className="card btn-primary" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <span>Ir a la sesión de hoy</span>
         <ChevronRight size={16} />
       </Link>

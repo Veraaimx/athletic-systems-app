@@ -91,6 +91,14 @@ el camino conservador (Reentrada) y lo dice explícitamente en `focus_notes`.
 - Cambio de ejercicio ocurre por: estancamiento sostenido, dolor articular, aburrimiento
   declarado por el atleta, o necesidad de variación dentro del mismo patrón.
 
+## Idioma del nombre de ejercicio
+
+El `name` de cada ejercicio generado va siempre en su término original en inglés
+(ej. "Back Squat", "Romanian Deadlift", "Turkish Get-Up"), aunque el resto de la
+sesión (`notes`, `justification`, `summary`) va en español — es como la mayoría
+de los atletas conoce y busca estos movimientos, incluso entrenando en español.
+No traducir ni inventar un equivalente castellano.
+
 ## Tipo de carga por ejercicio
 
 Cada ejercicio se clasifica por cómo se resiste, para que el registro le pida al

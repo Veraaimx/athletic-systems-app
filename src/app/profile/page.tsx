@@ -125,9 +125,30 @@ export default function ProfilePage() {
 
   if (loading || !data) return <p className="muted">Cargando perfil…</p>;
 
+  const general = data.datos_generales;
+  const generalObj = general && typeof general === "object" && !Array.isArray(general) ? general : null;
+  const nombre = generalObj?.nombre;
+  const statParts = [
+    generalObj?.edad != null ? `${generalObj.edad} años` : null,
+    generalObj?.altura_m != null ? `${generalObj.altura_m} m` : null,
+    generalObj?.peso_actual_kg != null ? `${generalObj.peso_actual_kg} kg` : null,
+  ].filter(Boolean);
+
   return (
     <div>
-      <h1 style={{ marginBottom: 8 }}>Perfil del atleta</h1>
+      {typeof nombre === "string" && nombre ? (
+        <>
+          <p className="muted" style={{ fontSize: "0.72rem", fontWeight: 600, letterSpacing: "0.06em", textTransform: "uppercase", marginBottom: 6 }}>
+            Perfil
+          </p>
+          <div className="heading-impact" style={{ fontSize: "2.1rem", marginBottom: 4 }}>{nombre}</div>
+          {statParts.length > 0 && (
+            <p className="muted" style={{ marginBottom: 20 }}>{statParts.join(" · ")}</p>
+          )}
+        </>
+      ) : (
+        <h1 style={{ marginBottom: 8 }}>Perfil del atleta</h1>
+      )}
       <p className="muted" style={{ marginBottom: 16 }}>
         Este es el perfil que el motor usa en cada decisión. Edita cualquier campo y guarda — sin código.
       </p>

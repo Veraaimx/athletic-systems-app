@@ -111,7 +111,7 @@ export default function GoalPage() {
       {active && !editing && (
         <div className="card">
           <p className="muted" style={{ marginBottom: 4 }}>Meta vigente</p>
-          <p>{active.goal_text}</p>
+          <p className="heading-impact" style={{ fontSize: "1.6rem" }}>{active.goal_text}</p>
           {active.suggested_program_weeks && (
             <div style={{ marginTop: 8 }}>
               <span className="chip">Programa sugerido: {active.suggested_program_weeks} semanas</span>

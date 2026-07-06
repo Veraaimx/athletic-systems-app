@@ -155,6 +155,10 @@ atleta un peso o no al registrar:
 - "band": banda elástica u otra resistencia no cuantificable en kg/lbs (band pull-apart, band rotation,
   band-resisted row) — la app no pide ningún peso, solo reps/tiempo/distancia.
 
+El campo "name" de cada ejercicio va siempre en su término original en inglés (ej. "Back Squat",
+"Turkish Get-Up"), nunca traducido al español — el resto de los campos (notes, justification) sí va
+en español.
+
 Responde SOLO con un JSON con esta forma exacta (3-5 ejercicios):
 {
   "exercises": [{
@@ -231,6 +235,10 @@ atleta un peso o no al registrar:
   peso por defecto; solo permite registrar peso EXTRA opcional (cinto, chaleco, mancuerna colgada).
 - "band": banda elástica u otra resistencia no cuantificable en kg/lbs (band pull-apart, band rotation,
   band-resisted row) — la app no pide ningún peso, solo reps/tiempo/distancia.
+
+El campo "name" de cada ejercicio va siempre en su término original en inglés (ej. "Back Squat",
+"Romanian Deadlift"), nunca traducido al español — el resto de los campos (notes, justification) sí
+va en español.
 
 Antes de escribir "justification", compara lo planeado en el bloque contra lo que los logs recientes
 dicen que realmente pasó (RPE, notas por ejercicio, dolor, sensación reportada) y decide explícitamente
