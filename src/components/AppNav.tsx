@@ -21,7 +21,7 @@ export function Sidebar() {
   const pathname = usePathname();
   return (
     <aside className="sidebar">
-      <div className="sidebar-brand">Athletic Systems</div>
+      <div className="sidebar-brand">AST</div>
       <nav className="sidebar-nav">
         {LINKS.map(({ href, label, icon: Icon, matchExtra }) => {
           const active = isActive(pathname, href, matchExtra);

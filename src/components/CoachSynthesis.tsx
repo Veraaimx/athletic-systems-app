@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { Lightbulb } from "lucide-react";
+import { Card } from "@/components/ui/Card";
+import { Button } from "@/components/ui/Button";
 
 interface Synthesis {
   id: string;
@@ -38,14 +40,14 @@ export function CoachSynthesis() {
   }
 
   return (
-    <div className="card">
+    <Card>
       <div className="exercise-card-header">
         <h2 style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <Lightbulb size={17} color="var(--accent-amber)" /> Síntesis del coach
+          <Lightbulb size={17} color="var(--accent-secondary)" /> Síntesis del coach
         </h2>
-        <button onClick={generate} disabled={loading}>
+        <Button onClick={generate} disabled={loading}>
           {loading ? "Generando…" : synthesis ? "Actualizar" : "Generar síntesis"}
-        </button>
+        </Button>
       </div>
 
       {error && <p className="muted">{error}</p>}
@@ -86,6 +88,6 @@ export function CoachSynthesis() {
           )}
         </>
       )}
-    </div>
+    </Card>
   );
 }

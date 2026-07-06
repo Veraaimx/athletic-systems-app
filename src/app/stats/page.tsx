@@ -12,6 +12,10 @@ import {
 import { Scale, Target, Activity, Moon, Dumbbell } from "lucide-react";
 import { Collapsible } from "@/components/Collapsible";
 import { CoachSynthesis } from "@/components/CoachSynthesis";
+import { Card } from "@/components/ui/Card";
+import { Chip } from "@/components/ui/Chip";
+import { KpiTile, KpiGrid } from "@/components/ui/KpiTile";
+import { SegmentedControl } from "@/components/ui/SegmentedControl";
 
 type Period = "day" | "week" | "month";
 
@@ -100,41 +104,11 @@ function AdherenceRing({ pct }: { pct: number }) {
   );
 }
 
-function KpiTile({
-  icon: Icon,
-  iconColor,
-  value,
-  label,
-  sub,
-  subColor,
-  sparkData,
-  sparkKey,
-}: {
-  icon: React.ComponentType<{ size?: number; color?: string }>;
-  iconColor: string;
-  value: string;
-  label: string;
-  sub?: string;
-  subColor?: string;
-  sparkData?: object[];
-  sparkKey?: string;
-}) {
-  return (
-    <div className="kpi-tile">
-      <div className="kpi-icon" style={{ background: `${iconColor}22` }}>
-        <Icon size={17} color={iconColor} />
-      </div>
-      <div className="kpi-value">{value}</div>
-      <div className="kpi-label">{label}</div>
-      {sub && (
-        <div className="kpi-sub" style={{ color: subColor ?? "var(--muted)" }}>
-          {sub}
-        </div>
-      )}
-      {sparkData && sparkKey && <Sparkline data={sparkData} dataKey={sparkKey} color={iconColor} />}
-    </div>
-  );
-}
+const PERIOD_OPTIONS: { value: Period; label: string }[] = [
+  { value: "day", label: "Día" },
+  { value: "week", label: "Semana" },
+  { value: "month", label: "Mes" },
+];
 
 export default function StatsPage() {
   const [stats, setStats] = useState<StatsData | null>(null);
@@ -156,7 +130,6 @@ export default function StatsPage() {
     latestWeight && firstWeight && latestWeight !== firstWeight
       ? +(latestWeight.weight_kg - firstWeight.weight_kg).toFixed(1)
       : null;
-  const kgToGoal = latestWeight ? +(latestWeight.weight_kg - 85).toFixed(1) : null;
 
   const avgRpe = avgOf(recentLogs.map((l) => l.rpe));
   const avgSleep = avgOf(recentLogs.map((l) => l.sleep_hours));
@@ -169,13 +142,7 @@ export default function StatsPage() {
     <div>
       <div className="exercise-card-header" style={{ marginBottom: 4 }}>
         <h1>Estadísticas</h1>
-        <div className="energy-picker" style={{ maxWidth: 220 }}>
-          {(["day", "week", "month"] as Period[]).map((p) => (
-            <button key={p} className={period === p ? "selected" : ""} onClick={() => setPeriod(p)}>
-              {p === "day" ? "Día" : p === "week" ? "Semana" : "Mes"}
-            </button>
-          ))}
-        </div>
+        <SegmentedControl options={PERIOD_OPTIONS} value={period} onChange={setPeriod} style={{ maxWidth: 220 }} />
       </div>
       {activeBlock && (
         <p className="muted" style={{ marginBottom: 16 }}>
@@ -184,17 +151,21 @@ export default function StatsPage() {
       )}
 
       {/* KPI row */}
-      <div className="kpi-grid">
+      <KpiGrid>
         <KpiTile
           icon={Scale}
-          iconColor="var(--accent-teal)"
-          value={latestWeight ? `${latestWeight.weight_kg}` : "—"}
+          iconColor="var(--accent-secondary)"
+          value={
+            <span className="heading-impact" style={{ fontSize: "2.1rem" }}>
+              {latestWeight ? `${latestWeight.weight_kg}` : "—"}
+            </span>
+          }
           label="Peso (kg) · meta 85"
           sub={weightDelta != null ? `${weightDelta > 0 ? "+" : ""}${weightDelta} kg total` : undefined}
-          subColor={weightDelta != null ? (weightDelta < 0 ? "var(--accent-green)" : "var(--accent-amber)") : undefined}
-          sparkData={weightSparkData.length > 1 ? weightSparkData : undefined}
-          sparkKey="v"
-        />
+          subColor={weightDelta != null ? (weightDelta < 0 ? "var(--accent-positive)" : "var(--accent-attention)") : undefined}
+        >
+          {weightSparkData.length > 1 && <Sparkline data={weightSparkData} dataKey="v" color="var(--accent-secondary)" />}
+        </KpiTile>
 
         <div className="kpi-tile" style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
           <div className="kpi-icon" style={{ background: "var(--accent-primary)22" }}>
@@ -217,29 +188,29 @@ export default function StatsPage() {
 
         <KpiTile
           icon={Activity}
-          iconColor="var(--accent-pink)"
+          iconColor="var(--accent-secondary)"
           value={avgRpe != null ? `${avgRpe}` : "—"}
           label={`RPE promedio · últimos ${recentLogs.length}`}
-          sparkData={rpeSparkData.length > 1 ? rpeSparkData : undefined}
-          sparkKey="v"
-        />
+        >
+          {rpeSparkData.length > 1 && <Sparkline data={rpeSparkData} dataKey="v" color="var(--accent-secondary)" />}
+        </KpiTile>
 
         <KpiTile
           icon={Moon}
-          iconColor="var(--accent-blue)"
+          iconColor="var(--accent-secondary)"
           value={avgSleep != null ? `${avgSleep}h` : "—"}
           label="Sueño promedio"
           sub={avgSleep != null ? (avgSleep < 7 ? "por debajo de lo ideal" : "bien") : undefined}
-          subColor={avgSleep != null && avgSleep < 7 ? "var(--accent-amber)" : "var(--accent-green)"}
-          sparkData={sleepSparkData.length > 1 ? sleepSparkData : undefined}
-          sparkKey="v"
-        />
-      </div>
+          subColor={avgSleep != null && avgSleep < 7 ? "var(--accent-attention)" : "var(--accent-positive)"}
+        >
+          {sleepSparkData.length > 1 && <Sparkline data={sleepSparkData} dataKey="v" color="var(--accent-secondary)" />}
+        </KpiTile>
+      </KpiGrid>
 
       <CoachSynthesis />
 
       {/* Peso detalle */}
-      <div className="card">
+      <Card>
         <h2>Peso</h2>
         {weightTrend.length === 0 ? (
           <p className="muted">Sin datos aún. Registra tu peso en el dashboard.</p>
@@ -256,12 +227,12 @@ export default function StatsPage() {
               ))}
           </Collapsible>
         )}
-      </div>
+      </Card>
 
       {/* Progresión de cargas */}
-      <div className="card">
+      <Card>
         <h2 style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <Dumbbell size={17} color="var(--accent-amber)" /> Progresión de cargas
+          <Dumbbell size={17} color="var(--accent-secondary)" /> Progresión de cargas
         </h2>
         {Object.keys(liftProgression).length === 0 ? (
           <p className="muted" style={{ marginTop: 8 }}>
@@ -279,23 +250,17 @@ export default function StatsPage() {
                   <strong>{name}</strong>
                   <span style={{ display: "flex", gap: 6, alignItems: "center" }}>
                     {mom?.change_pct != null && (
-                      <span
-                        className="chip"
-                        style={{
-                          color: mom.change_pct >= 0 ? "var(--accent-green)" : "var(--accent-pink)",
-                          fontWeight: 600,
-                        }}
-                      >
+                      <Chip style={{ color: mom.change_pct >= 0 ? "var(--accent-positive)" : "var(--accent-attention)", fontWeight: 600 }}>
                         {mom.change_pct > 0 ? "↑" : mom.change_pct < 0 ? "↓" : "→"} {Math.abs(mom.change_pct)}% vs mes anterior
-                      </span>
+                      </Chip>
                     )}
-                    <span className="chip">
+                    <Chip>
                       {lastMax}
                       {lastEntry.unit ?? "kg"} · {entries.length} sesiones
-                    </span>
+                    </Chip>
                   </span>
                 </div>
-                {liftSpark.length > 1 && <Sparkline data={liftSpark} dataKey="v" color="var(--accent-amber)" />}
+                {liftSpark.length > 1 && <Sparkline data={liftSpark} dataKey="v" color="var(--accent-secondary)" />}
                 <Collapsible label="Ver historial">
                   {entries.map((entry, i) => (
                     <div key={i} className="exercise-row">
@@ -308,11 +273,11 @@ export default function StatsPage() {
             );
           })
         )}
-      </div>
+      </Card>
 
       {/* Ejercicios saltados */}
       {skippedExercises.length > 0 && (
-        <div className="card">
+        <Card>
           <h2>Ejercicios que no hiciste</h2>
           <Collapsible label={`Ver detalle (${skippedExercises.length})`}>
             {skippedExercises
@@ -324,12 +289,12 @@ export default function StatsPage() {
                 </div>
               ))}
           </Collapsible>
-        </div>
+        </Card>
       )}
 
       {/* Benchmarks */}
       {benchmarks.length > 0 && (
-        <div className="card">
+        <Card>
           <h2>Benchmarks / WODs</h2>
           {benchmarks.map((b, i) => (
             <div key={i} className="exercise-row">
@@ -339,7 +304,7 @@ export default function StatsPage() {
               <p className="muted">{b.date}{b.notes ? ` · ${b.notes}` : ""}</p>
             </div>
           ))}
-        </div>
+        </Card>
       )}
     </div>
   );
