@@ -42,6 +42,8 @@ const QUOTES = [
   "Tu cuerpo se adapta a lo que repites, no a lo que haces una vez.",
   "Movilidad, fuerza, resistencia — hoy le toca a una de las tres.",
   "El descanso también es parte del entrenamiento.",
+  "Lo que no se mide, no se ajusta.",
+  "El descanso de hoy es la fuerza de la próxima semana.",
 ];
 
 function quoteOfDay(): string {
@@ -167,12 +169,22 @@ export default function HomePage() {
           <Field label="Energía">
             <SegmentedControl options={ENERGY_OPTIONS} value={energy} onChange={setEnergy} />
           </Field>
+          {energy <= 2 && (
+            <p className="muted" style={{ marginTop: -8, marginBottom: 14 }}>
+              Energía baja hoy. No es debilidad, es información — el plan de hoy pesa menos.
+            </p>
+          )}
           <Field label="Horas de sueño anoche">
             <input type="number" value={checkinSleep} onChange={(e) => setCheckinSleep(e.target.value)} min={0} max={14} />
           </Field>
           <Field label="Dolor / molestias ahora (opcional)">
             <input value={sorenessPain} onChange={(e) => setSorenessPain(e.target.value)} placeholder="Ej: rodilla un poco sensible" />
           </Field>
+          {sorenessPain.trim() && (
+            <p className="muted" style={{ marginTop: -8, marginBottom: 14 }}>
+              Anotado. El plan de hoy se ajusta a eso, no al calendario.
+            </p>
+          )}
           <Field label="Contexto especial (opcional)">
             <input
               value={specialContext}
@@ -180,6 +192,11 @@ export default function HomePage() {
               placeholder="Ej: solo tengo 30 min, me perdí la clase de yoga…"
             />
           </Field>
+          {specialContext.trim() && (
+            <p className="muted" style={{ marginTop: -8, marginBottom: 14 }}>
+              Contexto anotado. Hoy el sistema entrena con lo que tienes, no con lo que tendrías en un día perfecto.
+            </p>
+          )}
 
           <Button variant="primary" onClick={generateToday} disabled={generating} style={{ marginTop: 8 }}>
             {generating ? "Generando…" : "Generar sesión de hoy"}

@@ -109,7 +109,7 @@ function DayView({ weeks, startDate }: { weeks: BlockWeek[]; startDate: string }
   const offset = todayDayOffset(startDate);
   const today = weeks.flatMap((w) => w.sessions).find((s) => s.day_offset === offset);
   if (!today) {
-    return <p className="muted">Hoy no hay un día planificado explícito en el bloque (posible descanso).</p>;
+    return <p className="muted">Hoy no hay carga. El cuerpo también entrena cuando descansa.</p>;
   }
   const long = today.summary.length > 70;
   return (

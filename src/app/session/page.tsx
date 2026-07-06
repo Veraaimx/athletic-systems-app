@@ -215,12 +215,16 @@ function ExerciseCard({
 
       {loggable &&
         (!perf!.done ? (
-          <input
-            placeholder="¿Por qué no lo hiciste? (opcional)"
-            value={perf!.skip_reason ?? ""}
-            onChange={(e) => onPatch!({ skip_reason: e.target.value })}
-            style={{ marginTop: 8 }}
-          />
+          <div style={{ marginTop: 8 }}>
+            <p className="muted" style={{ marginBottom: 6 }}>
+              Se saltó. Queda registrado, no juzgado — el plan sigue con lo que sí pasó.
+            </p>
+            <input
+              placeholder="¿Por qué no lo hiciste? (opcional)"
+              value={perf!.skip_reason ?? ""}
+              onChange={(e) => onPatch!({ skip_reason: e.target.value })}
+            />
+          </div>
         ) : (
           <div style={{ marginTop: 8 }}>
             {loadType !== "band" && (
