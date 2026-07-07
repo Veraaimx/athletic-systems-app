@@ -39,7 +39,18 @@ export async function askEngine(userPrompt: string, maxTokens = 4096): Promise<s
   const response = await anthropic.messages.create({
     model: MODEL,
     max_tokens: maxTokens,
-    system: buildSystemPrompt(),
+    // The system prompt (tone rules + docs canon 01-05) is identical on every call,
+    // for every user. Marking it as an ephemeral cache breakpoint means repeat calls
+    // within the TTL window pay ~10% of input price for these ~6.8k tokens instead
+    // of full price — 1h TTL (vs. the 5m default) widens the window across users as
+    // the app moves from single- to multi-user.
+    system: [
+      {
+        type: "text",
+        text: buildSystemPrompt(),
+        cache_control: { type: "ephemeral", ttl: "1h" },
+      },
+    ],
     messages: [{ role: "user", content: userPrompt }],
   });
 
