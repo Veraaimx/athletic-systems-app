@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { supabase } from "@/lib/supabase";
+import { createClient } from "@/lib/supabase-server";
 import { askEngine, parseJsonResponse } from "@/lib/claude";
 import { todayISO } from "@/lib/dates";
 
@@ -65,6 +65,12 @@ function yogaPlaceholderExercise(daySummary: string | undefined): PlannedSession
 }
 
 export async function POST(request: Request) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return NextResponse.json({ error: "No autenticado" }, { status: 401 });
+
   const today = todayISO();
   const body = await request.json().catch(() => ({}));
   const checkin: CheckIn | null = body?.checkin ?? null;
@@ -283,6 +289,7 @@ Responde SOLO con un JSON con esta forma exacta:
       justification: planned.justification,
       status: "planned",
       checkin,
+      user_id: user.id,
     })
     .select()
     .single();
@@ -295,6 +302,12 @@ Responde SOLO con un JSON con esta forma exacta:
 }
 
 export async function GET() {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return NextResponse.json({ error: "No autenticado" }, { status: 401 });
+
   const today = todayISO();
   const { data, error } = await supabase
     .from("sessions")
@@ -327,6 +340,12 @@ function defaultTitleFor(type: string): string {
 
 // Rename the day's session — purely cosmetic, doesn't affect engine logic.
 export async function PATCH(request: Request) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return NextResponse.json({ error: "No autenticado" }, { status: 401 });
+
   const { session_id, title } = await request.json();
   if (!session_id || !title) {
     return NextResponse.json({ error: "session_id and title are required" }, { status: 400 });

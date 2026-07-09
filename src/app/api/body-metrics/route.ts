@@ -1,7 +1,13 @@
 import { NextResponse } from "next/server";
-import { supabase } from "@/lib/supabase";
+import { createClient } from "@/lib/supabase-server";
 
 export async function GET() {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return NextResponse.json({ error: "No autenticado" }, { status: 401 });
+
   const { data, error } = await supabase
     .from("body_metrics")
     .select("*")
@@ -13,6 +19,12 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return NextResponse.json({ error: "No autenticado" }, { status: 401 });
+
   const body = await request.json();
   const { weight_kg, body_fat_pct, notes, date } = body;
 
@@ -22,7 +34,13 @@ export async function POST(request: Request) {
 
   const { data, error } = await supabase
     .from("body_metrics")
-    .insert({ weight_kg, body_fat_pct: body_fat_pct ?? null, notes: notes ?? null, date: date ?? undefined })
+    .insert({
+      weight_kg,
+      body_fat_pct: body_fat_pct ?? null,
+      notes: notes ?? null,
+      date: date ?? undefined,
+      user_id: user.id,
+    })
     .select()
     .single();
 

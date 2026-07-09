@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { supabase } from "@/lib/supabase";
+import { createClient } from "@/lib/supabase-server";
 import { askEngine, parseJsonResponse } from "@/lib/claude";
 import { todayISO } from "@/lib/dates";
 
@@ -12,6 +12,12 @@ const PERIOD_DAYS = 30;
 
 // Returns the most recent synthesis on file — cheap, no LLM call.
 export async function GET() {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return NextResponse.json({ error: "No autenticado" }, { status: 401 });
+
   const { data, error } = await supabase
     .from("coach_synthesis")
     .select("*")
@@ -29,6 +35,12 @@ export async function GET() {
 // athlete notes) and persists it. Explicit action, not run automatically on page load,
 // since it's an LLM call.
 export async function POST() {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return NextResponse.json({ error: "No autenticado" }, { status: 401 });
+
   const today = todayISO();
   const periodStart = new Date(Date.now() - PERIOD_DAYS * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
 
@@ -80,6 +92,7 @@ SOLO con un JSON con esta forma exacta:
       period_end: today,
       findings: synthesis.findings,
       recommendations: synthesis.recommendations,
+      user_id: user.id,
     })
     .select()
     .single();

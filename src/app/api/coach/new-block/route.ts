@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { supabase } from "@/lib/supabase";
+import { createClient } from "@/lib/supabase-server";
 import { askEngine, parseJsonResponse } from "@/lib/claude";
 import { todayISO } from "@/lib/dates";
 
@@ -15,6 +15,12 @@ interface BlockPlan {
 // Returns the currently active block, if any — so /block can always show the
 // full 4-week plan, not just whatever proposal happened to be in memory.
 export async function GET() {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return NextResponse.json({ error: "No autenticado" }, { status: 401 });
+
   const { data: block, error } = await supabase
     .from("blocks")
     .select("*")
@@ -33,6 +39,12 @@ export async function GET() {
 // the athlete confirms via PUT /api/coach/new-block before it goes live,
 // matching the "recommendation, athlete decides" rule in the engine docs.
 export async function POST() {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return NextResponse.json({ error: "No autenticado" }, { status: 401 });
+
   const { data: profile } = await supabase
     .from("athlete_profile")
     .select("data")
@@ -133,6 +145,12 @@ Responde SOLO con un JSON con esta forma exacta:
 // Activates a confirmed block proposal: closes the current active block (if any)
 // and creates the new one starting today.
 export async function PUT(request: Request) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return NextResponse.json({ error: "No autenticado" }, { status: 401 });
+
   const { proposal } = await request.json();
 
   await supabase.from("blocks").update({ status: "closed" }).eq("status", "active");
@@ -144,6 +162,7 @@ export async function PUT(request: Request) {
       status: "active",
       focus_notes: proposal.focus_notes,
       raw_plan: proposal,
+      user_id: user.id,
     })
     .select()
     .single();

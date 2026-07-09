@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { supabase } from "@/lib/supabase";
+import { createClient } from "@/lib/supabase-server";
 import { askEngine, parseJsonResponse } from "@/lib/claude";
 
 interface AthleteTurn {
@@ -32,6 +32,12 @@ interface GoalRow {
 // Returns the current active goal (if any) and the in-progress draft (if any),
 // so the UI can show both: what's vigente today, and what's being refined.
 export async function GET() {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return NextResponse.json({ error: "No autenticado" }, { status: 401 });
+
   const [{ data: active, error: activeErr }, { data: draft, error: draftErr }] = await Promise.all([
     supabase.from("athlete_goals").select("*").eq("status", "active").order("updated_at", { ascending: false }).limit(1).maybeSingle(),
     supabase.from("athlete_goals").select("*").eq("status", "draft").order("updated_at", { ascending: false }).limit(1).maybeSingle(),
@@ -49,6 +55,12 @@ export async function GET() {
 // turn-by-turn refinement dialogue, not open-ended chat — scoped entirely to
 // arriving at a clear, actionable "meta vigente" for the current cycle.
 export async function POST(request: Request) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return NextResponse.json({ error: "No autenticado" }, { status: 401 });
+
   const { message } = await request.json();
   if (!message || typeof message !== "string") {
     return NextResponse.json({ error: "message is required" }, { status: 400 });
@@ -144,7 +156,7 @@ Responde SOLO con un JSON con esta forma exacta:
         .single()
     : await supabase
         .from("athlete_goals")
-        .insert({ status: "draft", conversation: nextConversation })
+        .insert({ status: "draft", conversation: nextConversation, user_id: user.id })
         .select()
         .single();
 
@@ -159,6 +171,12 @@ Responde SOLO con un JSON con esta forma exacta:
 // previously active and promotes the draft. Never happens automatically — the
 // athlete explicitly accepts (possibly edited) text from the chat.
 export async function PUT(request: Request) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return NextResponse.json({ error: "No autenticado" }, { status: 401 });
+
   const { goal_text } = await request.json();
   if (!goal_text || typeof goal_text !== "string") {
     return NextResponse.json({ error: "goal_text is required" }, { status: 400 });

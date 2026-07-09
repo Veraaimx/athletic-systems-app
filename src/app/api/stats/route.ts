@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { supabase } from "@/lib/supabase";
+import { createClient } from "@/lib/supabase-server";
 
 const PERIOD_DAYS: Record<string, number> = { day: 1, week: 7, month: 30 };
 
@@ -38,6 +38,12 @@ function monthOverMonth(
 }
 
 export async function GET(request: Request) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return NextResponse.json({ error: "No autenticado" }, { status: 401 });
+
   const period = new URL(request.url).searchParams.get("period") ?? "week";
   const cutoff = cutoffISO(period);
 

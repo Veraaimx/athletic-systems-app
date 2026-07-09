@@ -1,7 +1,13 @@
 import { NextResponse } from "next/server";
-import { supabase } from "@/lib/supabase";
+import { createClient } from "@/lib/supabase-server";
 
 export async function POST(request: Request) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return NextResponse.json({ error: "No autenticado" }, { status: 401 });
+
   const body = await request.json();
   const {
     session_id,
@@ -25,6 +31,7 @@ export async function POST(request: Request) {
     .upsert(
       {
         session_id,
+        user_id: user.id,
         rpe,
         pain_flags,
         sleep_hours,
@@ -48,6 +55,12 @@ export async function POST(request: Request) {
 }
 
 export async function GET(request: Request) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return NextResponse.json({ error: "No autenticado" }, { status: 401 });
+
   const sessionId = new URL(request.url).searchParams.get("session_id");
 
   if (sessionId) {

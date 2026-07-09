@@ -1,8 +1,14 @@
 import { NextResponse } from "next/server";
-import { supabase } from "@/lib/supabase";
+import { createClient } from "@/lib/supabase-server";
 import { ATHLETE_PROFILE_SEED } from "@/lib/profileSeed";
 
 export async function GET() {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return NextResponse.json({ error: "No autenticado" }, { status: 401 });
+
   const { data, error } = await supabase
     .from("athlete_profile")
     .select("*")
@@ -15,10 +21,10 @@ export async function GET() {
   }
 
   if (!data) {
-    // Seed the row with a structured profile the first time the app runs.
+    // Seed the row with a structured profile the first time this user shows up.
     const { data: inserted, error: insertError } = await supabase
       .from("athlete_profile")
-      .insert({ data: ATHLETE_PROFILE_SEED })
+      .insert({ data: ATHLETE_PROFILE_SEED, user_id: user.id })
       .select()
       .single();
 
@@ -32,6 +38,12 @@ export async function GET() {
 }
 
 export async function PUT(request: Request) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return NextResponse.json({ error: "No autenticado" }, { status: 401 });
+
   const body = await request.json();
 
   const { data: existing } = await supabase
@@ -44,7 +56,7 @@ export async function PUT(request: Request) {
   if (!existing) {
     const { data, error } = await supabase
       .from("athlete_profile")
-      .insert({ data: body })
+      .insert({ data: body, user_id: user.id })
       .select()
       .single();
     if (error) return NextResponse.json({ error: error.message }, { status: 500 });

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Dumbbell, CalendarRange, BarChart3, UserRound, History, Target } from "lucide-react";
+import { Dumbbell, CalendarRange, BarChart3, UserRound, History, Target, LogOut } from "lucide-react";
 
 const LINKS = [
   { href: "/", label: "Inicio", icon: Dumbbell, matchExtra: ["/session"] },
@@ -19,6 +19,7 @@ function isActive(pathname: string, href: string, matchExtra?: string[]) {
 
 export function Sidebar() {
   const pathname = usePathname();
+  if (pathname === "/login") return null;
   return (
     <aside className="sidebar">
       <div className="sidebar-brand">AST</div>
@@ -33,12 +34,19 @@ export function Sidebar() {
           );
         })}
       </nav>
+      <form action="/auth/signout" method="post">
+        <button type="submit" className="sidebar-link" style={{ width: "100%", border: "none", background: "none", cursor: "pointer" }}>
+          <LogOut size={18} className="nav-icon" />
+          Cerrar sesión
+        </button>
+      </form>
     </aside>
   );
 }
 
 export function BottomNav() {
   const pathname = usePathname();
+  if (pathname === "/login") return null;
   return (
     <nav className="bottom-nav">
       {LINKS.map(({ href, label, icon: Icon, matchExtra }) => {
