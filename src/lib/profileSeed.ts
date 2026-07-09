@@ -16,7 +16,17 @@ export const ATHLETE_PROFILE_SEED = {
     "Rendimiento atlético híbrido (fuerza + running + movilidad integrados)",
     "Longevidad articular (entrenar fuerte de forma sostenible)",
   ],
-  experiencia: "Avanzado con interrupciones: amplia experiencia en fuerza y funcional, con pausas y retornos. Técnica sólida en movimientos fundamentales.",
+  metas_especificas: [
+    "Running: bajar el ritmo de 5K a menos de 5:00 min/km",
+    "Natación: construir una base real de nado continuo (hoy no es una habilidad entrenada)",
+    "Agilidad: mejorar cambios de dirección y coordinación reactiva",
+    "Flexibilidad: aumentar rango de movimiento general, prioridad cadera/tobillo/hombro",
+  ],
+  enfoque_entrenamiento:
+    "Híbrido funcional + bodybuilding: fuerza funcional/atlética como base de cada bloque, con volumen de hipertrofia dirigido donde sirva a la recomposición corporal y al balance estructural — no bodybuilding puro ni solo funcional.",
+  deportes_a_soportar: ["Surf", "Snowboard", "Cabalgatas (equitación recreativa)", "Básquetbol", "Snorkel", "Buceo (scuba)"],
+  experiencia:
+    "Avanzado con interrupciones: amplia experiencia en fuerza y funcional, con pausas y retornos. Técnica sólida en movimientos fundamentales, incluye base de halterofilia (snatch, clean & jerk) y gimnasia (pull-ups estrictos, algo de ring work/kipping) de su etapa de CrossFit — no es principiante en esos patrones aunque estén oxidados.",
   equipo: "Gym completo (barras, racks, máquinas) + kettlebells propios.",
   disponibilidad: "4-5 días/semana, variable. La programación debe ser flexible y poder degradar a mínimo efectivo cuando el contexto lo exige.",
   running: {
@@ -35,6 +45,8 @@ export const ATHLETE_PROFILE_SEED = {
   },
   fortalezas: ["Fuerza en tren superior", "Movilidad/flexibilidad general"],
   debilidades: ["Movilidad de cadera/tobillo", "Trabajo unilateral (posibles desequilibrios lado a lado)", "Capacidad aeróbica"],
+  prioridad_programacion:
+    "Las debilidades identificadas y la rehab/recuperación de lesiones activas van primero al diseñar cada bloque — se programan antes que la novedad o la variedad, y el resto del volumen se construye alrededor de ellas, no al revés.",
   lesiones: {
     rodillas: {
       resumen: "Dolor más frecuente/intenso en rodilla izquierda, tendón del cuádriceps. Desgaste articular y tendinitis diagnosticados clínicamente.",
@@ -56,7 +68,7 @@ export const ATHLETE_PROFILE_SEED = {
   historial_deportivo: [
     "Surf desde los 15 años (recreativo, ocasional)",
     "Básquetbol en preparatoria (origen de esguinces de tobillo)",
-    "CrossFit (2014–2016)",
+    "CrossFit (2014–2016): incluyó halterofilia (snatch, clean & jerk) y gimnasia (pull-ups estrictos, algo de ring work/kipping)",
     "Entrenamiento de fuerza y funcional (actividad actual principal)",
     "Hiking y ocean safaris",
     "Esquí (temporada de invierno)",

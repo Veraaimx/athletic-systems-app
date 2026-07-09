@@ -20,6 +20,7 @@ interface PlannedSession {
   week_number: number;
   exercises: PlannedExercise[];
   justification: string;
+  checkin_recommendation: string | null;
 }
 
 interface CheckIn {
@@ -29,15 +30,27 @@ interface CheckIn {
   special_context: string;
 }
 
+// The check-in is informational, not a lever on the generated session: it never
+// changes volume/intensity/exercise selection by itself (that stays driven by the
+// block plan + the real logs of the last 14 days). Instead it feeds a separate,
+// visible "checkin_recommendation" the athlete can choose to act on.
 function checkinBlock(checkin: CheckIn | null): string {
   if (!checkin) return "El atleta no llenó el check-in de hoy — usa el historial reciente como referencia.";
   return `
-Check-in de HOY que el atleta acaba de llenar — tiene prioridad sobre el historial para ajustar la
-sesión de hoy específicamente (puede subir, mantener o bajar volumen/intensidad respecto al plan base):
+Check-in de HOY que el atleta acaba de llenar (informativo — ver regla abajo):
 - Energía hoy (1-5, 1=muy bajo): ${checkin.energy}
 - Horas de sueño anoche: ${checkin.sleep_hours}
 - Dolor/molestias ahora mismo: ${checkin.soreness_pain || "ninguna reportada"}
 - Contexto especial de hoy (tiempo disponible, eventos, etc.): ${checkin.special_context || "ninguno"}
+
+REGLA — no uses este check-in de hoy para subir, mantener o bajar automáticamente el volumen,
+intensidad o selección de ejercicios de la sesión: eso lo sigue definiendo el plan del bloque activo,
+ajustado solo por lo que el HISTORIAL de logs recientes (rendimiento real, no una sola variable del día)
+indique que hace falta. En vez de eso, usa el check-in de hoy para escribir "checkin_recommendation":
+una recomendación breve, específica y accionable para el atleta (ej. bajar el peso puntualmente en sus
+series, poner atención extra a la técnica, priorizar dormir esta noche, vigilar una molestia concreta,
+o ninguna si el check-in no amerita una) que el atleta decide si aplicar — nunca la apliques tú a los
+ejercicios planeados. Si el check-in no tiene nada que amerite recomendación, responde null en ese campo.
 `.trim();
 }
 
@@ -178,7 +191,8 @@ Responde SOLO con un JSON con esta forma exacta (3-5 ejercicios):
     "rest_seconds": number,
     "notes": string
   }],
-  "justification": string
+  "justification": string,
+  "checkin_recommendation": string | null
 }
 `.trim();
 
@@ -186,6 +200,7 @@ Responde SOLO con un JSON con esta forma exacta (3-5 ejercicios):
     const kbFlow = parseJsonResponse<{
       exercises: PlannedSession["exercises"];
       justification: string;
+      checkin_recommendation: string | null;
     }>(raw);
 
     planned = {
@@ -193,6 +208,7 @@ Responde SOLO con un JSON con esta forma exacta (3-5 ejercicios):
       week_number: plannedDay.week_number,
       exercises: [yogaPlaceholderExercise(plannedDay.summary), ...kbFlow.exercises],
       justification: `Día de yoga con instructora (no se programa). Complemento de Kettlebell Flow generado para hoy: ${kbFlow.justification}`,
+      checkin_recommendation: kbFlow.checkin_recommendation ?? null,
     };
   } else {
     // Friday with no planned session → athletic/conditioning day (structural rule).
@@ -266,7 +282,8 @@ Responde SOLO con un JSON con esta forma exacta:
     "rest_seconds": number,
     "notes": string
   }],
-  "justification": string
+  "justification": string,
+  "checkin_recommendation": string | null
 }
 `.trim();
 
@@ -287,6 +304,7 @@ Responde SOLO con un JSON con esta forma exacta:
       title: defaultTitleFor(planned.type),
       planned_exercises: planned.exercises,
       justification: planned.justification,
+      coach_recommendation: planned.checkin_recommendation ?? null,
       status: "planned",
       checkin,
       user_id: user.id,

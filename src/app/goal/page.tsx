@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Target } from "lucide-react";
+import { AutoResizeTextarea } from "@/components/AutoResizeTextarea";
 
 interface AthleteTurn {
   role: "athlete";
@@ -186,14 +187,13 @@ export default function GoalPage() {
             </div>
           )}
 
-          <div style={{ display: "flex", gap: 8, marginTop: 4 }}>
-            <input
+          <div style={{ display: "flex", gap: 8, marginTop: 4, alignItems: "flex-end" }}>
+            <AutoResizeTextarea
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Escribe qué quieres priorizar en este ciclo…"
-              onKeyDown={(e) => {
-                if (e.key === "Enter" && !sending) send();
-              }}
+              placeholder="Escribe qué quieres priorizar en este ciclo… (Enter envía, Shift+Enter salto de línea)"
+              onEnter={() => !sending && send()}
+              maxRows={8}
               style={{ flex: 1 }}
             />
             <button onClick={send} disabled={sending}>

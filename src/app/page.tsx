@@ -171,7 +171,8 @@ export default function HomePage() {
           </Field>
           {energy <= 2 && (
             <p className="muted" style={{ marginTop: -8, marginBottom: 14 }}>
-              Energía baja hoy. No es debilidad, es información — el plan de hoy pesa menos.
+              Energía baja hoy. No es debilidad, es información — el coach te va a dar una recomendación
+              visible para hoy; el plan del bloque no se ajusta solo por esto.
             </p>
           )}
           <Field label="Horas de sueño anoche">
@@ -182,7 +183,8 @@ export default function HomePage() {
           </Field>
           {sorenessPain.trim() && (
             <p className="muted" style={{ marginTop: -8, marginBottom: 14 }}>
-              Anotado. El plan de hoy se ajusta a eso, no al calendario.
+              Anotado. El coach lo toma en cuenta para su recomendación de hoy; el plan del bloque no se
+              ajusta solo por esto.
             </p>
           )}
           <Field label="Contexto especial (opcional)">
@@ -194,7 +196,8 @@ export default function HomePage() {
           </Field>
           {specialContext.trim() && (
             <p className="muted" style={{ marginTop: -8, marginBottom: 14 }}>
-              Contexto anotado. Hoy el sistema entrena con lo que tienes, no con lo que tendrías en un día perfecto.
+              Contexto anotado. El coach lo toma en cuenta para su recomendación de hoy; el plan del
+              bloque no se ajusta solo por esto.
             </p>
           )}
 

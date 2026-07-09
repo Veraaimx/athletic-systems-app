@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, Pencil, Flame, Clock, Activity, PlayCircle, Timer } from "lucide-react";
+import { ArrowLeft, Pencil, Flame, Clock, Activity, PlayCircle, Timer, Lightbulb } from "lucide-react";
 import { Collapsible, Badge, TYPE_COLORS, TYPE_LABELS } from "@/components/Collapsible";
+import { AutoResizeTextarea } from "@/components/AutoResizeTextarea";
 
 type Unit = "kg" | "lbs";
 type Measure = "reps" | "time" | "distance";
@@ -29,6 +30,7 @@ interface Session {
   title?: string | null;
   planned_exercises: Exercise[];
   justification: string;
+  coach_recommendation?: string | null;
   status: string;
 }
 
@@ -467,6 +469,20 @@ export default function SessionPage() {
         </div>
       </div>
 
+      {session.coach_recommendation && (
+        <div className="card" style={{ borderColor: "var(--accent-primary)" }}>
+          <div className="exercise-card-header" style={{ marginBottom: 4 }}>
+            <strong style={{ display: "flex", alignItems: "center", gap: 6 }}>
+              <Lightbulb size={16} color="var(--accent-primary)" /> Recomendación del coach para hoy
+            </strong>
+          </div>
+          <p style={{ margin: 0 }}>{session.coach_recommendation}</p>
+          <p className="muted" style={{ marginTop: 6, fontSize: "0.82rem" }}>
+            Es una sugerencia, no un ajuste automático — el plan de abajo sigue el bloque; tú decides si la aplicas.
+          </p>
+        </div>
+      )}
+
       <div className="card">
         <p className="muted" style={{ marginBottom: 8 }}>
           Marca lo que sí hiciste y captura el peso/tiempo/distancia real. Lo que no hiciste, déjalo sin marcar.
@@ -519,7 +535,7 @@ export default function SessionPage() {
               </div>
               <div className="field">
                 <label>Notas</label>
-                <textarea value={benchmarkNotes} onChange={(e) => setBenchmarkNotes(e.target.value)} rows={2} />
+                <AutoResizeTextarea value={benchmarkNotes} onChange={(e) => setBenchmarkNotes(e.target.value)} minRows={2} />
               </div>
             </div>
           )}
@@ -545,11 +561,11 @@ export default function SessionPage() {
           </div>
           <div className="field">
             <label>Dolor / molestias (opcional)</label>
-            <textarea value={painNotes} onChange={(e) => setPainNotes(e.target.value)} rows={2} />
+            <AutoResizeTextarea value={painNotes} onChange={(e) => setPainNotes(e.target.value)} minRows={2} />
           </div>
           <div className="field">
             <label>Notas (opcional)</label>
-            <textarea value={readinessNotes} onChange={(e) => setReadinessNotes(e.target.value)} rows={2} />
+            <AutoResizeTextarea value={readinessNotes} onChange={(e) => setReadinessNotes(e.target.value)} minRows={2} />
           </div>
           <div style={{ display: "flex", gap: 8 }}>
             <button className="btn-primary" onClick={submitLog}>
