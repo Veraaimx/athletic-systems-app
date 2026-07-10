@@ -1,7 +1,7 @@
 # Athlete Profile
 
 > Documento personalizado y evolutivo. Construido por entrevista, actualizado cada
-> semana/bloque a partir de logs y feedback real. Última actualización: 2026-06-29.
+> semana/bloque a partir de logs y feedback real. Última actualización: 2026-07-10.
 
 ## Datos generales
 
@@ -19,11 +19,39 @@ Combinación de los tres pilares, sin uno dominante sobre los demás:
 - Longevidad articular (entrenar fuerte de forma sostenible, con antecedentes que
   exigen cuidado activo)
 
+## Identidad atlética
+
+Alonso no encaja en una sola categoría de "hybrid athlete" entendida como levantar
+pesas + correr. Su identidad vigente es una mezcla:
+
+- **Strength-biased Hybrid Outdoor Athlete:** fuerza máxima/relativa como base, con
+  engine, potencia, movilidad y resiliencia para surf, hiking, ski, deportes
+  espontáneos y vida física real.
+- **Tactical Outdoor / Adaptive Athlete:** filosofía de preparación general extrema:
+  cargar, correr, moverse bajo fatiga, cambiar de dirección, tolerar esfuerzos largos
+  y recuperarse, sin la demanda profesional de un atleta táctico militar/policía.
+
+Traducción práctica para programación: no quiere una rutina de gimnasio con cardio
+agregado ni WODs ligeros de fitness general. Quiere preparación física de atleta
+generalista: fuerza alta, conditioning con intención, potencia, unilateralidad,
+capacidad energética y durabilidad articular.
+
+## Metas específicas de capacidad
+
+- Running: bajar el ritmo de 5K a menos de 5:00 min/km.
+- Natación: construir base real de nado continuo (hoy no es habilidad entrenada).
+- Agilidad: mejorar cambios de dirección, coordinación y reacción.
+- Flexibilidad/movilidad: aumentar rango usable, prioridad cadera/tobillo/hombro.
+- Potencia atlética: reintroducir saltos, lanzamientos, sprints cortos o derivados
+  olímpicos según tolerancia articular y técnica.
+
 ## Experiencia
 
 Avanzado con interrupciones: amplia experiencia en entrenamiento de fuerza y
 funcional, con pausas y retornos en el camino. Conoce bien la técnica de los
-movimientos fundamentales.
+movimientos fundamentales. Incluye base de halterofilia (snatch, clean & jerk) y
+gimnasia (pull-ups estrictos, algo de ring work/kipping) de su etapa de CrossFit,
+aunque esos patrones estén oxidados.
 
 ## Equipo disponible
 
@@ -41,6 +69,9 @@ real — la programación debe ser flexible, no rígida, y debe poder degradar a
 - Volumen actual: 1-2 veces por semana, ~5k por sesión.
 - Running es complemento al entrenamiento de fuerza, no el objetivo central.
 - Días previstos en el bloque: jueves y sábado.
+- El jueves puede evolucionar de "solo 5K" a **Hybrid Day**: running + strength
+  endurance, tempo + potencia, Zone 2 + accesorios/carries, o conditioning mixto según
+  la semana y la recuperación.
 
 ## Yoga
 
@@ -68,6 +99,9 @@ el sueño esté por debajo de lo necesario.
 - Movilidad de cadera/tobillo.
 - Trabajo unilateral (posibles desequilibrios lado a lado).
 - Capacidad aeróbica.
+- Potencia atlética y coordinación/reactividad.
+- Estabilidad lumbar bajo fatiga.
+- Resiliencia específica de rodilla.
 
 ## Lesiones y molestias articulares (información crítica)
 
@@ -115,6 +149,10 @@ el sueño esté por debajo de lo necesario.
 - Entrenamiento de fuerza y funcional (actividad actual principal).
 - Hiking y ocean safaris.
 - Esquí (temporada de invierno).
+- Snowboard.
+- Básquetbol recreativo.
+- Cabalgatas/equitación recreativa.
+- Snorkel y scuba.
 - Estilo de vida activo orientado a deportes "extremos"/outdoor; el cuerpo debe
   estar preparado para eventualidades físicas variadas, no solo para el gym.
 

@@ -16,14 +16,17 @@ export const ATHLETE_PROFILE_SEED = {
     "Rendimiento atlético híbrido (fuerza + running + movilidad integrados)",
     "Longevidad articular (entrenar fuerte de forma sostenible)",
   ],
+  identidad_atletica:
+    "Strength-biased Hybrid Outdoor / Tactical Outdoor / Adaptive Athlete: fuerza máxima y relativa como base, con engine, potencia, movilidad, unilateralidad y resiliencia articular para surf, hiking, ski/snowboard, deportes espontáneos y vida física real. No busca pesas + cardio al azar ni WODs ligeros; busca preparación física de atleta generalista.",
   metas_especificas: [
     "Running: bajar el ritmo de 5K a menos de 5:00 min/km",
     "Natación: construir una base real de nado continuo (hoy no es una habilidad entrenada)",
     "Agilidad: mejorar cambios de dirección y coordinación reactiva",
     "Flexibilidad: aumentar rango de movimiento general, prioridad cadera/tobillo/hombro",
+    "Potencia atlética: reintroducir saltos, lanzamientos, sprints cortos o derivados olímpicos según tolerancia articular y técnica",
   ],
   enfoque_entrenamiento:
-    "Híbrido funcional + bodybuilding: fuerza funcional/atlética como base de cada bloque, con volumen de hipertrofia dirigido donde sirva a la recomposición corporal y al balance estructural — no bodybuilding puro ni solo funcional.",
+    "Strength-biased hybrid: fuerza funcional/atlética como base de cada bloque, conditioning con intención (strength endurance, metabolic capacity, power endurance o mixed modal), potencia y movilidad/durabilidad integradas. Puede usar hipertrofia dirigida donde sirva a recomposición y balance estructural, pero no bodybuilding puro ni solo funcional.",
   deportes_a_soportar: ["Surf", "Snowboard", "Cabalgatas (equitación recreativa)", "Básquetbol", "Snorkel", "Buceo (scuba)"],
   experiencia:
     "Avanzado con interrupciones: amplia experiencia en fuerza y funcional, con pausas y retornos. Técnica sólida en movimientos fundamentales, incluye base de halterofilia (snatch, clean & jerk) y gimnasia (pull-ups estrictos, algo de ring work/kipping) de su etapa de CrossFit — no es principiante en esos patrones aunque estén oxidados.",
@@ -33,6 +36,8 @@ export const ATHLETE_PROFILE_SEED = {
     rol: "Complemento al entrenamiento de fuerza, no el objetivo central.",
     volumen_actual: "1-2 veces/semana, ~5k por sesión.",
     dias_previstos: "Jueves y sábado",
+    nota_programacion:
+      "El jueves puede evolucionar a Hybrid Day: running + strength endurance, tempo + potencia, Zone 2 + accesorios/carries, o mixed modal según semana y recuperación.",
   },
   yoga: {
     dias_previstos: "Lunes y miércoles",
@@ -44,7 +49,14 @@ export const ATHLETE_PROFILE_SEED = {
     manejo: "Conservador — el sistema solo degrada la sesión si la falta de sueño es notoria/consistente, no ante una mala noche aislada.",
   },
   fortalezas: ["Fuerza en tren superior", "Movilidad/flexibilidad general"],
-  debilidades: ["Movilidad de cadera/tobillo", "Trabajo unilateral (posibles desequilibrios lado a lado)", "Capacidad aeróbica"],
+  debilidades: [
+    "Movilidad de cadera/tobillo",
+    "Trabajo unilateral (posibles desequilibrios lado a lado)",
+    "Capacidad aeróbica",
+    "Potencia atlética y coordinación/reactividad",
+    "Estabilidad lumbar bajo fatiga",
+    "Resiliencia específica de rodilla",
+  ],
   prioridad_programacion:
     "Las debilidades identificadas y la rehab/recuperación de lesiones activas van primero al diseñar cada bloque — se programan antes que la novedad o la variedad, y el resto del volumen se construye alrededor de ellas, no al revés.",
   lesiones: {

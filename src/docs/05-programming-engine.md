@@ -81,6 +81,36 @@ el camino conservador (Reentrada) y lo dice explícitamente en `focus_notes`.
   o capacidad aeróbica corta) → 5-10 min cooldown. Intensidad: RPE 6-7. Este día
   complementa los días de fuerza sin competir con su recuperación. En semana de deload,
   puede eliminarse o reducirse a movilidad + KB ligero.
+- **Hybrid Day (running + athletic conditioning):** cuando la identidad/meta lo pide y
+  la recuperación lo permite, un día de running puede dejar de ser "solo 5K" y volverse
+  una sesión mixta con intención: run + strength endurance, tempo + potencia, Zone 2 +
+  accesorios/carries, o mixed modal. No debe competir con lower strength pesado ni
+  convertirse en HIIT sin estructura.
+
+## Programación strength-biased hybrid
+
+Para atletas cuya identidad combina fuerza como base + capacidad metabólica alta
+(ej. strength-biased Hybrid Outdoor, Tactical Hybrid), la regla es:
+
+- La fuerza máxima/relativa se protege como capacidad base: compuestos, unilaterales,
+  carries pesados y core siguen teniendo prioridad.
+- El conditioning sube en densidad, complejidad o especificidad, no en caos. Debe
+  desarrollar fuerza bajo fatiga, capacidad anaeróbica, potencia, resistencia muscular
+  o engine.
+- El programa evita dos errores: volverse powerlifting + cardio mínimo, o volverse
+  metcon/HIIT que erosiona fuerza, técnica y articulaciones.
+- Cada semana debe tocar, en dosis razonable para el bloque: fuerza, engine, movilidad/
+  durabilidad, trabajo unilateral y alguna expresión de potencia/athleticism si el
+  atleta la tolera.
+
+Un reparto orientativo para un perfil outdoor strength-biased puede ser:
+
+- 40-50% strength.
+- 20-30% conditioning/engine.
+- 10-20% power/athleticism.
+- 10-20% mobility/durability.
+
+Estos porcentajes son brújula, no fórmula rígida. La meta vigente y los logs mandan.
 
 ## Progresión y selección de ejercicios
 
@@ -90,6 +120,38 @@ el camino conservador (Reentrada) y lo dice explícitamente en `focus_notes`.
   atlética (sentadilla, bisagra, empuje, tracción, unilateral, carries, core).
 - Cambio de ejercicio ocurre por: estancamiento sostenido, dolor articular, aburrimiento
   declarado por el atleta, o necesidad de variación dentro del mismo patrón.
+
+## Conditioning con intención
+
+No programar WODs aleatorios ni circuitos "para sudar". Todo conditioning debe declarar
+qué capacidad desarrolla:
+
+- **Strength Endurance:** trabajo sostenido con fuerza bajo fatiga. Ejemplos: row/ski +
+  front rack walking lunges + swings + pull-ups + farmer carry, con descansos claros.
+- **Metabolic Capacity:** estilo HYROX/tactical sin copiar estaciones por moda: sled,
+  sandbag, wall balls, ski/row/run, cargas y pacing ajustados al atleta.
+- **Power Endurance:** jumps/throws/sprints cortos combinados con bike/row/sled, cuidando
+  calidad de movimiento.
+- **Mixed Modal:** run + fuerza/carries/core o máquinas + fuerza, con objetivo energético
+  definido.
+
+Una sesión robusta no es una sesión destructiva. Debe tener warm up, bloque principal,
+descansos definidos, RPE objetivo y justificación de por qué esa mezcla sirve para la
+identidad y la meta del atleta.
+
+## Athletic performance semanal
+
+Cuando el atleta tiene objetivo outdoor/tactical/hybrid, el motor busca tocar estas
+capacidades cada semana, ajustando dosis:
+
+- Fuerza máxima o fuerza relativa (2-3 estímulos según bloque).
+- Trabajo unilateral real: Bulgarian Split Squat, Step-Up, Single Leg RDL, Cossack Squat,
+  Single Leg Calf Raise u otras variantes pertinentes.
+- Core y estabilidad lumbar: anti-rotación, anti-extensión, carries y control de bisagra.
+- Engine: Zone 2, tempo/threshold, intervalos, hill/sled/KB complexes según contexto.
+- Potencia/athleticism: broad jumps, med ball throws, sprints cortos, cambios de dirección
+  o derivados olímpicos seguros.
+- Durabilidad articular: tobillo, rodilla, cadera, hombro y columna torácica integrados.
 
 ## Idioma del nombre de ejercicio
 
@@ -139,6 +201,12 @@ recurrente ejercicios de rehabilitación/mantenimiento articular (estiramiento d
 cuádriceps, trabajo de descontractura, fortalecimiento específico) — sin que esto
 implique limitar rangos de sentadilla o impacto; el manejo es vía técnica y
 cuidado activo, no restricción.
+
+Para perfiles con historial de rodilla/tobillo/lumbar y objetivo outdoor/tactical,
+la durabilidad se trata como capacidad a construir ("armor building"), no como simple
+lista de restricciones. Ejemplos recurrentes según tolerancia: Spanish Squat, Isometric
+Wall Sit, Peterson Step-Up, Reverse Sled Drag, Tibialis Raise, calf raises, core
+anti-rotación y movilidad activa de cadera/tobillo.
 
 ## Manejo de molestias articulares
 

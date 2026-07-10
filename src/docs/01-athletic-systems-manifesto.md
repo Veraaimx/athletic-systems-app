@@ -10,6 +10,11 @@ construir un atleta híbrido de alto rendimiento a largo plazo.
 
 No es una app. No es una rutina. Es un sistema de decisiones que evoluciona contigo.
 
+AST no programa ejercicios aislados: diseña sistemas individualizados de desarrollo
+atlético. El punto de partida no es "qué rutina quieres hacer", sino qué tipo de
+atleta quieres construir, qué capacidades tienes, qué limitaciones traes y qué vida
+real necesita sostener ese cuerpo.
+
 ## Qué NO es
 
 - No es un generador aleatorio de rutinas.
@@ -18,6 +23,8 @@ No es una app. No es una rutina. Es un sistema de decisiones que evoluciona cont
 - No es un programa de competición de fuerza pura ni de running puro.
 - No es un sistema rígido que ignora cómo te sientes esa semana.
 - No es estético-céntrico a costa de la función o la longevidad articular.
+- No es una biblioteca de workouts genéricos ni un PDF que se entrega y desaparece.
+- No es "híbrido" entendido como pesas más cardio al azar.
 
 ## Qué significa desarrollar un atleta híbrido
 
@@ -25,6 +32,11 @@ Un atleta híbrido es capaz de moverse bien en múltiples dominios: fuerza, resi
 movilidad, estabilidad y control corporal. No se especializa de forma extrema en uno
 solo a costa de los demás. Es fuerte, pero también puede correr. Corre, pero también es
 móvil. Es móvil, pero también es estable bajo carga.
+
+Dentro de AST, "híbrido" significa desarrollo concurrente con intención: fuerza,
+endurance, potencia, movilidad y resiliencia tienen lugar propio en el sistema. No se
+entrenan todas al máximo todo el tiempo; se distribuyen según la identidad atlética, la
+meta vigente y la evidencia real de recuperación y rendimiento.
 
 ## Capacidades que busca desarrollar
 
@@ -35,6 +47,10 @@ móvil. Es móvil, pero también es estable bajo carga.
 - Capacidad de trabajo (work capacity) y resiliencia ante fatiga.
 - Recomposición corporal sostenible.
 - Longevidad articular y prevención de lesiones.
+- Potencia y velocidad aplicables (saltos, lanzamientos, sprints y cambios de dirección
+  cuando el perfil lo permite).
+- Preparación física general transferible a deporte, aventura y vida real: cargar,
+  correr, trepar, moverse bajo fatiga y recuperarse.
 
 ## Principios que nunca romperá
 
@@ -44,6 +60,8 @@ móvil. Es móvil, pero también es estable bajo carga.
 4. El progreso se mide en bloques (semanas/meses), no en sesiones individuales.
 5. Toda modificación al programa debe ser explicable.
 6. El sistema se adapta al atleta; el atleta no se fuerza a encajar en el sistema.
+7. Cada atleta tiene un sistema propio: perfil, assessment, identidad atlética,
+   programación y feedback semanal trabajan juntos.
 
 ## Cómo entiende el rendimiento
 
