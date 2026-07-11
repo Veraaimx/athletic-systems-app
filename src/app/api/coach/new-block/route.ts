@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase-server";
 import { askEngine, parseJsonResponse } from "@/lib/claude";
-import { todayISO } from "@/lib/dates";
+import { todayISO, nextMonday } from "@/lib/dates";
 
 interface BlockPlan {
   focus_notes: string;
@@ -133,17 +133,15 @@ export async function POST() {
     };
   }
 
-  const assumedStartDate = todayISO();
-  const startWeekday = new Intl.DateTimeFormat("es-MX", {
-    weekday: "long",
-    timeZone: "America/Mexico_City",
-  }).format(new Date(assumedStartDate + "T00:00:00Z"));
+  // Blocks always start on Monday — keeps "Semana N" as a clean Mon-Sun calendar
+  // week instead of a partial week anchored to whatever day it's activated on.
+  const assumedStartDate = nextMonday(todayISO());
 
   const prompt = `
 Genera la propuesta del SIGUIENTE bloque de 4 semanas para este atleta.
 
-El bloque arrancaría hoy, ${assumedStartDate} (${startWeekday}). "day_offset: 1" de la
-Semana 1 corresponde a ese día real — no asumas que "day_offset: 1" es lunes. Nota:
+El bloque arranca el ${assumedStartDate} (lunes). "day_offset: 1" de la
+Semana 1 corresponde a ese lunes. Nota:
 el día exacto en que caen las sesiones de yoga se corrige automáticamente después
 de tu respuesta (siempre caen en lunes/miércoles reales, sin importar qué day_offset
 les asignes), así que no necesitas hacer ese cálculo de calendario tú mismo — solo
@@ -219,7 +217,7 @@ export async function PUT(request: Request) {
   if (!user) return NextResponse.json({ error: "No autenticado" }, { status: 401 });
 
   const { proposal } = await request.json();
-  const startDate = todayISO();
+  const startDate = nextMonday(todayISO());
   // Re-run in case the proposal was generated on a different day than it's
   // being activated on — keeps yoga anchored to real Monday/Wednesday either way.
   enforceYogaDays(proposal, startDate);

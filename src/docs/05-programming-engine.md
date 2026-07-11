@@ -117,6 +117,17 @@ necesite, igual que cualquier otro ejercicio.
 Squat — habilidades de alta demanda de hombro/rodilla; reevaluar cuando la rodilla
 izquierda y el hombro derecho estén sin molestia sostenida por varios bloques.
 
+**Logs de carga vs. variedad de vocabulario — no son lo mismo.** El historial de
+logs (RPE, peso, dolor) del bloque anterior existe para decidir progresión de
+**carga** en los movimientos de fuerza — no es una lista blanca implícita de
+"lo único seguro de programar". Un movimiento del banco de arriba sin logs
+previos no es un movimiento no probado o riesgoso, es simplemente uno que el
+atleta todavía no registró: se programa igual que cualquier otro, empezando en
+carga/complejidad conservadora si es genuinamente nuevo. Repetir bloque tras
+bloque solo lo que ya tiene logs estanca el conditioning exactamente en lo que
+"Programación strength-biased hybrid" pide evitar (subir en densidad,
+complejidad o especificidad cada bloque, no quedarse plano).
+
 ## Programación strength-biased hybrid
 
 Para atletas cuya identidad combina fuerza como base + capacidad metabólica alta
