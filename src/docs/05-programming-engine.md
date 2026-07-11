@@ -61,6 +61,14 @@ bloque — nunca aplicada en silencio — igual que cualquier otro cambio de blo
 explicadas" en Coach Behavior). Ante duda o evidencia mixta, el motor opta por
 el camino conservador (Reentrada) y lo dice explícitamente en `focus_notes`.
 
+**Cuando la Semana 1 salta la Reentrada, las demás semanas conservan su rol:**
+S1 = Carga, S2 = Carga (progresión sobre S1), S3 = Intensificación, S4 =
+Deload Inteligente. Saltar la Reentrada no convierte el bloque en dos semanas
+de intensificación — **hay exactamente una semana de Intensificación por
+bloque (la S3)**, porque el pico requiere la acumulación previa de S1-S2 y el
+deload posterior para absorberse. Etiquetar S2 como "Intensificación" es un
+error de estructura, no una progresión más agresiva.
+
 ## Distribución de disciplinas
 
 - **Fuerza:** ejercicios principales (compuestos) primero en la sesión, después
@@ -174,6 +182,22 @@ deben cubrir más de un patrón (no 6 variantes del mismo swing) e incluir
 regularmente empuje funcional (push-up/plyo/floor press) — es la vía prevista
 para trabajar pecho y brazos sin volumen de aislamiento.
 
+**Ubicación de isométricos (regla de colocación):** los isométricos tienen
+tres casas legítimas — (1) warm-up como activación corta y submáxima (ej. VMO
+iso), (2) slots de rehab/tendón donde el hold con carga es protocolo formal
+(ej. Spanish Squat, Wall Sit para tendinopatía), y (3) core finishers
+dedicados al cierre (Hollow Hold, planks). **Nunca como estación dentro de un
+circuito/EMOM/AMRAP dinámico de conditioning** — ahí toda estación debe ser
+movimiento cíclico o continuo (los carries cuentan como continuos); un hold
+estático dentro de un EMOM es un minuto muerto para la intención del formato,
+y ninguno de los formatos de referencia lo hace.
+
+**Sin duplicados en la misma sesión:** un ejercicio que ya apareció en el
+bloque principal (o warm-up) de una sesión no se repite dentro del
+conditioning de esa misma sesión — el slot de conditioning elige un movimiento
+distinto. Repetir el mismo ejercicio dos veces en una sesión es volumen
+duplicado sin propósito (el "junk volume" que Viada pide eliminar).
+
 ## Rotación semanal de conditioning por bloque
 
 Para que el conditioning no se quede fijo en el mismo formato semana tras
@@ -234,10 +258,13 @@ como la fuerza se mide en libras a través del bloque, el conditioning necesita
 su propia métrica objetiva — sin eso, "más variedad" puede volverse ruido sin
 dirección. Cada bloque de 4 semanas incluye 1 benchmark de conditioning fijo,
 con el mismo protocolo exacto (mismos movimientos, misma carga, mismo formato
-de tiempo), repetido en Semana 1 y Semana 3 (antes del deload) para que el
+de tiempo), repetido en **Semana 1 y Semana 3** (antes del deload) para que el
 resultado sea directamente comparable — ej. un AMRAP de 12 min con 3-4
 movimientos fijos (contar rondas/reps completadas), o un circuito for-time
-fijo (medir tiempo total). El benchmark se elige según la categoría de
+fijo (medir tiempo total). Las 2 semanas de separación son parte del diseño:
+programarlo en semanas consecutivas (ej. S2→S3) no deja tiempo real de
+adaptación entre mediciones y convierte la comparación en ruido — S1 y S3, no
+otras combinaciones. El benchmark se elige según la categoría de
 conditioning que el bloque esté priorizando (Strength Endurance, Power
 Endurance, Metabolic Capacity) y se mantiene idéntico dentro del bloque
 específicamente para poder medir — la variedad de la rotación semanal vive en
