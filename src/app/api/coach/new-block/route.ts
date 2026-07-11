@@ -185,8 +185,24 @@ Responde SOLO con un JSON con esta forma exacta:
 }
 `.trim();
 
-  const raw = await askEngine(prompt, 16000);
-  const plan = parseJsonResponse<BlockPlan>(raw);
+  let plan: BlockPlan;
+  try {
+    // 4 semanas completas con sesiones muy detalladas (sets, pesos, rehab por
+    // ejercicio) pueden acercarse o superar el límite anterior de 16000 tokens,
+    // truncando el JSON a la mitad — 32000 da margen real.
+    const raw = await askEngine(prompt, 32000);
+    plan = parseJsonResponse<BlockPlan>(raw);
+    if (!plan?.weeks?.length) {
+      throw new Error("La respuesta no incluyó las semanas del bloque.");
+    }
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    return NextResponse.json(
+      { error: `No se pudo generar la propuesta — respuesta inválida o incompleta del modelo (${message}). Intenta de nuevo.` },
+      { status: 502 }
+    );
+  }
+
   enforceYogaDays(plan, assumedStartDate);
 
   // Returned as a proposal, NOT inserted into `blocks` yet.
