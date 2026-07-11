@@ -31,7 +31,7 @@ interface SessionHistoryRow {
 function curateSessionsForPrompt(sessions: SessionHistoryRow[]): unknown[] {
   return sessions.map((s) => {
     if (s.type !== "yoga") return s;
-    const logs = s.session_logs ?? [];
+    const logs = Array.isArray(s.session_logs) ? s.session_logs : s.session_logs ? [s.session_logs] : [];
     const rpes = logs.map((l) => l.rpe).filter((r): r is number => r != null);
     const painFlags = logs.flatMap((l) => (l.pain_flags ? [l.pain_flags] : []));
     return {
@@ -69,6 +69,7 @@ function enforceYogaDays(plan: BlockPlan, startDateISO: string) {
   const startDow = new Date(startDateISO + "T00:00:00Z").getUTCDay(); // 0=Sun..6=Sat
 
   for (const week of plan.weeks) {
+    if (!Array.isArray(week?.sessions)) continue; // malformed week from the model — skip rather than crash
     const weekStart = (week.week_number - 1) * 7 + 1;
     const sorted = [...week.sessions].sort((a, b) => a.day_offset - b.day_offset);
     const yoga = sorted.filter((s) => s.type === "yoga");
@@ -171,9 +172,18 @@ export async function POST() {
       .select("date, week_number, type, status, justification, session_logs(*)")
       .eq("block_id", lastBlock.id)
       .order("date", { ascending: true });
+    let curatedSessions: unknown[];
+    try {
+      curatedSessions = curateSessionsForPrompt((sessionsWithLogs ?? []) as unknown as SessionHistoryRow[]);
+    } catch {
+      // Curation is a nice-to-have (removes the yoga anchor bias) — if the data
+      // shape is unexpected, fall back to raw sessions rather than failing the
+      // whole proposal over it.
+      curatedSessions = sessionsWithLogs ?? [];
+    }
     blockHistory = {
       focus_notes: lastBlock.focus_notes,
-      sessions: curateSessionsForPrompt((sessionsWithLogs ?? []) as unknown as SessionHistoryRow[]),
+      sessions: curatedSessions,
     };
   }
 
@@ -257,7 +267,15 @@ Responde SOLO con un JSON con esta forma exacta:
     );
   }
 
-  enforceYogaDays(plan, assumedStartDate);
+  try {
+    enforceYogaDays(plan, assumedStartDate);
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    return NextResponse.json(
+      { error: `No se pudo generar la propuesta — error ajustando los días de yoga (${message}). Intenta de nuevo.` },
+      { status: 500 }
+    );
+  }
 
   // Returned as a proposal, NOT inserted into `blocks` yet.
   return NextResponse.json({ proposal: plan, assumedStartDate });
