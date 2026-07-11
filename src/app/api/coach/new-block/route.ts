@@ -3,6 +3,50 @@ import { createClient } from "@/lib/supabase-server";
 import { askEngine, parseJsonResponse } from "@/lib/claude";
 import { todayISO, nextMonday } from "@/lib/dates";
 
+interface SessionLogRow {
+  rpe: number | null;
+  pain_flags: unknown;
+  readiness_notes: string | null;
+}
+
+interface SessionHistoryRow {
+  date: string;
+  week_number: number;
+  type: string;
+  status: string;
+  justification: string | null;
+  session_logs: SessionLogRow[] | null;
+}
+
+// Yoga sessions are where the KB complement kept repeating the exact same
+// movements block after block — even after an explicit "use more variety"
+// instruction in the docs canon. The specific exercise-by-exercise prose in
+// `justification` (e.g. "TGU 3x2 @16kg, Windmill 3x5 @16kg...") anchors the
+// model far more strongly than an abstract vocabulary list ever could, because
+// it's concrete, recent, and framed as "evidence to use for continuity."
+// Strength/running sessions keep full detail — that's where real load-
+// progression evidence matters. Yoga sessions are reduced to adherence/RPE/
+// pain only, with the movement-by-movement text removed, so there's nothing
+// left in the prompt to anchor the KB complement's exercise selection to.
+function curateSessionsForPrompt(sessions: SessionHistoryRow[]): unknown[] {
+  return sessions.map((s) => {
+    if (s.type !== "yoga") return s;
+    const logs = s.session_logs ?? [];
+    const rpes = logs.map((l) => l.rpe).filter((r): r is number => r != null);
+    const painFlags = logs.flatMap((l) => (l.pain_flags ? [l.pain_flags] : []));
+    return {
+      date: s.date,
+      week_number: s.week_number,
+      type: s.type,
+      status: s.status,
+      summary:
+        `Complemento KB completado. RPE: ${rpes.length ? rpes.join(", ") : "sin registro"}.` +
+        (painFlags.length ? ` Molestias reportadas: ${JSON.stringify(painFlags)}.` : "") +
+        " (Detalle de movimientos omitido a propósito — ver nota en el prompt.)",
+    };
+  });
+}
+
 interface BlockPlan {
   focus_notes: string;
   weeks: Array<{
@@ -129,7 +173,7 @@ export async function POST() {
       .order("date", { ascending: true });
     blockHistory = {
       focus_notes: lastBlock.focus_notes,
-      sessions: sessionsWithLogs ?? [],
+      sessions: curateSessionsForPrompt((sessionsWithLogs ?? []) as unknown as SessionHistoryRow[]),
     };
   }
 
@@ -158,6 +202,18 @@ Bloque anterior: lo que se planificó, lo que realmente se hizo, y los logs real
 real para decidir progresión, mantenimiento o regresión de carga — no asumas que el
 bloque anterior salió como se planeó si los logs dicen lo contrario:
 ${JSON.stringify(blockHistory, null, 2)}
+
+Nota sobre las sesiones de yoga en el historial de arriba: el detalle
+movimiento-por-movimiento del complemento KB fue omitido a propósito, no es un
+error de datos. Los días de yoga son de baja fatiga sistémica (movilidad/
+respiración, no un WOD) y son el lugar más seguro del bloque para introducir
+vocabulario nuevo del banco de movimiento — no compites por recuperación con
+nada ahí. No repitas por inercia los mismos movimientos KB de bloques
+anteriores en estos días: usa esta oportunidad para explorar categorías del
+banco poco usadas, en especial rotación de torso y core/control lumbar (la
+prioridad #1 declarada del atleta es estabilidad lumbar). La cuota mínima de
+variedad del bloque (3-4 movimientos nuevos, ver metodología) debe cumplirse
+principalmente aquí, no solo en el conditioning de fuerza/atlético.
 
 Antes de fijar la Semana 1, sigue la sección "Cuándo la Semana 1 no es Reentrada" de
 tu metodología de programación: evalúa con la evidencia de arriba (adherencia, dolor

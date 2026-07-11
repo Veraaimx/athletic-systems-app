@@ -86,6 +86,12 @@ real — la programación debe ser flexible, no rígida, y debe poder degradar a
   del atleta** — depende de clase con instructora, a diferencia de running estos
   días no se mueven.
 - Funciona como recuperación activa y trabajo de movilidad integrado.
+- Para el atleta, yoga es ante todo movilidad, respiración y mentalidad — hay
+  exigencia física real pero de naturaleza distinta a un WOD, no genera la
+  misma fatiga sistémica. Esto hace que el complemento KB de estos días sea el
+  lugar **más seguro del bloque** para introducir vocabulario nuevo del banco
+  de movimiento: no compite por recuperación con nada, así que no hay razón
+  para repetir los mismos movimientos bloque tras bloque.
 
 ## Nutrición
 

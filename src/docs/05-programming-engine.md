@@ -102,14 +102,28 @@ Vocabulario disponible para el motor — no es preferencia del atleta ni cuota
 obligatoria, se selecciona según el patrón/plano de movimiento que el bloque
 necesite, igual que cualquier otro ejercicio.
 
-- **Rotación / anti-rotación de torso:** Windmill, Windmill Snatch, High Elbow Twist,
-  Squat Twist Pullover, Split Stance Chops, Pallof Rotations.
+- **Familia de snatch (fundamental + variantes):** KB Snatch (single-arm,
+  fundamental — base de toda la familia), Windmill Snatch, Snatch Twist,
+  Squat Swing Snatch, Lunge Snatch, Skier Snatch, American Twist Swing.
+- **Rotación / anti-rotación de torso:** High Elbow Twist, Squat Twist Pullover,
+  Split Stance Chops, Pallof Rotations, KB Chop (diagonal explosivo, cintura a
+  hombro contrario), B-Stance Rotational Chops, Half-Kneeling KB Rotational
+  Woodchops, Curtsy Lunge + Uppercut, Rotational Clean, Cross-Body High Pull.
 - **Core / control lumbar:** Turkish Sit-Up, Iso Press + Leg Raise, Oblique V-Up,
-  Hanging Oblique Knee Tuck, Turkish Get-Up (TGU).
+  Hanging Oblique Knee Tuck, Turkish Get-Up (TGU), Single-Arm Overhead Iso Hold
+  Sit-Up, Hip Crawl con Single-Arm Overhead Iso Hold.
 - **Unilateral / estabilidad:** Kickstand Windmill Squat, overhead single-arm
-  stability lunge, Bulgarian Split Squat, Cossack Squat.
+  stability lunge, Bulgarian Split Squat, Cossack Squat, Single-Leg Press,
+  Isometric Lunge con Contralateral Press.
 - **Complejos multiplanares:** Deep Squat Hold Curl-Press + Lateral Flexion, Sumo
-  Tricep Extension, Seesaw Press, Hand-to-Hand passing.
+  Tricep Extension, Seesaw Press, Hand-to-Hand passing, Overhead Sumo Squat
+  Complex (knee drops + tricep extension + backward bend), Clean → Reverse
+  Lunge → Press, Split-Stance Clean to Hunter Squat, Squat-Down Bent-Over
+  Press, Windmill Press, Figure Eight into Press, Flexion to Extension High
+  Pull, Alternating Same-Hand Press (in/out).
+- **Halos / giros de muñeca:** Alternating Halo, Seated KB Halos, Half-Kneeling
+  Halo to Press. Nota: la variante con steel mace (Mace 360s) requiere equipo
+  que el atleta no tiene — usar siempre estas versiones con kettlebell.
 - **Carries y estaciones (equipo real disponible):** Farmer's Carry, Sled Push
   (solo empuje — no hay cuerdas/arnés para jalar), Wall Balls, Burpee Broad
   Jump, Box Jump (dosis conservadora, ver nota de impacto abajo), Assault Bike
