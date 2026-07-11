@@ -102,9 +102,10 @@ Vocabulario disponible para el motor — no es preferencia del atleta ni cuota
 obligatoria, se selecciona según el patrón/plano de movimiento que el bloque
 necesite, igual que cualquier otro ejercicio.
 
-- **Familia de snatch (fundamental + variantes):** KB Snatch (single-arm,
+- **Familia de snatch y swing (fundamental + variantes):** KB Snatch (single-arm,
   fundamental — base de toda la familia), Windmill Snatch, Snatch Twist,
-  Squat Swing Snatch, Lunge Snatch, Skier Snatch, American Twist Swing.
+  Squat Swing Snatch, Lunge Snatch, Skier Snatch, American Twist Swing,
+  Step-Back Swing, Alternating Ski Swing, Hand-to-Hand Lateral Swing.
 - **Rotación / anti-rotación de torso:** High Elbow Twist, Squat Twist Pullover,
   Split Stance Chops, Pallof Rotations, KB Chop (diagonal explosivo, cintura a
   hombro contrario), B-Stance Rotational Chops, Half-Kneeling KB Rotational
@@ -122,8 +123,21 @@ necesite, igual que cualquier otro ejercicio.
   Press, Windmill Press, Figure Eight into Press, Flexion to Extension High
   Pull, Alternating Same-Hand Press (in/out).
 - **Halos / giros de muñeca:** Alternating Halo, Seated KB Halos, Half-Kneeling
-  Halo to Press. Nota: la variante con steel mace (Mace 360s) requiere equipo
-  que el atleta no tiene — usar siempre estas versiones con kettlebell.
+  Halo to Press, Non-Stop Around the World. Nota: la variante con steel mace
+  (Mace 360s) requiere equipo que el atleta no tiene — usar siempre estas
+  versiones con kettlebell.
+- **Empuje funcional y brazos (dentro de conditioning):** Push-Up (estricto,
+  close-grip, incline), Plyo Push-Up, Navy SEAL Push-Up (push-up → knee drive
+  alternado → burpee), Push-Up to Low Squat Hold + Forward Press, KB Floor
+  Press, KB Curl dentro de flows/circuitos, Ballistic Row. **Aclaración
+  importante de alcance:** la regla de "máximo 2 ejercicios de bíceps por
+  bloque" aplica a slots de aislamiento dentro de las sesiones de fuerza — el
+  trabajo funcional de pecho/brazos dentro de circuitos de conditioning
+  (push-ups, plyo, KB curls en un flow) NO cuenta contra esa cuota. Lo que el
+  atleta no quiere es volumen de hipertrofia estilo bodybuilding (aislamiento
+  de espejo), no ausencia total de pecho y brazos: el empuje funcional bajo
+  fatiga es parte legítima del conditioning atlético y aparece constantemente
+  en los formatos de referencia.
 - **Carries y estaciones (equipo real disponible):** Farmer's Carry, Sled Push
   (solo empuje — no hay cuerdas/arnés para jalar), Wall Balls, Burpee Broad
   Jump, Box Jump (dosis conservadora, ver nota de impacto abajo), Assault Bike
@@ -147,6 +161,18 @@ bloque de 4 semanas debe incluir al menos 3-4 movimientos del banco de
 vocabulario que no aparecieron en los logs del bloque anterior. Repetir bloque
 tras bloque solo lo que ya tiene logs estanca el conditioning exactamente en
 lo que "Programación strength-biased hybrid" pide evitar.
+
+**Estructura mínima de finishers y circuitos (regla verificable):** el
+finisher KB de los días de fuerza y el circuito del día atlético se componen
+de **4-6 movimientos full-body** en formato EMOM/AMRAP/circuit de 12-20
+minutos, opcionalmente cerrados con un core finisher de 2 movimientos — el
+formato de los ejemplos de referencia (ej. EMOM 20 min: rotational hand-to-hand
+pulls + curtsy lunges + rotational cleans + single-leg presses, × 5 rondas +
+core finisher). Un EMOM de solo 2 movimientos es formato de deload, no de
+semana de trabajo: en S1-S3 se considera subdimensionado. Los 4-6 movimientos
+deben cubrir más de un patrón (no 6 variantes del mismo swing) e incluir
+regularmente empuje funcional (push-up/plyo/floor press) — es la vía prevista
+para trabajar pecho y brazos sin volumen de aislamiento.
 
 ## Rotación semanal de conditioning por bloque
 
