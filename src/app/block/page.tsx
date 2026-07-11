@@ -151,6 +151,7 @@ function BlockPageContent() {
   const [activeBlock, setActiveBlock] = useState<ActiveBlock | null | undefined>(undefined);
   const [view, setView] = useState<View>(searchParams.get("propose") ? "month" : "week");
   const [proposal, setProposal] = useState<BlockProposal | null>(null);
+  const [proposalStartDate, setProposalStartDate] = useState<string>(new Date().toISOString().slice(0, 10));
   const [loading, setLoading] = useState(false);
   const [activated, setActivated] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -176,7 +177,7 @@ function BlockPageContent() {
     try {
       const res = await fetch("/api/coach/new-block", { method: "POST" });
       const text = await res.text();
-      let data: { proposal?: BlockProposal; error?: string };
+      let data: { proposal?: BlockProposal; assumedStartDate?: string; error?: string };
       try {
         data = text ? JSON.parse(text) : {};
       } catch {
@@ -188,6 +189,7 @@ function BlockPageContent() {
         return;
       }
       if (data.proposal) setProposal(data.proposal);
+      if (data.assumedStartDate) setProposalStartDate(data.assumedStartDate);
     } catch {
       setError("No se pudo conectar con el servidor. Verifica que esté corriendo e intenta de nuevo.");
     } finally {
@@ -261,7 +263,7 @@ function BlockPageContent() {
             <div style={{ marginTop: 16 }}>
               <h3>Propuesta (sin activar)</h3>
               <p className="muted">{proposal.focus_notes}</p>
-              <MonthView weeks={proposal.weeks} startDate={new Date().toISOString().slice(0, 10)} />
+              <MonthView weeks={proposal.weeks} startDate={proposalStartDate} />
 
               <button onClick={activate} style={{ marginTop: 16 }}>
                 Activar este bloque

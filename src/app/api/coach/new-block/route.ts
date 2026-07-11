@@ -12,6 +12,43 @@ interface BlockPlan {
   }>;
 }
 
+// Yoga is a real, non-negotiable weekly commitment (instructor-led class —
+// see docs/04-athlete-profile.md) that always falls on Monday and Wednesday,
+// regardless of which real weekday the block happens to start on. The model
+// reasons about a Mon-Sun template but is never told today's actual weekday,
+// so `day_offset` values it proposes for yoga can land on any real day. Rather
+// than rely on prompting alone for a hard constraint, enforce it deterministically:
+// walk each week's 7 real calendar days and slot yoga sessions into whichever
+// land on Monday/Wednesday, filling the rest with the model's other sessions
+// in their original relative order.
+function enforceYogaDays(plan: BlockPlan, startDateISO: string) {
+  const startDow = new Date(startDateISO + "T00:00:00Z").getUTCDay(); // 0=Sun..6=Sat
+
+  for (const week of plan.weeks) {
+    const weekStart = (week.week_number - 1) * 7 + 1;
+    const sorted = [...week.sessions].sort((a, b) => a.day_offset - b.day_offset);
+    const yoga = sorted.filter((s) => s.type === "yoga");
+    const other = sorted.filter((s) => s.type !== "yoga");
+    const rebuilt: typeof week.sessions = [];
+
+    for (let i = 0; i < 7; i++) {
+      const dayOffset = weekStart + i;
+      const dow = (startDow + (dayOffset - 1)) % 7;
+      const isYogaDay = dow === 1 || dow === 3; // Monday or Wednesday
+      if (isYogaDay && yoga.length) {
+        rebuilt.push({ ...yoga.shift()!, day_offset: dayOffset });
+      } else if (!isYogaDay && other.length) {
+        rebuilt.push({ ...other.shift()!, day_offset: dayOffset });
+      } else if (yoga.length) {
+        rebuilt.push({ ...yoga.shift()!, day_offset: dayOffset });
+      } else if (other.length) {
+        rebuilt.push({ ...other.shift()!, day_offset: dayOffset });
+      }
+    }
+    week.sessions = rebuilt;
+  }
+}
+
 // Returns the currently active block, if any — so /block can always show the
 // full 4-week plan, not just whatever proposal happened to be in memory.
 export async function GET() {
@@ -96,8 +133,21 @@ export async function POST() {
     };
   }
 
+  const assumedStartDate = todayISO();
+  const startWeekday = new Intl.DateTimeFormat("es-MX", {
+    weekday: "long",
+    timeZone: "America/Mexico_City",
+  }).format(new Date(assumedStartDate + "T00:00:00Z"));
+
   const prompt = `
 Genera la propuesta del SIGUIENTE bloque de 4 semanas para este atleta.
+
+El bloque arrancaría hoy, ${assumedStartDate} (${startWeekday}). "day_offset: 1" de la
+Semana 1 corresponde a ese día real — no asumas que "day_offset: 1" es lunes. Nota:
+el día exacto en que caen las sesiones de yoga se corrige automáticamente después
+de tu respuesta (siempre caen en lunes/miércoles reales, sin importar qué day_offset
+les asignes), así que no necesitas hacer ese cálculo de calendario tú mismo — solo
+incluye 2 sesiones de yoga por semana en el orden que tengan sentido dentro de tu plan.
 
 Perfil del atleta (JSON):
 ${JSON.stringify(profile?.data ?? {}, null, 2)}
@@ -137,9 +187,10 @@ Responde SOLO con un JSON con esta forma exacta:
 
   const raw = await askEngine(prompt, 16000);
   const plan = parseJsonResponse<BlockPlan>(raw);
+  enforceYogaDays(plan, assumedStartDate);
 
   // Returned as a proposal, NOT inserted into `blocks` yet.
-  return NextResponse.json({ proposal: plan });
+  return NextResponse.json({ proposal: plan, assumedStartDate });
 }
 
 // Activates a confirmed block proposal: closes the current active block (if any)
@@ -152,13 +203,17 @@ export async function PUT(request: Request) {
   if (!user) return NextResponse.json({ error: "No autenticado" }, { status: 401 });
 
   const { proposal } = await request.json();
+  const startDate = todayISO();
+  // Re-run in case the proposal was generated on a different day than it's
+  // being activated on — keeps yoga anchored to real Monday/Wednesday either way.
+  enforceYogaDays(proposal, startDate);
 
   await supabase.from("blocks").update({ status: "closed" }).eq("status", "active");
 
   const { data: block, error } = await supabase
     .from("blocks")
     .insert({
-      start_date: todayISO(),
+      start_date: startDate,
       status: "active",
       focus_notes: proposal.focus_notes,
       raw_plan: proposal,
