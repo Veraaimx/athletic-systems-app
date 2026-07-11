@@ -30,7 +30,7 @@ export const ATHLETE_PROFILE_SEED = {
   deportes_a_soportar: ["Surf", "Snowboard", "Cabalgatas (equitación recreativa)", "Básquetbol", "Snorkel", "Buceo (scuba)"],
   experiencia:
     "Avanzado con interrupciones: amplia experiencia en fuerza y funcional, con pausas y retornos. Técnica sólida en movimientos fundamentales, incluye base de halterofilia (snatch, clean & jerk) y gimnasia (pull-ups estrictos, algo de ring work/kipping) de su etapa de CrossFit — no es principiante en esos patrones aunque estén oxidados.",
-  equipo: "Gym completo (barras, racks, máquinas) + kettlebells propios.",
+  equipo: "Gym completo: barras, racks, máquinas, kettlebells propios, sled (solo empuje — no hay cuerdas/arnés para jalar por ahora), assault bike, remadora (rowing machine), box de salto (plyo box), balones medicinales, caminadoras. No disponible: sandbag, ski erg.",
   disponibilidad: "4-5 días/semana, variable. La programación debe ser flexible y poder degradar a mínimo efectivo cuando el contexto lo exige.",
   running: {
     rol: "Complemento al entrenamiento de fuerza, no el objetivo central.",

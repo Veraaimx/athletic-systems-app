@@ -55,7 +55,10 @@ aunque esos patrones estén oxidados.
 
 ## Equipo disponible
 
-Gym completo (barras, racks, máquinas) + kettlebells propios disponibles.
+Gym completo: barras, racks, máquinas, kettlebells propios, sled (**solo
+empuje** — no hay cuerdas/arnés para jalar por ahora), assault bike, remadora
+(rowing machine), box de salto (plyo box), balones medicinales, caminadoras.
+**No disponible:** sandbag, ski erg.
 
 ## Disponibilidad / frecuencia
 

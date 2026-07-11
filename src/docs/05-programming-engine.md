@@ -110,8 +110,11 @@ necesite, igual que cualquier otro ejercicio.
   stability lunge, Bulgarian Split Squat, Cossack Squat.
 - **Complejos multiplanares:** Deep Squat Hold Curl-Press + Lateral Flexion, Sumo
   Tricep Extension, Seesaw Press, Hand-to-Hand passing.
-- **Carries y estaciones estilo Hyrox:** Farmer's Carry, Sandbag Carry, Sled
-  Push/Pull, Wall Balls, Burpee Broad Jump.
+- **Carries y estaciones (equipo real disponible):** Farmer's Carry, Sled Push
+  (solo empuje — no hay cuerdas/arnés para jalar), Wall Balls, Burpee Broad
+  Jump, Box Jump (dosis conservadora, ver nota de impacto abajo), Assault Bike
+  intervals, Row (remadora), Medicine Ball Slam/Throw. No usar Sandbag Carry
+  ni Ski Erg — no disponibles.
 
 **En espera (no programar todavía):** Handstand Walk, Bar/Ring Muscle-Up, Pistol
 Squat — habilidades de alta demanda de hombro/rodilla; reevaluar cuando la rodilla
@@ -123,10 +126,49 @@ logs (RPE, peso, dolor) del bloque anterior existe para decidir progresión de
 "lo único seguro de programar". Un movimiento del banco de arriba sin logs
 previos no es un movimiento no probado o riesgoso, es simplemente uno que el
 atleta todavía no registró: se programa igual que cualquier otro, empezando en
-carga/complejidad conservadora si es genuinamente nuevo. Repetir bloque tras
-bloque solo lo que ya tiene logs estanca el conditioning exactamente en lo que
-"Programación strength-biased hybrid" pide evitar (subir en densidad,
-complejidad o especificidad cada bloque, no quedarse plano).
+carga/complejidad conservadora si es genuinamente nuevo.
+
+**Cuota mínima de variedad (regla verificable, no solo intención):** cada
+bloque de 4 semanas debe incluir al menos 3-4 movimientos del banco de
+vocabulario que no aparecieron en los logs del bloque anterior. Repetir bloque
+tras bloque solo lo que ya tiene logs estanca el conditioning exactamente en
+lo que "Programación strength-biased hybrid" pide evitar.
+
+## Rotación semanal de conditioning por bloque
+
+Para que el conditioning no se quede fijo en el mismo formato semana tras
+semana, cada semana del bloque tiene una intención de conditioning distinta,
+inspirada en un enfoque de referencia específico:
+
+- **Semana 1 (Reentrada/Carga):** Strength Endurance — carries + fuerza bajo
+  fatiga moderada (Farmer's Carry, Sled Push, Row).
+- **Semana 2 (Carga Alta):** Power Endurance — saltos, lanzamientos y sled
+  combinados con bike/row. Impacto (Box Jump) entra con dosis conservadora,
+  altura baja y aterrizaje controlado, dada la rodilla izquierda — no se evita,
+  se dosifica (ver "Integración de movilidad" y "Manejo de molestias
+  articulares").
+- **Semana 3 (Intensificación):** Metabolic Capacity estilo Hyrox — Wall
+  Balls, Sled Push, Assault Bike, Row, o un **Compromised Workout** real
+  (estación inmediatamente después de running/engine, sin pausa).
+- **Semana 4 (Deload):** Mixed Modal ligero — KB flow de baja intensidad y
+  movilidad, sin buscar estímulo nuevo.
+
+Los tres coaches de referencia (Alex Viada, Training Think Tank, Sebastian
+Oreb) se complementan en capas distintas del sistema — no compiten entre sí ni
+se contradicen: **Oreb** define la base de fuerza no negociable (qué patrones
+son innegociables, entrenar con reps in reserve); **Viada** define cómo
+combinar fuerza y conditioning sin que uno destruya al otro (secuencia
+same-day, High-Low Strategy, volumen mínimo efectivo); **Training Think Tank**
+define cómo individualizar y reevaluar semana a semana con evidencia real
+(quién es el limitante actual). Ninguno de los tres dicta qué movimientos usar
+en el conditioning — eso lo cubren el banco de vocabulario y esta rotación.
+
+Esta rotación cambia el **contenido/formato** del conditioning, no la regla de
+desempate fuerza-vs-conditioning ya establecida (la fuerza sigue protegida por
+defecto ante conflicto de recuperación, salvo la excepción revisable por
+evidencia de limitante real) — son ejes distintos: uno decide qué cede cuando
+hay conflicto de recuperación, el otro decide qué variedad de estímulo usa el
+conditioning esa semana cuando no hay conflicto.
 
 ## Programación strength-biased hybrid
 
@@ -197,12 +239,12 @@ Principios adicionales de secuenciación e intensidad para este perfil:
 No programar WODs aleatorios ni circuitos "para sudar". Todo conditioning debe declarar
 qué capacidad desarrolla:
 
-- **Strength Endurance:** trabajo sostenido con fuerza bajo fatiga. Ejemplos: row/ski +
+- **Strength Endurance:** trabajo sostenido con fuerza bajo fatiga. Ejemplos: row +
   front rack walking lunges + swings + pull-ups + farmer carry, con descansos claros.
-- **Metabolic Capacity:** estilo HYROX/tactical sin copiar estaciones por moda: sled,
-  sandbag, wall balls, ski/row/run, cargas y pacing ajustados al atleta.
-- **Power Endurance:** jumps/throws/sprints cortos combinados con bike/row/sled, cuidando
-  calidad de movimiento.
+- **Metabolic Capacity:** estilo HYROX/tactical sin copiar estaciones por moda: sled
+  push, wall balls, row/run/assault bike, cargas y pacing ajustados al atleta.
+- **Power Endurance:** jumps/throws/sprints cortos combinados con assault bike/row/sled
+  push, cuidando calidad de movimiento.
 - **Mixed Modal:** run + fuerza/carries/core o máquinas + fuerza, con objetivo energético
   definido.
 
@@ -285,8 +327,9 @@ cuidado activo, no restricción.
 Para perfiles con historial de rodilla/tobillo/lumbar y objetivo outdoor/tactical,
 la durabilidad se trata como capacidad a construir ("armor building"), no como simple
 lista de restricciones. Ejemplos recurrentes según tolerancia: Spanish Squat, Isometric
-Wall Sit, Peterson Step-Up, Reverse Sled Drag, Tibialis Raise, calf raises, core
-anti-rotación y movilidad activa de cadera/tobillo.
+Wall Sit, Peterson Step-Up, Sled Push (excéntrico controlado en el retorno),
+Tibialis Raise, calf raises, core anti-rotación y movilidad activa de
+cadera/tobillo.
 
 ## Manejo de molestias articulares
 
