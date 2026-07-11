@@ -167,6 +167,23 @@ inspirada en un enfoque de referencia específico:
 - **Semana 4 (Deload):** Mixed Modal ligero — KB flow de baja intensidad y
   movilidad, sin buscar estímulo nuevo.
 
+**La categoría de la semana aplica a TODO el conditioning de esa semana, no
+solo a un slot.** El finisher KB de los días de fuerza (ej. martes) y el
+circuito dedicado del día atlético (ej. viernes) deben reflejar la misma
+categoría semanal — si S2 es Power Endurance, el finisher del martes también
+cambia a Power Endurance, no se queda fijo en Strength Endurance mientras solo
+el viernes rota. Dejar un slot fijo mientras el otro rota no es variedad real,
+es la mitad del problema con un disfraz.
+
+**Progresión de carga ≠ progresión de complejidad — no confundir una con
+otra.** Repetir exactamente el mismo EMOM (mismos 2 movimientos) subiendo solo
+reps o distancia semana a semana no es la progresión que pide "Programación
+strength-biased hybrid" ("sube en densidad, complejidad o especificidad, no en
+caos"): es progresión de carga, la misma lógica que ya se aplica a los
+movimientos de fuerza. El conditioning necesita su propio eje de progresión —
+cambiar qué se hace, no solo cuánto — para reflejar el cambio real de
+categoría semanal.
+
 Los tres coaches de referencia (Alex Viada, Training Think Tank, Sebastian
 Oreb) se complementan en capas distintas del sistema — no compiten entre sí ni
 se contradicen: **Oreb** define la base de fuerza no negociable (qué patrones
@@ -176,6 +193,29 @@ same-day, High-Low Strategy, volumen mínimo efectivo); **Training Think Tank**
 define cómo individualizar y reevaluar semana a semana con evidencia real
 (quién es el limitante actual). Ninguno de los tres dicta qué movimientos usar
 en el conditioning — eso lo cubren el banco de vocabulario y esta rotación.
+
+**Importante — la rotación/variedad de esta sección NO aplica a los 5
+movimientos ancla de fuerza (Front Squat, RDL, Bulgarian Split Squat, Pull-Up,
+Overhead Press).** Ahí rige Oreb al revés de como rige aquí: la consistencia
+del movimiento es lo que permite medir progreso real bloque a bloque — esos 5
+patrones se mantienen fijos y progresan en carga/reps, no se rotan ni se
+sustituyen por variedad. La rotación semanal es exclusivamente del
+conditioning/athletic (KB finishers, circuitos, engine) — un eje aparte que no
+contradice ni compite con la consistencia de los movimientos ancla.
+
+**Benchmark de conditioning (evita "junk volume", principio de Viada).** Así
+como la fuerza se mide en libras a través del bloque, el conditioning necesita
+su propia métrica objetiva — sin eso, "más variedad" puede volverse ruido sin
+dirección. Cada bloque de 4 semanas incluye 1 benchmark de conditioning fijo,
+con el mismo protocolo exacto (mismos movimientos, misma carga, mismo formato
+de tiempo), repetido en Semana 1 y Semana 3 (antes del deload) para que el
+resultado sea directamente comparable — ej. un AMRAP de 12 min con 3-4
+movimientos fijos (contar rondas/reps completadas), o un circuito for-time
+fijo (medir tiempo total). El benchmark se elige según la categoría de
+conditioning que el bloque esté priorizando (Strength Endurance, Power
+Endurance, Metabolic Capacity) y se mantiene idéntico dentro del bloque
+específicamente para poder medir — la variedad de la rotación semanal vive en
+las sesiones de entrenamiento normales, no en el benchmark.
 
 Esta rotación cambia el **contenido/formato** del conditioning, no la regla de
 desempate fuerza-vs-conditioning ya establecida (la fuerza sigue protegida por
