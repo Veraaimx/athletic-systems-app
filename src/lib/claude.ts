@@ -36,7 +36,12 @@ function buildSystemPrompt() {
 }
 
 export async function askEngine(userPrompt: string, maxTokens = 4096): Promise<string> {
-  const response = await anthropic.messages.create({
+  // Streamed rather than a single blocking call: the SDK requires streaming for
+  // requests it estimates could run past 10 minutes, which large max_tokens values
+  // (e.g. a full 4-week block with detailed sessions) can trigger. .stream() +
+  // .finalMessage() still gives back the complete message once done, so callers
+  // don't need to change.
+  const stream = anthropic.messages.stream({
     model: MODEL,
     max_tokens: maxTokens,
     // The system prompt (tone rules + docs canon 01-05) is identical on every call,
@@ -53,6 +58,8 @@ export async function askEngine(userPrompt: string, maxTokens = 4096): Promise<s
     ],
     messages: [{ role: "user", content: userPrompt }],
   });
+
+  const response = await stream.finalMessage();
 
   const block = response.content[0];
   if (block.type !== "text") {
