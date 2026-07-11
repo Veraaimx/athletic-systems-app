@@ -65,27 +65,57 @@ el camino conservador (Reentrada) y lo dice explícitamente en `focus_notes`.
 
 - **Fuerza:** ejercicios principales (compuestos) primero en la sesión, después
   accesorios y unilaterales. 2-4 sesiones de fuerza por semana según bloque.
-- **Running:** días fijos no consecutivos (p. ej. jueves y sábado), separados de
-  sesiones de fuerza de tren inferior pesado cuando sea posible.
-- **Yoga:** días fijos (p. ej. lunes y miércoles), funciona como recuperación activa
-  y trabajo de movilidad, no se trata como "día libre".
+- **Running:** sin días fijos — el motor elige 2 sesiones/semana no consecutivas según
+  lo que el bloque necesite, separadas de fuerza de tren inferior pesado cuando sea
+  posible. A diferencia del yoga, esto no es una restricción de horario del atleta,
+  es una decisión de programación y puede cambiar de bloque a bloque.
+- **Yoga:** días fijos (lunes y miércoles) — única restricción de horario no
+  negociable del atleta, por depender de clase con instructora. Funciona como
+  recuperación activa y trabajo de movilidad, no se trata como "día libre".
 - **Kettlebells:** se incluyen de forma **obligatoria** en toda sesión de fuerza como
   bloque final de acondicionamiento (10-15 min, nunca omitir). Formato: KB flow,
-  EMOM, circuit corto, o carry work — elegido según fatiga acumulada del día y semana
-  del bloque. Progresión en complejidad gradual (movimientos actuales de referencia:
-  TGU 16 kg, Windmill 24 kg). En semana de deload (semana 4), el bloque KB se reduce
-  a 1-2 movimientos de baja intensidad o se sustituye por carries ligeros.
+  EMOM, AMRAP + core rotacional, circuit corto, o carry work — elegido según fatiga
+  acumulada del día y semana del bloque. Progresión en complejidad gradual (ver
+  "Banco de vocabulario de movimiento" abajo). En semana de deload (semana 4), el
+  bloque KB se reduce a 1-2 movimientos de baja intensidad o se sustituye por carries
+  ligeros.
 - **Día atlético (viernes):** sesión dedicada a conditioning/athletics/flow, sin fuerza
   pesada. Estructura base: 5-10 min warm up de movilidad → 20-25 min de trabajo
   principal (KB flow complejo, movimientos atléticos, trabajo explosivo de bajo impacto,
-  o capacidad aeróbica corta) → 5-10 min cooldown. Intensidad: RPE 6-7. Este día
-  complementa los días de fuerza sin competir con su recuperación. En semana de deload,
-  puede eliminarse o reducirse a movilidad + KB ligero.
+  circuito clásico, o **running clock con ventanas** — bloques fijos de trabajo/AMRAP/
+  rest dentro de un reloj corrido, ej. 3 min trabajo → 3 min rest, repetido — para variar
+  el estímulo sin caer en WOD aleatorio) → 5-10 min cooldown. Intensidad: RPE 6-7. Este
+  día complementa los días de fuerza sin competir con su recuperación. En semana de
+  deload, puede eliminarse o reducirse a movilidad + KB ligero.
 - **Hybrid Day (running + athletic conditioning):** cuando la identidad/meta lo pide y
   la recuperación lo permite, un día de running puede dejar de ser "solo 5K" y volverse
   una sesión mixta con intención: run + strength endurance, tempo + potencia, Zone 2 +
-  accesorios/carries, o mixed modal. No debe competir con lower strength pesado ni
-  convertirse en HIIT sin estructura.
+  accesorios/carries, mixed modal, o **Compromised Workout** (estación funcional
+  inmediatamente después de un tramo de running, sin pausa entre ambos — ej. 1km run →
+  farmer carry → 1km run → sled push — entrena moverse bien bajo fatiga real en vez de
+  solo acumular volumen de cada cosa por separado). No debe competir con lower strength
+  pesado ni convertirse en HIIT sin estructura.
+
+## Banco de vocabulario de movimiento (kettlebell y core)
+
+Vocabulario disponible para el motor — no es preferencia del atleta ni cuota
+obligatoria, se selecciona según el patrón/plano de movimiento que el bloque
+necesite, igual que cualquier otro ejercicio.
+
+- **Rotación / anti-rotación de torso:** Windmill, Windmill Snatch, High Elbow Twist,
+  Squat Twist Pullover, Split Stance Chops, Pallof Rotations.
+- **Core / control lumbar:** Turkish Sit-Up, Iso Press + Leg Raise, Oblique V-Up,
+  Hanging Oblique Knee Tuck, Turkish Get-Up (TGU).
+- **Unilateral / estabilidad:** Kickstand Windmill Squat, overhead single-arm
+  stability lunge, Bulgarian Split Squat, Cossack Squat.
+- **Complejos multiplanares:** Deep Squat Hold Curl-Press + Lateral Flexion, Sumo
+  Tricep Extension, Seesaw Press, Hand-to-Hand passing.
+- **Carries y estaciones estilo Hyrox:** Farmer's Carry, Sandbag Carry, Sled
+  Push/Pull, Wall Balls, Burpee Broad Jump.
+
+**En espera (no programar todavía):** Handstand Walk, Bar/Ring Muscle-Up, Pistol
+Squat — habilidades de alta demanda de hombro/rodilla; reevaluar cuando la rodilla
+izquierda y el hombro derecho estén sin molestia sostenida por varios bloques.
 
 ## Programación strength-biased hybrid
 
@@ -112,6 +142,26 @@ Un reparto orientativo para un perfil outdoor strength-biased puede ser:
 
 Estos porcentajes son brújula, no fórmula rígida. La meta vigente y los logs mandan.
 
+Principios adicionales de secuenciación e intensidad para este perfil:
+
+- **Secuencia same-day:** cuando fuerza y conditioning/running caen el mismo día,
+  fuerza va primero — preserva mejor la adaptación de fuerza que el orden inverso.
+- **High-Low Strategy:** los días de mayor estrés (fuerza pesada, Hybrid Day) se
+  agrupan con al menos un día de menor estrés entre medio (yoga, movilidad, día
+  atlético moderado) para permitir ~48h de recuperación sistémica real, en vez de
+  repartir intensidad alta todos los días.
+- **80/20 de intensidad en conditioning:** la mayoría del volumen de engine/
+  conditioning debe sentirse controlado (RPE 6-7 o menor), reservando esfuerzo
+  verdaderamente alto para 1 sesión/semana. Conditioning no es sinónimo de ir al
+  máximo cada vez.
+- **Reps in reserve:** no entrenar al fallo como práctica habitual, ni en fuerza ni
+  en conditioning — dejar 1-2 reps en reserva preserva calidad técnica y permite
+  progresión sostenida bloque tras bloque.
+- **Base no negociable:** sentadilla, bisagra (deadlift/hinge), empuje (horizontal/
+  vertical) y tracción vertical (pull-up/chin-up) son los 4 patrones que siempre
+  deben tener representación en el bloque, sin importar qué tan variado sea el
+  resto de la programación.
+
 ## Progresión y selección de ejercicios
 
 - Progresión por evidencia: técnica sólida + RPE consistente por debajo del objetivo
@@ -134,6 +184,15 @@ qué capacidad desarrolla:
   calidad de movimiento.
 - **Mixed Modal:** run + fuerza/carries/core o máquinas + fuerza, con objetivo energético
   definido.
+
+**Formatos de estructura disponibles** (organizan el tiempo, no son una capacidad en sí):
+
+- **Circuito clásico:** rondas fijas con descanso definido entre ejercicios.
+- **EMOM / AMRAP:** ventana de tiempo fija, con o sin remate de core rotacional al cierre.
+- **Running clock con ventanas:** reloj corrido con bloques de trabajo/AMRAP/rest
+  predefinidos — útil para variar el estímulo del Día Atlético sin caer en WOD aleatorio.
+- **Compromised Workout:** estación inmediatamente después de un tramo de running/engine,
+  sin pausa — reservado para Hybrid Day, entrena rendimiento bajo fatiga real.
 
 Una sesión robusta no es una sesión destructiva. Debe tener warm up, bloque principal,
 descansos definidos, RPE objetivo y justificación de por qué esa mezcla sirve para la

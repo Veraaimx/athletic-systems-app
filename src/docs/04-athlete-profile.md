@@ -68,14 +68,20 @@ real — la programación debe ser flexible, no rígida, y debe poder degradar a
 - Corredor recreativo.
 - Volumen actual: 1-2 veces por semana, ~5k por sesión.
 - Running es complemento al entrenamiento de fuerza, no el objetivo central.
-- Días previstos en el bloque: jueves y sábado.
-- El jueves puede evolucionar de "solo 5K" a **Hybrid Day**: running + strength
-  endurance, tempo + potencia, Zone 2 + accesorios/carries, o conditioning mixto según
-  la semana y la recuperación.
+- Sin días fijos asignados — el motor decide qué 2 días de la semana usar según lo
+  que el bloque necesite (no consecutivos, separados de fuerza pesada de tren
+  inferior cuando sea posible). A diferencia del yoga, esto no es una restricción
+  de horario del atleta.
+- Cualquiera de los 2 días de running puede evolucionar de "solo 5K" a **Hybrid
+  Day**: running + strength endurance, tempo + potencia, Zone 2 + accesorios/
+  carries, conditioning mixto, o **Compromised Workout** (estación inmediatamente
+  después del tramo de running, sin pausa) según la semana y la recuperación.
 
 ## Yoga
 
-- Días previstos: lunes y miércoles.
+- Días previstos: lunes y miércoles. **Única restricción de horario no negociable
+  del atleta** — depende de clase con instructora, a diferencia de running estos
+  días no se mueven.
 - Funciona como recuperación activa y trabajo de movilidad integrado.
 
 ## Nutrición

@@ -35,12 +35,12 @@ export const ATHLETE_PROFILE_SEED = {
   running: {
     rol: "Complemento al entrenamiento de fuerza, no el objetivo central.",
     volumen_actual: "1-2 veces/semana, ~5k por sesión.",
-    dias_previstos: "Jueves y sábado",
+    dias_previstos: "Sin días fijos — el motor los ubica según necesidad del bloque (no consecutivos, separados de fuerza pesada de tren inferior cuando sea posible). A diferencia del yoga, esto no es restricción de horario del atleta.",
     nota_programacion:
-      "El jueves puede evolucionar a Hybrid Day: running + strength endurance, tempo + potencia, Zone 2 + accesorios/carries, o mixed modal según semana y recuperación.",
+      "Cualquiera de los 2 días puede evolucionar a Hybrid Day: running + strength endurance, tempo + potencia, Zone 2 + accesorios/carries, mixed modal, o Compromised Workout (estación inmediatamente después del tramo de running, sin pausa) según semana y recuperación.",
   },
   yoga: {
-    dias_previstos: "Lunes y miércoles",
+    dias_previstos: "Lunes y miércoles — única restricción de horario no negociable del atleta (depende de clase con instructora); a diferencia de running, estos días no se mueven.",
     formato: "Clase con instructora en el gimnasio — el motor no programa el contenido, solo la registra como recuperación activa/movilidad.",
   },
   nutricion: "Enfoque intuitivo pero consciente: no cuenta macros activamente, cuida calidad de alimentos y proteína, alineado a recomposición corporal.",
