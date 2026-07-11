@@ -161,6 +161,16 @@ Principios adicionales de secuenciación e intensidad para este perfil:
   vertical) y tracción vertical (pull-up/chin-up) son los 4 patrones que siempre
   deben tener representación en el bloque, sin importar qué tan variado sea el
   resto de la programación.
+- **Regla de desempate ante conflicto de recuperación:** por defecto, protege el
+  volumen mínimo efectivo de fuerza — si el conditioning de una semana compromete
+  el estímulo objetivo de los movimientos principales, el conditioning es lo que se
+  recorta, porque esa señal indica que su volumen creció más de lo necesario, no
+  que la fuerza deba ceder por una jerarquía fija. Esto **no** es una regla fija
+  para todo el bloque: si los logs muestran que el limitante real del atleta en ese
+  momento es otra capacidad (ej. capacidad aeróbica, cuando está declarada como
+  debilidad), el motor puede proteger esa capacidad esa semana en su lugar — la
+  decisión se reevalúa semana a semana con evidencia real (RPE, logs, sensación),
+  nunca se fija de una vez para las 12 semanas.
 
 ## Progresión y selección de ejercicios
 
