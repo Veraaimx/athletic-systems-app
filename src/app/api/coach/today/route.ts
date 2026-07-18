@@ -196,12 +196,24 @@ Responde SOLO con un JSON con esta forma exacta (3-5 ejercicios):
 }
 `.trim();
 
-    const raw = await askEngine(prompt);
-    const kbFlow = parseJsonResponse<{
+    let kbFlow: {
       exercises: PlannedSession["exercises"];
       justification: string;
       checkin_recommendation: string | null;
-    }>(raw);
+    };
+    try {
+      // Default 4096 max_tokens truncated responses once session detail grew
+      // (same failure mode already fixed in new-block) — give real headroom.
+      const raw = await askEngine(prompt, 8000);
+      kbFlow = parseJsonResponse(raw);
+      if (!kbFlow?.exercises?.length) throw new Error("La respuesta no incluyó ejercicios.");
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err);
+      return NextResponse.json(
+        { error: `No se pudo generar el complemento del día — respuesta inválida o incompleta del modelo (${message}). Intenta de nuevo.` },
+        { status: 502 }
+      );
+    }
 
     planned = {
       type: "yoga",
@@ -287,8 +299,22 @@ Responde SOLO con un JSON con esta forma exacta:
 }
 `.trim();
 
-    const raw = await askEngine(prompt);
-    planned = parseJsonResponse<PlannedSession>(raw);
+    try {
+      // Same headroom rationale as the KB-flow branch: the prompt now carries the
+      // full (much more detailed) block plan, and detailed sessions can overflow
+      // the 4096-token default, truncating the JSON mid-response.
+      const raw = await askEngine(prompt, 12000);
+      planned = parseJsonResponse<PlannedSession>(raw);
+      if (!planned?.exercises?.length && planned?.type !== "running") {
+        throw new Error("La respuesta no incluyó ejercicios.");
+      }
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err);
+      return NextResponse.json(
+        { error: `No se pudo generar la sesión de hoy — respuesta inválida o incompleta del modelo (${message}). Intenta de nuevo.` },
+        { status: 502 }
+      );
+    }
   }
 
   // "atletico" is a semantic label from the engine; DB constraint only allows the 4 canonical types.
