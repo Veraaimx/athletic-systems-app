@@ -92,6 +92,11 @@ real — la programación debe ser flexible, no rígida, y debe poder degradar a
   lugar **más seguro del bloque** para introducir vocabulario nuevo del banco
   de movimiento: no compite por recuperación con nada, así que no hay razón
   para repetir los mismos movimientos bloque tras bloque.
+- El complemento se divide en dos partes (tope total 25 min): flow KB compacto
+  (~12 min, variedad rotación/core) + **bloque de hipertrofia dirigida**
+  (~10-12 min) — lunes hombros/tríceps, miércoles pecho/bíceps. La estética de
+  hombros, pecho y brazos es objetivo secundario declarado del atleta
+  (2026-07): dosis corta 2×/semana, no bodybuilding como enfoque.
 
 ## Nutrición
 
@@ -180,7 +185,13 @@ el sueño esté por debajo de lo necesario.
 
 ## Aversiones
 
-Ninguna aversión fuerte declarada a ejercicios o tipos de entrenamiento específicos.
+- No bodybuilding **como enfoque global** ni volumen de hipertrofia excesivo —
+  pero la hipertrofia dirigida de hombros/pecho/brazos como objetivo estético
+  secundario sí es bienvenida (bloques cortos en días de yoga, ver sección
+  Yoga). El "máximo 2 ejercicios de bíceps" aplica a slots de aislamiento en
+  sesiones de fuerza; el bloque estético de yoga y el trabajo funcional de
+  conditioning no cuentan contra esa cuota.
+- No HIIT estilo CrossFit tradicional (WODs aleatorios sin intención).
 
 ## Resultados del bloque anterior
 

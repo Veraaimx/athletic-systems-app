@@ -40,6 +40,7 @@ export const TYPE_COLORS: Record<string, string> = {
   running: "#38bdf8",
   yoga: "#a855f7",
   otro: "#2dd4bf",
+  descanso: "#475569",
 };
 
 export const TYPE_LABELS: Record<string, string> = {
@@ -47,4 +48,5 @@ export const TYPE_LABELS: Record<string, string> = {
   running: "🏃 Running",
   yoga: "🧘 Yoga",
   otro: "⚡ Benchmark",
+  descanso: "😴 Descanso",
 };

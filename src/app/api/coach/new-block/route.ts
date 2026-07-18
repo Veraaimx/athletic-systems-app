@@ -73,21 +73,27 @@ function enforceYogaDays(plan: BlockPlan, startDateISO: string) {
     const weekStart = (week.week_number - 1) * 7 + 1;
     const sorted = [...week.sessions].sort((a, b) => a.day_offset - b.day_offset);
     const yoga = sorted.filter((s) => s.type === "yoga");
-    const other = sorted.filter((s) => s.type !== "yoga");
+    const rest = sorted.filter((s) => s.type === "descanso");
+    const other = sorted.filter((s) => s.type !== "yoga" && s.type !== "descanso");
     const rebuilt: typeof week.sessions = [];
 
     for (let i = 0; i < 7; i++) {
       const dayOffset = weekStart + i;
       const dow = (startDow + (dayOffset - 1)) % 7;
       const isYogaDay = dow === 1 || dow === 3; // Monday or Wednesday
+      const isRestDay = dow === 0; // Sunday — explicit full rest day
       if (isYogaDay && yoga.length) {
         rebuilt.push({ ...yoga.shift()!, day_offset: dayOffset });
-      } else if (!isYogaDay && other.length) {
+      } else if (isRestDay && rest.length) {
+        rebuilt.push({ ...rest.shift()!, day_offset: dayOffset });
+      } else if (!isYogaDay && !isRestDay && other.length) {
         rebuilt.push({ ...other.shift()!, day_offset: dayOffset });
       } else if (yoga.length) {
         rebuilt.push({ ...yoga.shift()!, day_offset: dayOffset });
       } else if (other.length) {
         rebuilt.push({ ...other.shift()!, day_offset: dayOffset });
+      } else if (rest.length) {
+        rebuilt.push({ ...rest.shift()!, day_offset: dayOffset });
       }
     }
     week.sessions = rebuilt;
@@ -200,6 +206,10 @@ el día exacto en que caen las sesiones de yoga se corrige automáticamente desp
 de tu respuesta (siempre caen en lunes/miércoles reales, sin importar qué day_offset
 les asignes), así que no necesitas hacer ese cálculo de calendario tú mismo — solo
 incluye 2 sesiones de yoga por semana en el orden que tengan sentido dentro de tu plan.
+Incluye también 1 sesión type "descanso" por semana (cae automáticamente en domingo):
+su summary es breve — descanso completo, sin entrenamiento programado. Marca además
+1-2 sesiones de la semana como flexibles en su summary (candidatas a saltarse sin
+penalidad si la semana real solo da para 4-5 días — la disponibilidad real del atleta).
 
 Perfil del atleta (JSON):
 ${JSON.stringify(profile?.data ?? {}, null, 2)}
@@ -243,7 +253,7 @@ Responde SOLO con un JSON con esta forma exacta:
     {
       "week_number": 1,
       "label": "Reentrada" | "Carga" | "Intensificación" | "Deload Inteligente",
-      "sessions": [{ "day_offset": number, "type": "fuerza"|"running"|"yoga", "summary": string }]
+      "sessions": [{ "day_offset": number, "type": "fuerza"|"running"|"yoga"|"descanso", "summary": string }]
     }
   ]
 }

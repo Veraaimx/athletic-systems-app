@@ -80,6 +80,21 @@ error de estructura, no una progresión más agresiva.
 - **Yoga:** días fijos (lunes y miércoles) — única restricción de horario no
   negociable del atleta, por depender de clase con instructora. Funciona como
   recuperación activa y trabajo de movilidad, no se trata como "día libre".
+  El complemento post-clase (tope total 25 min) se compone de dos partes:
+  **flow KB compacto (~12 min)** con la variedad de rotación/core del banco, y
+  **bloque de hipertrofia dirigida (~10-12 min)** — objetivo estético
+  secundario declarado del atleta: lunes = hombros (Lateral Raise, Rear Delt
+  Fly) + tríceps; miércoles = pecho (Incline DB Press o push-up con carga) +
+  bíceps. Frecuencia 2×/semana por grupo, dosis corta — es remate estético
+  sobre el volumen indirecto que ya existe (OHP, push-ups, plyo), no un giro
+  a bodybuilding.
+- **Descanso:** el domingo es descanso completo y aparece **explícito** en el
+  plan del bloque (type "descanso"), no implícito por omisión. Además, como la
+  disponibilidad real del atleta es 4-5 días/semana (no 6), cada semana marca
+  1-2 sesiones como **flexibles** — candidatas a saltarse sin penalidad si la
+  semana real solo da para 4-5 días (candidatos naturales: el complemento KB
+  de un día de yoga, o el segundo run de la semana). El plan asume la semana
+  buena; la semana real manda.
 - **Kettlebells:** se incluyen de forma **obligatoria** en toda sesión de fuerza como
   bloque final de acondicionamiento (10-15 min, nunca omitir). Formato: KB flow,
   EMOM, AMRAP + core rotacional, circuit corto, o carry work — elegido según fatiga
@@ -156,6 +171,15 @@ necesite, igual que cualquier otro ejercicio.
 Squat — habilidades de alta demanda de hombro/rodilla; reevaluar cuando la rodilla
 izquierda y el hombro derecho estén sin molestia sostenida por varios bloques.
 
+**Cues de ejecución para movimientos no estándar (regla de claridad):** todo
+movimiento del banco que no sea de nombre universalmente conocido (los que
+vienen de creadores específicos: Hip Crawl con Iso Hold, Kickstand Windmill
+Squat, B-Stance Rotational Chops, etc.) debe incluir en el summary de la
+sesión **1-2 líneas de cómo ejecutarlo** (posición inicial → acción → qué
+cuidar), porque el atleta puede no encontrarlo en video — ya ocurrió: reportó
+en logs no entender un movimiento ni hallarlo en YouTube. Un movimiento que el
+atleta no puede ejecutar por falta de referencia es peor que uno repetido.
+
 **Logs de carga vs. variedad de vocabulario — no son lo mismo.** El historial de
 logs (RPE, peso, dolor) del bloque anterior existe para decidir progresión de
 **carga** en los movimientos de fuerza — no es una lista blanca implícita de
@@ -192,11 +216,30 @@ movimiento cíclico o continuo (los carries cuentan como continuos); un hold
 estático dentro de un EMOM es un minuto muerto para la intención del formato,
 y ninguno de los formatos de referencia lo hace.
 
-**Sin duplicados en la misma sesión:** un ejercicio que ya apareció en el
-bloque principal (o warm-up) de una sesión no se repite dentro del
-conditioning de esa misma sesión — el slot de conditioning elige un movimiento
-distinto. Repetir el mismo ejercicio dos veces en una sesión es volumen
-duplicado sin propósito (el "junk volume" que Viada pide eliminar).
+**Sin duplicados en la misma sesión (alcance completo):** un ejercicio
+aparece **una sola vez por sesión**, sin importar en qué pieza — warm-up,
+bloque principal, finisher, circuito o benchmark. Dos piezas de conditioning
+de la misma sesión tampoco repiten ejercicio entre sí. Repetir el mismo
+ejercicio dos veces en una sesión es volumen duplicado sin propósito (el
+"junk volume" que Viada pide eliminar).
+
+**El día de benchmark, el benchmark ES el conditioning de la sesión:**
+reemplaza al circuito/finisher de ese día, no se suma encima. Un circuito
+completo + un AMRAP de benchmark en la misma sesión es exceso de volumen de
+conditioning y contamina la medición (el benchmark debe correrse en
+condiciones comparables entre S1 y S3, no tras 25 min de circuito previo).
+
+**Calibración de densidad por RPE reportado (regla de ajuste):** las reps de
+cada estación de un EMOM se dimensionan para ~40-45 seg de trabajo por minuto
+— si el atleta termina en 20 seg, la dosis está mal puesta. Si los logs
+reportan tiempo sobrante notorio o RPE 1-2 puntos por debajo del objetivo, la
+semana siguiente escala densidad/reps **más allá** de la progresión planeada
+originalmente — la rampa se recalibra con la evidencia, no se sigue por
+inercia. Señal ya observada en este atleta: estaciones de salto de EMOM
+terminadas "muy rápido" con tiempo muerto, y el finisher convertido por
+iniciativa propia en circuito for-time sin descanso. Ante la duda entre EMOM
+espaciado y circuito continuo/for-time, preferir el circuito continuo — es el
+formato que el atleta busca y el que usan los referentes.
 
 ## Rotación semanal de conditioning por bloque
 

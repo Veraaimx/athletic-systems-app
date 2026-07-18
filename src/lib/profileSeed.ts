@@ -43,6 +43,7 @@ export const ATHLETE_PROFILE_SEED = {
     dias_previstos: "Lunes y miércoles — única restricción de horario no negociable del atleta (depende de clase con instructora); a diferencia de running, estos días no se mueven.",
     formato: "Clase con instructora en el gimnasio — el motor no programa el contenido, solo la registra como recuperación activa/movilidad.",
     nota_fatiga: "Ante todo movilidad, respiración y mentalidad — exigencia física real pero de otra naturaleza, no genera la misma fatiga sistémica que un WOD. El complemento KB de estos días es el lugar más seguro del bloque para introducir vocabulario nuevo, no compite por recuperación con nada.",
+    estructura_complemento: "Dos partes, tope total 25 min: flow KB compacto (~12 min, rotación/core del banco) + bloque de hipertrofia dirigida (~10-12 min) — lunes hombros/tríceps, miércoles pecho/bíceps. Estética de hombros/pecho/brazos es objetivo secundario declarado (2026-07).",
   },
   nutricion: "Enfoque intuitivo pero consciente: no cuenta macros activamente, cuida calidad de alimentos y proteína, alineado a recomposición corporal.",
   sueno: {
@@ -91,6 +92,7 @@ export const ATHLETE_PROFILE_SEED = {
     "Disfruta variedad y kettlebells; le aburre la rutina rígida",
     "Prefiere evitar cardio largo y sostenido como actividad principal",
   ],
-  aversiones: "Ninguna aversión fuerte declarada.",
+  aversiones:
+    "No bodybuilding como enfoque global ni volumen de hipertrofia excesivo — pero hipertrofia dirigida de hombros/pecho/brazos como objetivo estético secundario sí es bienvenida (bloques cortos en días de yoga). 'Máximo 2 ejercicios de bíceps' aplica a aislamiento en sesiones de fuerza; el bloque estético de yoga y el trabajo funcional de conditioning no cuentan contra esa cuota. No HIIT estilo CrossFit tradicional (WODs aleatorios sin intención).",
   resultado_bloque_anterior: "Bloque previo (Front Squat + RDL, yoga lunes/miércoles, running jueves/sábado): bien, listo para progresar. Buena adherencia y sensaciones.",
 };
