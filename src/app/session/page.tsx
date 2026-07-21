@@ -251,26 +251,31 @@ function ExerciseCard({
             )}
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6 }}>
               {perf!.sets.map((s, setIdx) => (
-                <div key={setIdx} style={{ display: "flex", gap: 4, alignItems: "center" }}>
-                  <span className="muted" style={{ width: 32 }}>
+                // minWidth:0 on the row (and flex:1 1 0 on the inputs) lets the
+                // two-column grid actually shrink on narrow phones — with fixed
+                // input widths the row's intrinsic size overflowed the card.
+                <div key={setIdx} style={{ display: "flex", gap: 4, alignItems: "center", minWidth: 0 }}>
+                  <span className="muted" style={{ flexShrink: 0 }}>
                     S{setIdx + 1}
                   </span>
                   {loadType !== "band" && (
                     <input
                       type="number"
+                      inputMode="decimal"
                       placeholder={loadType === "bodyweight" ? `+${perf!.unit}` : perf!.unit}
                       value={s.weight || ""}
                       onChange={(e) => onUpdateSet!(setIdx, "weight", Number(e.target.value))}
-                      style={{ width: 68 }}
+                      style={{ flex: "1 1 0", minWidth: 0, padding: "10px 8px" }}
                     />
                   )}
-                  {loadType !== "band" && <span className="muted">×</span>}
+                  {loadType !== "band" && <span className="muted" style={{ flexShrink: 0 }}>×</span>}
                   <input
                     type="number"
+                    inputMode="numeric"
                     placeholder={valueLabelFor(measure)}
                     value={s.reps || ""}
                     onChange={(e) => onUpdateSet!(setIdx, "reps", Number(e.target.value))}
-                    style={{ width: 76 }}
+                    style={{ flex: "1 1 0", minWidth: 0, padding: "10px 8px" }}
                   />
                 </div>
               ))}

@@ -258,7 +258,22 @@ usa "notes" para indicar a qué parte pertenece cada uno):
 
     const fuerzaKbReminder =
       plannedDay?.type === "fuerza" || (!plannedDay && !isFriday)
-        ? `\nREGLA ESTRUCTURAL — DÍAS DE FUERZA: toda sesión de fuerza incluye obligatoriamente un bloque final de KB conditioning (10-15 min): KB flow, EMOM, circuit corto, o carry work. Nunca omitir. En semana de deload reducir a 1-2 movimientos ligeros.\n`
+        ? `
+REGLA ESTRUCTURAL — DÍAS DE FUERZA: toda sesión de fuerza incluye obligatoriamente un bloque final
+de KB conditioning (10-15 min): KB flow, EMOM, circuit corto, o carry work. Nunca omitir. En semana
+de deload reducir a 1-2 movimientos ligeros.
+
+REGLA DE SESIÓN — SIN EJERCICIOS REPETIDOS: antes de responder, revisa tu lista completa de
+ejercicios y verifica que ningún nombre aparezca dos veces, sin importar la pieza (warm-up, bloque
+principal, finisher, cooldown). Si un movimiento ya está en el warm-up, NO puede volver a aparecer
+en el bloque principal ni en el conditioning: elige otro que cubra esa función. Repetir es volumen
+duplicado sin propósito.
+
+REGLA — DÍA DE FUERZA INFERIOR: cierra con 2 accesorios de hipertrofia dirigida de pierna (~5-6 min,
+10-15 reps): isquio por flexión de rodilla (Leg Curl o Nordic asistido) y pantorrilla (Calf Raise,
+alternando de pie/sentado entre bloques). Son de fatiga sistémica baja y cubren dos huecos reales
+que los compuestos del día no tocan. No los conviertas en un bloque extenso.
+`
         : "";
 
     const prompt = `
