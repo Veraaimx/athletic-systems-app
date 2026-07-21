@@ -259,6 +259,19 @@ usa "notes" para indicar a qué parte pertenece cada uno):
     const fuerzaKbReminder =
       plannedDay?.type === "fuerza" || (!plannedDay && !isFriday)
         ? `
+REGLA INNEGOCIABLE — MOVIMIENTOS ANCLA: los 5 movimientos ancla del atleta (Front Squat, Romanian
+Deadlift, Bulgarian Split Squat, Pull-Up, Overhead Press) son la columna vertebral del programa y
+NUNCA se omiten, sustituyen ni rotan por variedad — su consistencia es lo único que permite medir
+progreso real de fuerza bloque a bloque. Día de fuerza INFERIOR: deben aparecer Front Squat,
+Romanian Deadlift y Bulgarian Split Squat. Día de fuerza SUPERIOR: deben aparecer Pull-Up y
+Overhead Press. Front Squat además es el principal estímulo de core bajo carga axial del atleta, y
+el Bulgarian Split Squat es su fuente principal de hipertrofia de cuádriceps: eliminarlos deja dos
+huecos que ningún accesorio cubre.
+
+ORDEN DE RECORTE SI LA SESIÓN SE ALARGA: si el tiempo total no alcanza, recorta en este orden —
+(1) ejercicios de warm-up, (2) accesorios secundarios, (3) tamaño del finisher de conditioning,
+(4) series de los ancla. Los movimientos ancla se recortan en volumen, nunca se eliminan.
+
 REGLA ESTRUCTURAL — DÍAS DE FUERZA: toda sesión de fuerza incluye obligatoriamente un bloque final
 de KB conditioning (10-15 min): KB flow, EMOM, circuit corto, o carry work. Nunca omitir. En semana
 de deload reducir a 1-2 movimientos ligeros.

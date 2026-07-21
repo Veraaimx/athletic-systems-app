@@ -314,6 +314,22 @@ sustituyen por variedad. La rotación semanal es exclusivamente del
 conditioning/athletic (KB finishers, circuitos, engine) — un eje aparte que no
 contradice ni compite con la consistencia de los movimientos ancla.
 
+**Los ancla tampoco se omiten por falta de tiempo.** Cada día de fuerza debe
+incluir los ancla que le corresponden — inferior: Front Squat, RDL y Bulgarian
+Split Squat; superior: Pull-Up y Overhead Press. Dos funciones específicas se
+pierden si desaparecen y ningún accesorio las cubre: el Front Squat es el
+principal estímulo de core bajo carga axial (más que cualquier plancha o
+anti-extensión), y el Bulgarian Split Squat es la fuente principal de
+hipertrofia de cuádriceps además de trabajo unilateral.
+
+**Orden de recorte cuando la sesión se alarga:** a medida que se acumulan
+rehab, accesorios, hipertrofia dirigida y finishers de 4-6 movimientos, las
+sesiones crecen. Si el tiempo no alcanza, se recorta en este orden: (1)
+ejercicios de warm-up, (2) accesorios secundarios, (3) tamaño del finisher de
+conditioning, (4) series de los movimientos ancla. Los ancla se recortan en
+**volumen**, nunca se eliminan — perder una serie de Front Squat es un costo
+menor que perder el Front Squat.
+
 **Benchmark de conditioning (evita "junk volume", principio de Viada).** Así
 como la fuerza se mide en libras a través del bloque, el conditioning necesita
 su propia métrica objetiva — sin eso, "más variedad" puede volverse ruido sin
