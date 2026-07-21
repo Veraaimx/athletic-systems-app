@@ -185,13 +185,22 @@ el sueño esté por debajo de lo necesario.
 
 ## Aversiones
 
-- No bodybuilding **como enfoque global** ni volumen de hipertrofia excesivo —
-  pero la hipertrofia dirigida de hombros/pecho/brazos como objetivo estético
-  secundario sí es bienvenida (bloques cortos en días de yoga, ver sección
-  Yoga). El "máximo 2 ejercicios de bíceps" aplica a slots de aislamiento en
-  sesiones de fuerza; el bloque estético de yoga y el trabajo funcional de
-  conditioning no cuentan contra esa cuota.
-- No HIIT estilo CrossFit tradicional (WODs aleatorios sin intención).
+Una sola aversión real, y es de **arquitectura**: que la programación se
+convierta en bodybuilding clásico — split por grupos musculares, aislamiento
+como eje central, volumen orientado al espejo sin transferencia atlética.
+
+**El atleta no está en contra de la hipertrofia.** Quiere desarrollo muscular
+real en hombros, pecho, brazos y piernas, y el trabajo dirigido a esos grupos
+es bienvenido mientras viva dentro de un sistema atlético: bloques cortos de
+hipertrofia dirigida (hombros/tríceps y pecho/bíceps en días de yoga, ver
+sección Yoga; accesorios de pierna al cierre del día de fuerza inferior, ver
+"Hipertrofia dirigida de pierna" en la metodología), empuje funcional dentro
+del conditioning, y volumen orientado a recomposición y balance estructural.
+No hay cuota fija de ejercicios por grupo muscular — lo que se cuida es que el
+aislamiento nunca desplace al trabajo atlético, no su existencia.
+
+Segunda aversión: no HIIT estilo CrossFit tradicional — WODs aleatorios sin
+intención declarada. Todo conditioning debe desarrollar una capacidad específica.
 
 ## Resultados del bloque anterior
 

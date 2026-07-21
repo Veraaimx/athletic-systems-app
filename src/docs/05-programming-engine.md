@@ -73,6 +73,8 @@ error de estructura, no una progresión más agresiva.
 
 - **Fuerza:** ejercicios principales (compuestos) primero en la sesión, después
   accesorios y unilaterales. 2-4 sesiones de fuerza por semana según bloque.
+  El día de fuerza inferior cierra con **hipertrofia dirigida de pierna** — ver
+  regla dedicada abajo.
 - **Running:** sin días fijos — el motor elige 2 sesiones/semana no consecutivas según
   lo que el bloque necesite, separadas de fuerza de tren inferior pesado cuando sea
   posible. A diferencia del yoga, esto no es una restricción de horario del atleta,
@@ -95,6 +97,22 @@ error de estructura, no una progresión más agresiva.
   semana real solo da para 4-5 días (candidatos naturales: el complemento KB
   de un día de yoga, o el segundo run de la semana). El plan asume la semana
   buena; la semana real manda.
+- **Hipertrofia dirigida de pierna:** el día de fuerza inferior cierra con 2
+  accesorios de aislamiento (~5-6 min, rango 10-15 reps) — **no un bloque
+  extenso**. Los compuestos y unilaterales del día (Front Squat 4×5, BSS
+  4×7/lado, SL-RDL 3×8/lado) ya entregan volumen en rango de hipertrofia: lo
+  que falta no es volumen, es cobertura de dos músculos específicos.
+  (1) **Isquios por flexión de rodilla** — RDL y SL-RDL son extensión de
+  cadera y trabajan el isquio como extensor, no como flexor; Leg Curl o Nordic
+  asistido llena ese hueco. (2) **Pantorrilla** — debilidad declarada del
+  atleta (fatiga rápida y calambres al correr), hoy solo presente como dosis
+  de mantenimiento en cooldown; Calf Raise 3×15 alternando de pie y sentado
+  entre bloques. Ambos son de fatiga sistémica baja (sin carga axial, sin
+  demanda de CNS), por eso caben aquí sin competir con la recuperación de los
+  compuestos — agregar extensiones no es lo mismo que agregar sentadillas.
+  Si en algún bloque falta desarrollo de cuádriceps, la vía correcta **no** es
+  apilar más accesorios: es cambiar el estímulo de lo que ya está (subir BSS a
+  rango 8-10, o rotar a Hack Squat como variante principal).
 - **Kettlebells:** se incluyen de forma **obligatoria** en toda sesión de fuerza como
   bloque final de acondicionamiento (10-15 min, nunca omitir). Formato: KB flow,
   EMOM, AMRAP + core rotacional, circuit corto, o carry work — elegido según fatiga

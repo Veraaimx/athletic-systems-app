@@ -93,6 +93,6 @@ export const ATHLETE_PROFILE_SEED = {
     "Prefiere evitar cardio largo y sostenido como actividad principal",
   ],
   aversiones:
-    "No bodybuilding como enfoque global ni volumen de hipertrofia excesivo — pero hipertrofia dirigida de hombros/pecho/brazos como objetivo estético secundario sí es bienvenida (bloques cortos en días de yoga). 'Máximo 2 ejercicios de bíceps' aplica a aislamiento en sesiones de fuerza; el bloque estético de yoga y el trabajo funcional de conditioning no cuentan contra esa cuota. No HIIT estilo CrossFit tradicional (WODs aleatorios sin intención).",
+    "Una sola aversión real, de arquitectura: que la programación se vuelva bodybuilding clásico — split por grupos musculares, aislamiento como eje central, volumen de espejo sin transferencia atlética. NO está en contra de la hipertrofia: quiere desarrollo muscular real en hombros, pecho, brazos y piernas, y el trabajo dirigido a esos grupos es bienvenido mientras viva dentro de un sistema atlético (hombros/tríceps y pecho/bíceps en días de yoga, accesorios de pierna al cierre del día de fuerza inferior, empuje funcional en conditioning). No hay cuota fija de ejercicios por grupo muscular. Segunda aversión: no HIIT estilo CrossFit tradicional (WODs aleatorios sin intención declarada).",
   resultado_bloque_anterior: "Bloque previo (Front Squat + RDL, yoga lunes/miércoles, running jueves/sábado): bien, listo para progresar. Buena adherencia y sensaciones.",
 };
