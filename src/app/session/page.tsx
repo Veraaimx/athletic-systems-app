@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, Pencil, Flame, Clock, Activity, PlayCircle, Timer, Lightbulb } from "lucide-react";
+import { useSearchParams } from "next/navigation";
+import { ArrowLeft, Pencil, Flame, Clock, Activity, PlayCircle, Timer, Lightbulb, Moon } from "lucide-react";
 import { Collapsible, Badge, TYPE_COLORS, TYPE_LABELS } from "@/components/Collapsible";
 import { AutoResizeTextarea } from "@/components/AutoResizeTextarea";
 
@@ -292,8 +293,44 @@ function ExerciseCard({
   );
 }
 
+interface RestDayInfo {
+  rest_day: true;
+  date: string;
+  week_number: number;
+  summary: string;
+}
+
+interface AgendaDay {
+  date: string;
+  isToday: boolean;
+  isFuture: boolean;
+  type: string | null;
+  summary: string | null;
+  isRestDay: boolean;
+  movedFromDate: string | null;
+  weekNumber: number;
+}
+
 export default function SessionPage() {
+  return (
+    <Suspense fallback={<p className="muted">Cargando…</p>}>
+      <SessionPageContent />
+    </Suspense>
+  );
+}
+
+function SessionPageContent() {
+  const searchParams = useSearchParams();
+  // No `date` means today — the home page's "empezar entrenamiento" keeps
+  // working unchanged; the agenda passes an explicit date to open any past day.
+  const requestedDate = searchParams.get("date");
+  const dateQuery = requestedDate ? `?date=${requestedDate}` : "";
+
   const [session, setSession] = useState<Session | null | undefined>(undefined);
+  const [agendaDay, setAgendaDay] = useState<AgendaDay | null>(null);
+  const [restDay, setRestDay] = useState<RestDayInfo | null>(null);
+  const [generating, setGenerating] = useState(false);
+  const [genError, setGenError] = useState<string | null>(null);
   const [existingLog, setExistingLog] = useState<ExistingLog | null>(null);
   const [stats, setStats] = useState<StatsData | null>(null);
   const [editingLog, setEditingLog] = useState(false);
@@ -312,14 +349,68 @@ export default function SessionPage() {
   const [logSaved, setLogSaved] = useState(false);
 
   useEffect(() => {
-    fetch("/api/coach/today")
+    setSession(undefined);
+    fetch(`/api/coach/today${dateQuery}`)
       .then((r) => r.json())
-      .then((d) => setSession(d ?? null));
+      .then((d) => setSession(d ?? null))
+      .catch(() => setSession(null));
     fetch("/api/stats")
       .then((r) => r.json())
       .then(setStats)
       .catch(() => {});
-  }, []);
+    // The agenda knows what the day is *supposed* to be even when no session row
+    // exists yet — without it, an ungenerated rest day is indistinguishable from
+    // an ungenerated training day and both render as "todavía no la generaste".
+    fetch("/api/agenda")
+      .then((r) => r.json())
+      .then((a: { today: string; days: AgendaDay[] }) => {
+        const target = requestedDate ?? a.today;
+        setAgendaDay(a.days?.find((d) => d.date === target) ?? null);
+      })
+      .catch(() => {});
+  }, [dateQuery, requestedDate]);
+
+  // Generates the session for the date being viewed. On a rest day the API
+  // returns `rest_day` instead of a session and never calls the engine; `force`
+  // is the athlete's explicit "train anyway", which also records the override so
+  // the coach sees it when planning the next block.
+  async function generateFor(force = false) {
+    setGenerating(true);
+    setGenError(null);
+    try {
+      const res = await fetch("/api/coach/today", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ date: requestedDate ?? undefined, force }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        setGenError(data.error ?? "No se pudo generar la sesión.");
+        return;
+      }
+      if (data?.rest_day) {
+        setRestDay(data as RestDayInfo);
+        return;
+      }
+      if (force && requestedDate) {
+        await fetch("/api/day-adjustments", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            date: requestedDate,
+            kind: "extra",
+            note: "Entrené en un día marcado como descanso.",
+          }),
+        }).catch(() => {});
+      }
+      setRestDay(null);
+      setSession(data);
+    } catch {
+      setGenError("No se pudo conectar con el servidor.");
+    } finally {
+      setGenerating(false);
+    }
+  }
 
   useEffect(() => {
     if (!session) return;
@@ -422,12 +513,66 @@ export default function SessionPage() {
   if (session === undefined) return <p className="muted">Cargando…</p>;
 
   if (session === null) {
+    const backHref = requestedDate ? "/block" : "/";
+    const isRest = restDay !== null || agendaDay?.isRestDay === true;
+    const dayLabel = requestedDate ?? "hoy";
+
     return (
       <div>
-        <Link href="/" className="muted" style={{ display: "inline-flex", alignItems: "center", gap: 6, marginBottom: 16 }}>
+        <Link href={backHref} className="muted" style={{ display: "inline-flex", alignItems: "center", gap: 6, marginBottom: 16 }}>
           <ArrowLeft size={16} /> Volver
         </Link>
-        <p className="muted">Todavía no has generado la sesión de hoy. Vuelve al inicio para generarla.</p>
+
+        {isRest ? (
+          <div className="card">
+            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
+              <Moon size={18} style={{ color: "#94a3b8" }} />
+              <h2 style={{ margin: 0 }}>Día de descanso</h2>
+            </div>
+            <p className="muted">
+              {restDay?.summary ?? agendaDay?.summary ?? "Sin entrenamiento programado."}
+            </p>
+            <p className="muted" style={{ marginTop: 10 }}>
+              El domingo es descanso completo. La adaptación pasa aquí, no solo bajo la barra.
+            </p>
+            {!agendaDay?.isFuture && (
+              <button onClick={() => generateFor(true)} disabled={generating} style={{ marginTop: 12 }}>
+                {generating ? "Generando…" : "Entrenar de todos modos"}
+              </button>
+            )}
+            {genError && <p className="muted" style={{ color: "#ef4444", marginTop: 10 }}>⚠️ {genError}</p>}
+          </div>
+        ) : agendaDay?.isFuture ? (
+          <div className="card">
+            <h2>Todavía no</h2>
+            <p className="muted">
+              {agendaDay.summary ?? "Sin detalle disponible."}
+            </p>
+            <p className="muted" style={{ marginTop: 10 }}>
+              El desglose de este día se genera con tus registros más recientes, así que se arma el
+              mismo día. Por ahora esto es lo que trae el plan del bloque.
+            </p>
+          </div>
+        ) : (
+          <div className="card">
+            <h2>{requestedDate ? `Sesión del ${dayLabel}` : "Sesión de hoy"}</h2>
+            {agendaDay?.movedFromDate && (
+              <p className="muted" style={{ marginTop: 4 }}>
+                Es la sesión que te tocaba el {agendaDay.movedFromDate}, movida a este día.
+              </p>
+            )}
+            {agendaDay?.summary && (
+              <p className="muted" style={{ marginTop: 8 }}>{agendaDay.summary}</p>
+            )}
+            <p className="muted" style={{ marginTop: 10 }}>
+              Todavía no has generado el desglose de este día.
+            </p>
+            <button onClick={() => generateFor(false)} disabled={generating} style={{ marginTop: 12 }}>
+              {generating ? "Generando…" : "Generar el desglose"}
+            </button>
+            {genError && <p className="muted" style={{ color: "#ef4444", marginTop: 10 }}>⚠️ {genError}</p>}
+          </div>
+        )}
       </div>
     );
   }
@@ -436,9 +581,19 @@ export default function SessionPage() {
 
   return (
     <div>
-      <Link href="/" className="muted" style={{ display: "inline-flex", alignItems: "center", gap: 6, marginBottom: 16 }}>
+      <Link
+        href={requestedDate ? "/block" : "/"}
+        className="muted"
+        style={{ display: "inline-flex", alignItems: "center", gap: 6, marginBottom: 16 }}
+      >
         <ArrowLeft size={16} /> Volver
       </Link>
+
+      {agendaDay?.movedFromDate && (
+        <p className="muted" style={{ marginBottom: 10 }}>
+          Sesión del {agendaDay.movedFromDate}, hecha el {session.date}.
+        </p>
+      )}
 
       <div className="card progress-ring-card" style={{ flexDirection: "column", alignItems: "stretch" }}>
         <div className="exercise-card-header" style={{ marginBottom: 0 }}>

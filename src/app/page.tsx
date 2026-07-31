@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { ChevronRight, ListChecks, Activity, Moon } from "lucide-react";
+import { ChevronRight, ListChecks, Activity, Moon, CalendarRange } from "lucide-react";
 import { Badge, TYPE_COLORS, TYPE_LABELS } from "@/components/Collapsible";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
@@ -32,6 +32,12 @@ interface WeekSummary {
   adherencia: { pct: number | null; completed: number; total: number };
   avgRpe: number | null;
   avgSleep: number | null;
+}
+
+interface RestDay {
+  rest_day: true;
+  date: string;
+  summary: string;
 }
 
 const QUOTES = [
@@ -70,6 +76,7 @@ export default function HomePage() {
   const router = useRouter();
   const [name, setName] = useState<string | null>(null);
   const [session, setSession] = useState<Session | null | undefined>(undefined);
+  const [restDay, setRestDay] = useState<RestDay | null>(null);
   const [generating, setGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [weekSummary, setWeekSummary] = useState<WeekSummary | null>(null);
@@ -93,6 +100,23 @@ export default function HomePage() {
       .then((r) => r.json())
       .then((row) => setName(row?.data?.datos_generales?.nombre ?? null));
 
+    // A rest day has no session row, so without asking the agenda the home page
+    // can't tell "descanso" from "todavía no la generas" and would offer the
+    // check-in form on a Sunday.
+    fetch("/api/agenda")
+      .then((r) => r.json())
+      .then((a: { today: string; days: Array<{ date: string; isRestDay: boolean; summary: string | null }> }) => {
+        const todayDay = a.days?.find((d) => d.date === a.today);
+        if (todayDay?.isRestDay) {
+          setRestDay({
+            rest_day: true,
+            date: todayDay.date,
+            summary: todayDay.summary ?? "Descanso completo. Sin entrenamiento programado.",
+          });
+        }
+      })
+      .catch(() => {});
+
     fetch("/api/stats?period=week")
       .then((r) => r.json())
       .then((s) => {
@@ -109,7 +133,7 @@ export default function HomePage() {
       .catch(() => {});
   }, []);
 
-  async function generateToday() {
+  async function generateToday(force = false) {
     setGenerating(true);
     setError(null);
     try {
@@ -117,6 +141,7 @@ export default function HomePage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          force,
           checkin: {
             energy,
             sleep_hours: Number(checkinSleep),
@@ -130,6 +155,13 @@ export default function HomePage() {
         setError(data.error ?? "Error generando la sesión");
         return;
       }
+      // Rest day: the engine was never called. Show the rest card instead of a
+      // workout the plan doesn't want the athlete doing today.
+      if (data?.rest_day) {
+        setRestDay(data as RestDay);
+        return;
+      }
+      setRestDay(null);
       setSession(data);
     } finally {
       setGenerating(false);
@@ -161,7 +193,24 @@ export default function HomePage() {
 
       {error && <p className="card">⚠️ {error}</p>}
 
-      {!session && (
+      {!session && restDay && (
+        <Card>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
+            <Moon size={18} style={{ color: "#94a3b8" }} />
+            <h2 style={{ margin: 0 }}>Hoy toca descansar</h2>
+          </div>
+          <p className="muted">{restDay.summary}</p>
+          <p className="muted" style={{ marginTop: 10 }}>
+            El descanso de hoy es la fuerza de la próxima semana. Si de todos modos quieres entrenar,
+            queda registrado como un día extra para que el coach lo tenga en cuenta.
+          </p>
+          <Button onClick={() => generateToday(true)} disabled={generating} style={{ marginTop: 12 }}>
+            {generating ? "Generando…" : "Entrenar de todos modos"}
+          </Button>
+        </Card>
+      )}
+
+      {!session && !restDay && (
         <Card>
           <h2>¿Cómo te sientes hoy?</h2>
           {trendHint && <HintBanner>{trendHint}</HintBanner>}
@@ -201,7 +250,7 @@ export default function HomePage() {
             </p>
           )}
 
-          <Button variant="primary" onClick={generateToday} disabled={generating} style={{ marginTop: 8 }}>
+          <Button variant="primary" onClick={() => generateToday(false)} disabled={generating} style={{ marginTop: 8 }}>
             {generating ? "Generando…" : "Generar sesión de hoy"}
           </Button>
         </Card>
@@ -222,6 +271,20 @@ export default function HomePage() {
           </Button>
         </Card>
       )}
+
+      <Card href="/block">
+        <div className="exercise-card-header" style={{ marginBottom: 0 }}>
+          <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <CalendarRange size={16} />
+            Ver todos mis días
+          </span>
+          <ChevronRight size={14} />
+        </div>
+        <p className="muted" style={{ marginTop: 6 }}>
+          El bloque completo día por día. Ahí puedes abrir una sesión que te saltaste o anotar un
+          cambio de día.
+        </p>
+      </Card>
 
       {weekSummary && (
         <Card href="/stats">

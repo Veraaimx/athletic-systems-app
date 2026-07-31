@@ -1,7 +1,13 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase-server";
 import { askEngine, parseJsonResponse } from "@/lib/claude";
-import { todayISO } from "@/lib/dates";
+import { todayISO, isValidISODate, addDaysISO, weekdayName, dayOfWeek } from "@/lib/dates";
+import {
+  resolveDay,
+  adjustmentsForPrompt,
+  type DayAdjustment,
+  type ResolvedDay,
+} from "@/lib/blockPlan";
 
 interface PlannedExercise {
   name: string;
@@ -54,25 +60,29 @@ ejercicios planeados. Si el check-in no tiene nada que amerite recomendación, r
 `.trim();
 }
 
-// The yoga complement's hypertrophy half is day-specific (Monday shoulders/triceps,
-// Wednesday chest/biceps), so the prompt needs the weekday spelled out — an ISO
-// date alone leaves the model to derive it.
-function weekdayName(dateISO: string): string {
-  return new Intl.DateTimeFormat("es-MX", { weekday: "long", timeZone: "UTC" }).format(
-    new Date(dateISO + "T00:00:00Z")
-  );
+// Generating a session for a day other than today is a deliberate catch-up (the
+// athlete missed Thursday and is doing it Friday), so the prompt has to say so —
+// otherwise the model reasons as if the date were today and mis-frames recovery,
+// weekday-specific work, and its own justification.
+function catchUpBlock(resolved: ResolvedDay, targetDate: string, today: string): string {
+  const parts: string[] = [];
+  if (targetDate !== today) {
+    parts.push(
+      `NOTA: esta sesión corresponde al ${weekdayName(targetDate)} ${targetDate}, pero se está generando el ${today} — el atleta la está recuperando fuera de su día original. Tómalo en cuenta para la recuperación (qué entrenó realmente en los días intermedios, según los logs y los ajustes de abajo), no para cambiar el contenido programado del día.`
+    );
+  }
+  if (resolved.movedFromDate) {
+    parts.push(
+      `El atleta movió a propósito la sesión del ${resolved.movedFromDate} a este día (${targetDate}). Genera la sesión que le tocaba el ${resolved.movedFromDate}, no la que el calendario marcaba para hoy.`
+    );
+  }
+  return parts.join("\n");
 }
 
-interface BlockDaySession {
+interface BlockDaySessionRef {
   day_offset: number;
   type: string;
   summary: string;
-}
-
-interface BlockWeek {
-  week_number: number;
-  label: string;
-  sessions: BlockDaySession[];
 }
 
 // Yoga is instructor-led at the gym — the engine doesn't script the class itself,
@@ -86,6 +96,28 @@ function yogaPlaceholderExercise(daySummary: string | undefined): PlannedSession
   };
 }
 
+// Shared by POST and GET: resolves which date the caller is asking about and
+// checks it's one we're willing to serve.
+function resolveTargetDate(raw: unknown): { date: string } | { error: string; status: number } {
+  const today = todayISO();
+  if (raw == null || raw === "") return { date: today };
+  if (!isValidISODate(raw)) {
+    return { error: "Fecha inválida — usa el formato YYYY-MM-DD.", status: 400 };
+  }
+  // Future days are deliberately not generatable. The engine calibrates on the
+  // logs of the last 14 days, so generating next Tuesday today would bake in
+  // stale evidence and then present it as the plan. Upcoming days stay visible
+  // as the block's summary in /block, which is the right level of detail for
+  // something that hasn't happened yet.
+  if (raw > today) {
+    return {
+      error: "Todavía no puedes generar una sesión a futuro — el coach la arma con tus registros más recientes. Puedes ver el resumen del día en Workouts.",
+      status: 400,
+    };
+  }
+  return { date: raw };
+}
+
 export async function POST(request: Request) {
   const supabase = await createClient();
   const {
@@ -96,6 +128,15 @@ export async function POST(request: Request) {
   const today = todayISO();
   const body = await request.json().catch(() => ({}));
   const checkin: CheckIn | null = body?.checkin ?? null;
+  // Explicit opt-in to train on a structural rest day. Recorded as an 'extra'
+  // adjustment by the client so the coach sees it in the next block.
+  const force: boolean = body?.force === true;
+
+  const target = resolveTargetDate(body?.date);
+  if ("error" in target) {
+    return NextResponse.json({ error: target.error }, { status: target.status });
+  }
+  const targetDate = target.date;
 
   const { data: block } = await supabase
     .from("blocks")
@@ -112,6 +153,46 @@ export async function POST(request: Request) {
     );
   }
 
+  // Idempotent: a date that already has a session returns it instead of burning
+  // another engine call and leaving a duplicate row that shadows the first.
+  const { data: existing } = await supabase
+    .from("sessions")
+    .select("*")
+    .eq("date", targetDate)
+    .order("created_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  if (existing) return NextResponse.json(existing);
+
+  const { data: adjustmentRows } = await supabase
+    .from("day_adjustments")
+    .select("id, date, kind, moved_to_date, note")
+    .eq("block_id", block.id);
+  const adjustments: DayAdjustment[] = adjustmentRows ?? [];
+
+  const resolved = resolveDay(targetDate, block.start_date, block.raw_plan, adjustments);
+
+  if (!resolved.isInsideBlock) {
+    return NextResponse.json(
+      { error: `${targetDate} cae fuera del bloque activo (inició ${block.start_date}).` },
+      { status: 400 }
+    );
+  }
+
+  // Rest day: no engine call at all. Returning early is the whole point — the
+  // previous version fell through to the generic branch and produced a full
+  // workout on a day the plan marked as rest.
+  if (resolved.isRestDay && !force) {
+    return NextResponse.json({
+      rest_day: true,
+      date: targetDate,
+      week_number: resolved.weekNumber,
+      summary:
+        resolved.plannedDay?.summary ??
+        "Domingo — descanso completo. Sin entrenamiento programado.",
+    });
+  }
+
   const { data: profile } = await supabase
     .from("athlete_profile")
     .select("data")
@@ -119,28 +200,25 @@ export async function POST(request: Request) {
     .limit(1)
     .maybeSingle();
 
-  const twoWeeksAgo = new Date(Date.now() - 14 * 24 * 60 * 60 * 1000)
-    .toISOString()
-    .slice(0, 10);
+  // Window starts 14 days before the session being generated rather than before
+  // "now", so a catch-up looks at the training that actually preceded that day.
+  // It stays open-ended at the top on purpose: when recovering Thursday on
+  // Friday, what the athlete did Thursday (the 5k) is real evidence about
+  // recovery and the coach should see it.
+  const windowStart = addDaysISO(targetDate, -14);
 
   const { data: recentLogs } = await supabase
     .from("session_logs")
     .select("*, sessions(date, type, week_number, planned_exercises)")
-    .gte("created_at", twoWeeksAgo)
+    .gte("created_at", windowStart)
     .order("created_at", { ascending: false });
 
-  // Diff two date-only strings (both parsed as UTC midnight) so this is immune
-  // to server timezone — only `today` (already in the athlete's timezone) matters.
-  const daysIntoBlock = Math.floor(
-    (Date.parse(today) - Date.parse(block.start_date)) / (24 * 60 * 60 * 1000)
-  );
-  const dayOffset = daysIntoBlock + 1;
-  const weekNumber = Math.min(4, Math.floor(daysIntoBlock / 7) + 1);
+  const recentAdjustments = adjustments.filter((a) => a.date >= windowStart && a.date <= targetDate);
 
-  const weeks: BlockWeek[] = block.raw_plan?.weeks ?? [];
-  const plannedDay = weeks
-    .flatMap((w) => w.sessions.map((s) => ({ ...s, week_number: w.week_number })))
-    .find((s) => s.day_offset === dayOffset);
+  const plannedDay: BlockDaySessionRef | null = resolved.plannedDay;
+  const dayOffset = resolved.dayOffset;
+  const weekNumber = resolved.weekNumber;
+  const catchUp = catchUpBlock(resolved, targetDate, today);
 
   let planned: PlannedSession;
 
@@ -150,8 +228,10 @@ export async function POST(request: Request) {
     // generated by the engine (athlete request: standing structural rule, not
     // a one-off — covers both "went to class, want more" and "missed class").
     const prompt = `
-Hoy es ${weekdayName(today)} ${today} (día ${dayOffset}, semana ${plannedDay.week_number}) — día de
+Esta sesión es del ${weekdayName(targetDate)} ${targetDate} (día ${dayOffset}, semana ${weekNumber}) — día de
 yoga con instructora según el bloque activo: ${plannedDay.summary}
+
+${catchUp}
 
 La yoga NO se programa (es instructor-led). Genera el complemento post-clase de este mismo día,
 que tiene DOS partes y un tope total de 25 minutos (ver "Yoga" en el perfil del atleta y en la
@@ -166,7 +246,7 @@ universalmente conocido, incluye en sus "notes" 1-2 líneas de cómo ejecutarlo 
 acción → qué cuidar) — el atleta ya reportó no poder encontrar uno en video.
 
 PARTE 2 — Hipertrofia dirigida (~10-12 min): objetivo estético secundario declarado del atleta.
-Si hoy es LUNES: hombros (ej. Lateral Raise, Rear Delt Fly) + tríceps. Si hoy es MIÉRCOLES: pecho
+Si el día es LUNES: hombros (ej. Lateral Raise, Rear Delt Fly) + tríceps. Si el día es MIÉRCOLES: pecho
 (ej. Incline DB Press o push-up con carga) + bíceps. Dosis corta, 2-3 ejercicios, rango 10-15 reps —
 es remate estético sobre el volumen indirecto que ya existe (OHP, push-ups, plyo), no bodybuilding.
 Esta parte NO cuenta contra la cuota de "máximo 2 ejercicios de bíceps" que aplica a las sesiones
@@ -182,6 +262,8 @@ ${JSON.stringify(profile?.data ?? {}, null, 2)}
 
 Logs de los últimos 14 días (RPE, dolor, sueño, rendimiento real):
 ${JSON.stringify(recentLogs ?? [], null, 2)}
+
+${adjustmentsForPrompt(recentAdjustments)}
 
 Para cada ejercicio indica también el tiempo de descanso entre series (rest_seconds) y la forma en que
 se mide (measure: "reps" para repeticiones, "time" para tiempo sostenido como planchas/holds, "distance"
@@ -240,21 +322,21 @@ usa "notes" para indicar a qué parte pertenece cada uno):
 
     planned = {
       type: "yoga",
-      week_number: plannedDay.week_number,
+      week_number: weekNumber,
       exercises: [yogaPlaceholderExercise(plannedDay.summary), ...kbFlow.exercises],
-      justification: `Día de yoga con instructora (no se programa). Complemento de Kettlebell Flow generado para hoy: ${kbFlow.justification}`,
+      justification: `Día de yoga con instructora (no se programa). Complemento de Kettlebell Flow generado para este día: ${kbFlow.justification}`,
       checkin_recommendation: kbFlow.checkin_recommendation ?? null,
     };
   } else {
     // Friday with no planned session → athletic/conditioning day (structural rule).
-    const isFriday = new Date(today + "T12:00:00Z").getUTCDay() === 5;
+    const isFriday = dayOfWeek(targetDate) === 5;
     const isAthleticDay = !plannedDay && isFriday;
 
     const sessionContext = isAthleticDay
-      ? `Hoy (${today}, día ${dayOffset}, semana ${weekNumber}) es VIERNES — día atlético/conditioning/flow según la estructura semanal del atleta. No hay fuerza pesada. Genera una sesión de tipo "atletico": warm up de movilidad (5-10 min) → bloque principal de 20-25 min (KB flow, movimientos atléticos, trabajo explosivo de bajo impacto, o capacidad aeróbica corta) → cooldown. RPE objetivo: 6-7.`
+      ? `Esta sesión es del ${targetDate} (día ${dayOffset}, semana ${weekNumber}), un VIERNES — día atlético/conditioning/flow según la estructura semanal del atleta. No hay fuerza pesada. Genera una sesión de tipo "atletico": warm up de movilidad (5-10 min) → bloque principal de 20-25 min (KB flow, movimientos atléticos, trabajo explosivo de bajo impacto, o capacidad aeróbica corta) → cooldown. RPE objetivo: 6-7.`
       : plannedDay
-      ? `El bloque activo indica que hoy (día ${dayOffset}, semana ${plannedDay.week_number}) es una sesión de tipo "${plannedDay.type}": ${plannedDay.summary}`
-      : `No hay un día exacto definido en el bloque para hoy; usa el contexto general del bloque y la semana ${weekNumber}.`;
+      ? `El bloque activo indica que este día (día ${dayOffset}, semana ${weekNumber}) es una sesión de tipo "${plannedDay.type}": ${plannedDay.summary}`
+      : `No hay un día exacto definido en el bloque para esta fecha; usa el contexto general del bloque y la semana ${weekNumber}.`;
 
     const fuerzaKbReminder =
       plannedDay?.type === "fuerza" || (!plannedDay && !isFriday)
@@ -290,9 +372,10 @@ que los compuestos del día no tocan. No los conviertas en un bloque extenso.
         : "";
 
     const prompt = `
-Genera la sesión de entrenamiento de HOY (${today}) para este atleta.
+Genera la sesión de entrenamiento del ${weekdayName(targetDate)} ${targetDate} para este atleta.
 
 ${sessionContext}
+${catchUp}
 ${fuerzaKbReminder}
 ${checkinBlock(checkin)}
 
@@ -304,6 +387,8 @@ ${JSON.stringify(block.raw_plan ?? {}, null, 2)}
 
 Logs de los últimos 14 días (RPE, dolor, sueño, rendimiento real):
 ${JSON.stringify(recentLogs ?? [], null, 2)}
+
+${adjustmentsForPrompt(recentAdjustments)}
 
 Genera el detalle de ejercicios para sesiones de tipo "fuerza" y "atletico". Running puede llevar
 indicaciones de ritmo/atención articular en lugar de lista de ejercicios.
@@ -362,7 +447,7 @@ Responde SOLO con un JSON con esta forma exacta:
     } catch (err) {
       const message = err instanceof Error ? err.message : String(err);
       return NextResponse.json(
-        { error: `No se pudo generar la sesión de hoy — respuesta inválida o incompleta del modelo (${message}). Intenta de nuevo.` },
+        { error: `No se pudo generar la sesión — respuesta inválida o incompleta del modelo (${message}). Intenta de nuevo.` },
         { status: 502 }
       );
     }
@@ -375,8 +460,10 @@ Responde SOLO con un JSON con esta forma exacta:
     .from("sessions")
     .insert({
       block_id: block.id,
-      date: today,
-      week_number: planned.week_number,
+      date: targetDate,
+      // Trust the resolved calendar position over the model's echo: on a moved
+      // session the model sees the source day's context and can report its week.
+      week_number: weekNumber,
       type: dbType,
       title: defaultTitleFor(planned.type),
       planned_exercises: planned.exercises,
@@ -396,18 +483,23 @@ Responde SOLO con un JSON con esta forma exacta:
   return NextResponse.json(session);
 }
 
-export async function GET() {
+export async function GET(request: Request) {
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "No autenticado" }, { status: 401 });
 
-  const today = todayISO();
+  const requested = new URL(request.url).searchParams.get("date");
+  const target = resolveTargetDate(requested);
+  if ("error" in target) {
+    return NextResponse.json({ error: target.error }, { status: target.status });
+  }
+
   const { data, error } = await supabase
     .from("sessions")
     .select("*")
-    .eq("date", today)
+    .eq("date", target.date)
     .order("created_at", { ascending: false })
     .limit(1)
     .maybeSingle();

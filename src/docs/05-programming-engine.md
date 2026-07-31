@@ -528,3 +528,33 @@ cadera/tobillo.
 Viajes, falta de equipo, enfermedad, estrés vital alto, o cambios de horario
 disparan una versión simplificada del programa (mínimo efectivo) en lugar de
 forzar la sesión planificada original.
+
+## Ajustes de día: el plan vs. la realidad
+
+El plan del bloque es la **intención**; lo que el atleta entrenó es la
+**ejecución**. Cuando las dos difieren a propósito —se movió una sesión de un
+día a otro, se sustituyó por otra actividad, se saltó, o se entrenó en un día
+de descanso— eso se registra como un **ajuste de día**, y es evidencia de
+primera clase para el motor.
+
+Reglas:
+
+- **El ajuste no reescribe el plan del bloque.** El plan queda intacto y
+  auditable; el ajuste se superpone al leerlo. Poder comparar "qué se programó"
+  contra "qué pasó" es justamente lo que permite aprender de la diferencia.
+- **Una sesión movida se genera con el contenido de su día original**, no con
+  el del día en que se ejecuta. Si el jueves de fuerza se hace el viernes, el
+  atleta hace la sesión de fuerza del jueves — no la del viernes.
+- **Los ajustes se leen como patrón, no como incidentes.** Un día de la semana
+  que aparece movido, sustituido o saltado repetidamente no es falta de
+  disciplina: es un día que no existe en la vida real del atleta. El siguiente
+  bloque se reacomoda alrededor de esa realidad (menos días, o el trabajo
+  pesado en los días que sí sostiene), en vez de reprogramar lo mismo esperando
+  un resultado distinto. Ver también "Descanso" en Distribución de disciplinas:
+  el plan asume la semana buena; la semana real manda.
+- **La carga sustituida cuenta como carga.** Si el atleta cambió una sesión de
+  fuerza por 5 km de carrera, eso es fatiga real y entra en la decisión de
+  volumen y recuperación — no es un día en blanco.
+- **La adherencia se mide contra el plan, no contra las sesiones generadas.**
+  Un día que nunca se generó no puede desaparecer de la cuenta: si desapareciera,
+  la adherencia subiría precisamente cuando el atleta entrena menos.

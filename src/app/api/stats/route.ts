@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase-server";
+import { todayISO } from "@/lib/dates";
+import { blockDates, resolveDay, type DayAdjustment } from "@/lib/blockPlan";
 
 const PERIOD_DAYS: Record<string, number> = { day: 1, week: 7, month: 30 };
 
@@ -51,7 +53,7 @@ export async function GET(request: Request) {
     supabase.from("sessions").select("id, date, type, status, week_number, block_id, planned_exercises"),
     supabase.from("session_logs").select("*, sessions(date, type, week_number)").order("created_at", { ascending: true }),
     supabase.from("body_metrics").select("*").order("date", { ascending: true }),
-    supabase.from("blocks").select("id, start_date, status, focus_notes").eq("status", "active").maybeSingle(),
+    supabase.from("blocks").select("id, start_date, status, focus_notes, raw_plan").eq("status", "active").maybeSingle(),
   ]);
 
   const sessions = sessionsRes.data ?? [];
@@ -59,13 +61,51 @@ export async function GET(request: Request) {
   const bodyMetrics = bodyRes.data ?? [];
   const activeBlock = blockRes.data;
 
-  // Adherencia en el bloque activo
+  const { data: adjustmentRows } = activeBlock
+    ? await supabase
+        .from("day_adjustments")
+        .select("date, kind, moved_to_date, note")
+        .eq("block_id", activeBlock.id)
+    : { data: [] };
+  const adjustments: DayAdjustment[] = (adjustmentRows ?? []).map((a) => ({
+    date: a.date,
+    kind: a.kind,
+    moved_to_date: a.moved_to_date ?? null,
+    note: a.note ?? null,
+  }));
+
+  // Adherencia contra el PLAN, no contra los rows generados.
+  //
+  // Antes el denominador era "sesiones que existen en la tabla", lo que hacía
+  // invisible el caso que más importa: un día que el atleta no entrenó nunca
+  // generó row, así que no bajaba el porcentaje. La adherencia subía justamente
+  // cuando el atleta entrenaba menos. Ahora el denominador son los días
+  // entrenables del bloque que ya transcurrieron, leídos del plan y ajustados
+  // por los cambios de día que el atleta registró.
+  const today = todayISO();
   const blockSessions = activeBlock
     ? sessions.filter((s) => s.block_id === activeBlock.id)
     : sessions;
-  const total = blockSessions.length;
-  const completed = blockSessions.filter((s) => s.status === "completed").length;
-  const skipped = blockSessions.filter((s) => s.status === "skipped").length;
+  const sessionByDate = new Map(blockSessions.map((s) => [s.date, s]));
+
+  let total = 0;
+  let completed = 0;
+  if (activeBlock) {
+    for (const date of blockDates(activeBlock.start_date)) {
+      if (date > today) break; // el futuro no cuenta ni a favor ni en contra
+      const resolved = resolveDay(date, activeBlock.start_date, activeBlock.raw_plan, adjustments);
+      // Descanso, o un día cuya sesión se movió a otra fecha (cuenta allá).
+      if (resolved.isRestDay || !resolved.plannedDay) continue;
+      total += 1;
+      if (sessionByDate.get(date)?.status === "completed") completed += 1;
+    }
+  } else {
+    total = blockSessions.length;
+    completed = blockSessions.filter((s) => s.status === "completed").length;
+  }
+
+  const skipped = Math.max(0, total - completed);
+  const adjusted = adjustments.filter((a) => a.kind !== "extra").length;
   const adherencia = total > 0 ? Math.round((completed / total) * 100) : null;
 
   // Tendencia RPE y sueño, filtrada por el periodo seleccionado (día/semana/mes)
@@ -156,7 +196,7 @@ export async function GET(request: Request) {
     activeBlock: activeBlock
       ? { id: activeBlock.id, start_date: activeBlock.start_date, focus_notes: activeBlock.focus_notes }
       : null,
-    adherencia: { total, completed, skipped, pct: adherencia },
+    adherencia: { total, completed, skipped, adjusted, pct: adherencia },
     recentLogs,
     liftProgression,
     liftMonthOverMonth,

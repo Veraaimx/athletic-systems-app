@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase-server";
 import { askEngine, parseJsonResponse } from "@/lib/claude";
 import { todayISO, nextMonday } from "@/lib/dates";
+import { adjustmentsForPrompt, enforceWeekStructure, type BlockPlan } from "@/lib/blockPlan";
 
 interface SessionLogRow {
   rpe: number | null;
@@ -45,59 +46,6 @@ function curateSessionsForPrompt(sessions: SessionHistoryRow[]): unknown[] {
         " (Detalle de movimientos omitido a propósito — ver nota en el prompt.)",
     };
   });
-}
-
-interface BlockPlan {
-  focus_notes: string;
-  weeks: Array<{
-    week_number: number;
-    label: string;
-    sessions: Array<{ day_offset: number; type: string; summary: string }>;
-  }>;
-}
-
-// Yoga is a real, non-negotiable weekly commitment (instructor-led class —
-// see docs/04-athlete-profile.md) that always falls on Monday and Wednesday,
-// regardless of which real weekday the block happens to start on. The model
-// reasons about a Mon-Sun template but is never told today's actual weekday,
-// so `day_offset` values it proposes for yoga can land on any real day. Rather
-// than rely on prompting alone for a hard constraint, enforce it deterministically:
-// walk each week's 7 real calendar days and slot yoga sessions into whichever
-// land on Monday/Wednesday, filling the rest with the model's other sessions
-// in their original relative order.
-function enforceYogaDays(plan: BlockPlan, startDateISO: string) {
-  const startDow = new Date(startDateISO + "T00:00:00Z").getUTCDay(); // 0=Sun..6=Sat
-
-  for (const week of plan.weeks) {
-    if (!Array.isArray(week?.sessions)) continue; // malformed week from the model — skip rather than crash
-    const weekStart = (week.week_number - 1) * 7 + 1;
-    const sorted = [...week.sessions].sort((a, b) => a.day_offset - b.day_offset);
-    const yoga = sorted.filter((s) => s.type === "yoga");
-    const rest = sorted.filter((s) => s.type === "descanso");
-    const other = sorted.filter((s) => s.type !== "yoga" && s.type !== "descanso");
-    const rebuilt: typeof week.sessions = [];
-
-    for (let i = 0; i < 7; i++) {
-      const dayOffset = weekStart + i;
-      const dow = (startDow + (dayOffset - 1)) % 7;
-      const isYogaDay = dow === 1 || dow === 3; // Monday or Wednesday
-      const isRestDay = dow === 0; // Sunday — explicit full rest day
-      if (isYogaDay && yoga.length) {
-        rebuilt.push({ ...yoga.shift()!, day_offset: dayOffset });
-      } else if (isRestDay && rest.length) {
-        rebuilt.push({ ...rest.shift()!, day_offset: dayOffset });
-      } else if (!isYogaDay && !isRestDay && other.length) {
-        rebuilt.push({ ...other.shift()!, day_offset: dayOffset });
-      } else if (yoga.length) {
-        rebuilt.push({ ...yoga.shift()!, day_offset: dayOffset });
-      } else if (other.length) {
-        rebuilt.push({ ...other.shift()!, day_offset: dayOffset });
-      } else if (rest.length) {
-        rebuilt.push({ ...rest.shift()!, day_offset: dayOffset });
-      }
-    }
-    week.sessions = rebuilt;
-  }
 }
 
 // Returns the currently active block, if any — so /block can always show the
@@ -168,6 +116,22 @@ export async function POST() {
     goalProgressNote = `Este sería el bloque ${blockNumber} de ~${totalBlocks} sugeridos para esta meta (duración sugerida: ${activeGoal.suggested_program_weeks} semanas — ${activeGoal.program_weeks_reasoning ?? "sin razonamiento adicional guardado"}). Es una referencia orientativa, no una cuenta rígida — ajusta según la evidencia real de progreso.`;
   }
 
+  // What the athlete actually did vs. what was scheduled. This is the only
+  // signal the engine has about real availability — a day never trained leaves
+  // no session row, so without these adjustments it's invisible and the next
+  // block gets planned against a week the athlete doesn't actually have.
+  let adjustmentsNote = "El atleta no registró ajustes de día en el bloque anterior.";
+  if (lastBlock) {
+    const { data: adjustmentRows } = await supabase
+      .from("day_adjustments")
+      .select("date, kind, moved_to_date, note")
+      .eq("block_id", lastBlock.id)
+      .order("date", { ascending: true });
+    adjustmentsNote = adjustmentsForPrompt(
+      (adjustmentRows ?? []).map((a) => ({ ...a, moved_to_date: a.moved_to_date ?? null, note: a.note ?? null }))
+    );
+  }
+
   // Pull every real session + log from the block that's closing, so the proposal
   // is grounded in what actually happened (RPE, dolor, sueño, rendimiento real),
   // not just the plan that was originally drawn up.
@@ -207,7 +171,8 @@ de tu respuesta (siempre caen en lunes/miércoles reales, sin importar qué day_
 les asignes), así que no necesitas hacer ese cálculo de calendario tú mismo — solo
 incluye 2 sesiones de yoga por semana en el orden que tengan sentido dentro de tu plan.
 Incluye también 1 sesión type "descanso" por semana (cae automáticamente en domingo):
-su summary es breve — descanso completo, sin entrenamiento programado. Marca además
+su summary es breve — descanso completo, sin entrenamiento programado. El domingo es
+descanso innegociable: nunca propongas 7 días de entrenamiento en una semana. Marca además
 1-2 sesiones de la semana como flexibles en su summary (candidatas a saltarse sin
 penalidad si la semana real solo da para 4-5 días — la disponibilidad real del atleta).
 
@@ -222,6 +187,16 @@ Bloque anterior: lo que se planificó, lo que realmente se hizo, y los logs real
 real para decidir progresión, mantenimiento o regresión de carga — no asumas que el
 bloque anterior salió como se planeó si los logs dicen lo contrario:
 ${JSON.stringify(blockHistory, null, 2)}
+
+${adjustmentsNote}
+
+Los ajustes de arriba son la disponibilidad REAL del atleta, no una falla de adherencia que haya que
+regañar. Léelos como patrón, no como incidentes: si un mismo día de la semana aparece repetidamente
+movido, sustituido o saltado, ese día no existe en su vida real — reacomoda el plan alrededor de eso
+(menos días, o el trabajo pesado en los días que sí sostiene) en vez de reprogramar lo mismo esperando
+un resultado distinto. Si el atleta sustituyó sesiones por correr, cuenta esa carga como carga real al
+decidir volumen y recuperación. Menciona en "focus_notes" cualquier cambio de estructura que hagas por
+esta razón.
 
 Nota sobre las sesiones de yoga en el historial de arriba: el detalle
 movimiento-por-movimiento del complemento KB fue omitido a propósito, no es un
@@ -278,11 +253,11 @@ Responde SOLO con un JSON con esta forma exacta:
   }
 
   try {
-    enforceYogaDays(plan, assumedStartDate);
+    enforceWeekStructure(plan, assumedStartDate);
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
     return NextResponse.json(
-      { error: `No se pudo generar la propuesta — error ajustando los días de yoga (${message}). Intenta de nuevo.` },
+      { error: `No se pudo generar la propuesta — error ajustando la estructura de la semana (${message}). Intenta de nuevo.` },
       { status: 500 }
     );
   }
@@ -302,9 +277,9 @@ export async function PUT(request: Request) {
 
   const { proposal } = await request.json();
   const startDate = nextMonday(todayISO());
-  // Re-run in case the proposal was generated on a different day than it's
-  // being activated on — keeps yoga anchored to real Monday/Wednesday either way.
-  enforceYogaDays(proposal, startDate);
+  // Re-run in case the proposal was generated on a different day than it's being
+  // activated on — keeps yoga on real Monday/Wednesday and Sunday on rest either way.
+  enforceWeekStructure(proposal, startDate);
 
   await supabase.from("blocks").update({ status: "closed" }).eq("status", "active");
 
