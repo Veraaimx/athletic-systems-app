@@ -8,6 +8,18 @@ interface SessionLogRow {
   rpe: number | null;
   pain_flags: unknown;
   readiness_notes: string | null;
+  actual_performance?: unknown;
+}
+
+interface LoggedSet {
+  reps?: number | null;
+  weight?: number | null;
+}
+
+interface LoggedExercise {
+  name?: string;
+  unit?: string;
+  sets?: LoggedSet[];
 }
 
 interface SessionHistoryRow {
@@ -17,6 +29,50 @@ interface SessionHistoryRow {
   status: string;
   justification: string | null;
   session_logs: SessionLogRow[] | null;
+}
+
+// The load table exists because of a bug this caused: `curateSessionsForPrompt`
+// strips the movement-by-movement prose from yoga sessions to kill the
+// repetition anchor — and that prose was also the ONLY place the engine could
+// see what the athlete actually lifted on those days. Block 7 came out with
+// every KB accessory dropped to a 12 kg default (Turkish Sit-Up, Halos,
+// Woodchops, B-Stance Chops) and Incline DB Press at half the logged load,
+// because none of those live in a strength session.
+//
+// So loads travel separately from vocabulary: this walks EVERY log (yoga
+// included) and reports the heaviest set per exercise as plain evidence. It
+// carries no session context and no ordering, so it can't act as a "repeat
+// this workout" anchor — it's a list of numbers, not a list of ideas.
+function buildLoadReference(sessions: SessionHistoryRow[]): string {
+  const best = new Map<string, { weight: number; unit: string; reps: number; date: string }>();
+  for (const session of sessions) {
+    const logs = Array.isArray(session.session_logs)
+      ? session.session_logs
+      : session.session_logs
+        ? [session.session_logs]
+        : [];
+    for (const log of logs) {
+      const perf = log.actual_performance as { exercises?: LoggedExercise[] } | null | undefined;
+      for (const exercise of perf?.exercises ?? []) {
+        const name = exercise?.name?.trim();
+        if (!name) continue;
+        const unit = exercise.unit === "kg" ? "kg" : "lbs";
+        for (const set of exercise.sets ?? []) {
+          const weight = Number(set?.weight) || 0;
+          if (weight <= 0) continue;
+          const previous = best.get(name);
+          if (!previous || weight > previous.weight) {
+            best.set(name, { weight, unit, reps: Number(set?.reps) || 0, date: session.date });
+          }
+        }
+      }
+    }
+  }
+  if (!best.size) return "No hay cargas registradas en los logs del bloque anterior.";
+  return [...best.entries()]
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([name, r]) => `- ${name}: ${r.weight} ${r.unit}${r.reps ? ` × ${r.reps} reps` : ""} (registrado ${r.date})`)
+    .join("\n");
 }
 
 // Yoga sessions are where the KB complement kept repeating the exact same
@@ -136,6 +192,7 @@ export async function POST() {
   // is grounded in what actually happened (RPE, dolor, sueño, rendimiento real),
   // not just the plan that was originally drawn up.
   let blockHistory: unknown = "No hay bloque anterior, este es el primero.";
+  let loadReference = "No hay bloque anterior, así que no hay cargas registradas.";
   if (lastBlock) {
     const { data: sessionsWithLogs } = await supabase
       .from("sessions")
@@ -155,6 +212,7 @@ export async function POST() {
       focus_notes: lastBlock.focus_notes,
       sessions: curatedSessions,
     };
+    loadReference = buildLoadReference((sessionsWithLogs ?? []) as unknown as SessionHistoryRow[]);
   }
 
   // Blocks always start on Monday — keeps "Semana N" as a clean Mon-Sun calendar
@@ -175,6 +233,10 @@ su summary es breve — descanso completo, sin entrenamiento programado. El domi
 descanso innegociable: nunca propongas 7 días de entrenamiento en una semana. Marca además
 1-2 sesiones de la semana como flexibles en su summary (candidatas a saltarse sin
 penalidad si la semana real solo da para 4-5 días — la disponibilidad real del atleta).
+NUNCA marques como flexible una sesión de medición (benchmark, test cronometrado o
+cualquier sesión que la meta vigente nombre como instrumento para medir el ciclo):
+esas no se saltan, se mueven de día. Marcar una medición como opcional destruye la
+comparación que el ciclo entero necesita.
 
 Perfil del atleta (JSON):
 ${JSON.stringify(profile?.data ?? {}, null, 2)}
@@ -187,6 +249,21 @@ Bloque anterior: lo que se planificó, lo que realmente se hizo, y los logs real
 real para decidir progresión, mantenimiento o regresión de carga — no asumas que el
 bloque anterior salió como se planeó si los logs dicen lo contrario:
 ${JSON.stringify(blockHistory, null, 2)}
+
+CARGAS DE REFERENCIA REGISTRADAS — el peso más alto que el atleta movió en cada
+ejercicio, sacado de TODOS los logs del bloque anterior, incluidos los días de
+yoga cuyo detalle se omitió arriba:
+${loadReference}
+
+Esta lista es evidencia de carga, NO un menú de ejercicios a repetir: que un
+movimiento aparezca aquí no es razón para volver a programarlo, y que no
+aparezca no lo hace nuevo ni riesgoso. Úsala solo para una cosa: si programas
+un ejercicio que está en esta lista, parte de esa carga. Nunca lo programes por
+debajo del peso registrado sin decir en el summary de esa sesión por qué bajas
+(reentrada tras deload, molestia articular, cambio de tempo o de rango). Un
+accesorio que el atleta ya movió a 16 kg no se programa a 12 kg en silencio.
+Ojo con las unidades: la lista dice kg o lbs para cada ejercicio, y un peso de
+mancuerna es por mancuerna, no el par.
 
 ${adjustmentsNote}
 
