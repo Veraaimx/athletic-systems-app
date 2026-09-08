@@ -198,6 +198,17 @@ cuidar), porque el atleta puede no encontrarlo en video — ya ocurrió: report�
 en logs no entender un movimiento ni hallarlo en YouTube. Un movimiento que el
 atleta no puede ejecutar por falta de referencia es peor que uno repetido.
 
+**Atribución de origen cuando el movimiento viene de un creador (enmienda
+2026-09-08):** varios movimientos del banco provienen de creadores de Instagram
+y no existen en YouTube con ese nombre. Nombrarlos sin decir de dónde salen
+deja al atleta sin forma de buscarlos — ya ocurrió y volvió a reportarse en los
+logs. Todo movimiento no estándar debe incluir, además de los cues, **de dónde
+viene o cómo encontrarlo**: la cuenta o creador si se conoce, y si no, un
+nombre alterno o una descripción buscable (ej. "sin nombre estándar — busca
+'kettlebell rotational chop half-kneeling'"). Si el motor no puede dar ninguna
+de las dos cosas, **no programa ese movimiento con ese nombre**: usa un
+equivalente estándar y lo dice explícitamente.
+
 **Logs de carga vs. variedad de vocabulario — no son lo mismo.** El historial de
 logs (RPE, peso, dolor) del bloque anterior existe para decidir progresión de
 **carga** en los movimientos de fuerza — no es una lista blanca implícita de
@@ -221,8 +232,24 @@ pulls + curtsy lunges + rotational cleans + single-leg presses, × 5 rondas +
 core finisher). Un EMOM de solo 2 movimientos es formato de deload, no de
 semana de trabajo: en S1-S3 se considera subdimensionado. Los 4-6 movimientos
 deben cubrir más de un patrón (no 6 variantes del mismo swing) e incluir
-regularmente empuje funcional (push-up/plyo/floor press) — es la vía prevista
-para trabajar pecho y brazos sin volumen de aislamiento.
+regularmente empuje funcional (push-up/plyo/floor press). El empuje funcional
+se mantiene como pieza obligatoria del conditioning y no se sustituye por
+trabajo de máquina o mancuerna.
+
+**Hipertrofia dirigida de aislamiento (regla de alcance — enmienda
+2026-09-08):** el empuje funcional del conditioning ya no es la *única* vía
+para pecho y brazos. Existe un slot corto y acotado de hipertrofia dirigida —el
+mismo formato que ya opera para hombro (Lateral Raise, Rear Delt Fly, Tricep
+Overhead Extension)— que cubre además **pecho y bíceps** con ejercicios de
+aislamiento reales y progresión de carga registrada: press inclinado o plano
+con mancuernas, floor press cargado, curl con mancuerna/KB/barra y sus
+variantes. Reglas de alcance, no negociables: **volumen bajo** —~10-12 min por
+sesión, 2-3 ejercicios de 3×10-15, nunca más—; vive en los días de yoga y en el
+remate de los días de fuerza de tren superior; **nunca dentro del
+circuito/EMOM/AMRAP** (sigue aplicando la regla de estaciones dinámicas); y
+**nunca desplaza** al trabajo ancla ni al empuje funcional. Es complemento, no
+eje: si compite por tiempo con la fuerza o el conditioning, la hipertrofia
+dirigida es lo primero que se recorta.
 
 **Ubicación de isométricos (regla de colocación):** los isométricos tienen
 tres casas legítimas — (1) warm-up como activación corta y submáxima (ej. VMO
