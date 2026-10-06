@@ -75,10 +75,22 @@ error de estructura, no una progresión más agresiva.
   accesorios y unilaterales. 2-4 sesiones de fuerza por semana según bloque.
   El día de fuerza inferior cierra con **hipertrofia dirigida de pierna** — ver
   regla dedicada abajo.
-- **Running:** sin días fijos — el motor elige 2 sesiones/semana no consecutivas según
-  lo que el bloque necesite, separadas de fuerza de tren inferior pesado cuando sea
-  posible. A diferencia del yoga, esto no es una restricción de horario del atleta,
-  es una decisión de programación y puede cambiar de bloque a bloque.
+- **Running (corregido 2026-10-06 con la conducta real del atleta):** el atleta
+  **ya corre por su cuenta martes, jueves y sábado** (el sábado a veces), 2-3
+  veces por semana, ~5-7 km. Esto dejó de ser una decisión de programación: es
+  un hecho de su semana, y el motor programa alrededor de él en vez de asignar
+  días de running como si el calendario estuviera vacío.
+  **Consecuencia estructural que hay que respetar:** martes y jueves son también
+  los días de fuerza de la plantilla, así que **esos dos días ya son dobles**
+  (fuerza + corrida) aunque el plan solo muestre la sesión de fuerza. Esa es la
+  causa medida de que el conditioning del día de fuerza inferior se cayera
+  bloque tras bloque: no era un día cargado, era un día doble. Por tanto: el día
+  de fuerza inferior lleva conditioning ligero o nulo (ya es regla del ciclo), y
+  el conditioning denso va al miércoles antes de yoga y al día atlético.
+  El running registrado en la app casi nunca aparece — el Bloque 7 cerró con
+  cero sesiones de running registradas y el atleta corrió igual. **Un bloque sin
+  running en los logs no significa que no corrió.** No recortar ni "compensar"
+  por una supuesta falta de adherencia al running.
 - **Yoga:** días fijos (lunes y miércoles) — única restricción de horario no
   negociable del atleta, por depender de clase con instructora. Funciona como
   recuperación activa y trabajo de movilidad, no se trata como "día libre".
@@ -111,8 +123,10 @@ error de estructura, no una progresión más agresiva.
   demanda de CNS), por eso caben aquí sin competir con la recuperación de los
   compuestos — agregar extensiones no es lo mismo que agregar sentadillas.
   Si en algún bloque falta desarrollo de cuádriceps, la vía correcta **no** es
-  apilar más accesorios: es cambiar el estímulo de lo que ya está (subir BSS a
-  rango 8-10, o rotar a Hack Squat como variante principal).
+  apilar más accesorios: es cambiar el estímulo de lo que ya está (subir el
+  unilateral a rango 8-10, o rotar la variante del patrón de sentadilla — ver la
+  tabla de variantes legítimas; Hack Squat NO es una de ellas, el atleta no tiene
+  esa máquina).
 - **Kettlebells:** se incluyen de forma **obligatoria** en toda sesión de fuerza como
   bloque final de acondicionamiento (10-15 min, nunca omitir). Formato: KB flow,
   EMOM, AMRAP + core rotacional, circuit corto, o carry work — elegido según fatiga
@@ -184,6 +198,24 @@ necesite, igual que cualquier otro ejercicio.
   Jump, Box Jump (dosis conservadora, ver nota de impacto abajo), Assault Bike
   intervals, Row (remadora), Medicine Ball Slam/Throw. No usar Sandbag Carry
   ni Ski Erg — no disponibles.
+
+- **Familia landmine (incorporada 2026-10-06 a pedido del atleta):** la barra
+  anclada en el suelo da un arco de resistencia en diagonal que ninguna otra
+  herramienta del gym reproduce — carga rotacional y de empuje en ángulo con
+  menos compresión axial que la barra libre, lo que la vuelve especialmente útil
+  mientras el episodio de psoas/lumbar esté activo. Movimientos: Landmine Press
+  (single-arm y doble), Landmine Squat, Landmine Rotation (anti-rotación de
+  torso), Landmine Row, Landmine Thruster, Landmine Reverse Lunge + Press, y
+  **Skater + Split Jerk Landmine** — el movimiento que el atleta trajo
+  explícitamente: salto lateral de patinador para aterrizar en una pierna,
+  seguido de un split jerk de la barra anclada; es trabajo de potencia lateral
+  más empuje en ángulo bajo fatiga, encaja en Power Endurance (S2) y como
+  estación de circuito en el día atlético. Progresión: dominar el skater y el
+  split jerk por separado antes de encadenarlos; primera exposición sin carga
+  añadida más allá de la barra, con aterrizaje controlado dada la rodilla
+  izquierda. Fuente: movimiento de creador no identificado que el atleta vio en
+  redes — al programarlo, aplicar la regla de atribución de origen (describir la
+  mecánica paso a paso, porque no hay nombre estándar que buscar).
 
 **En espera (no programar todavía):** Handstand Walk, Bar/Ring Muscle-Up, Pistol
 Squat — habilidades de alta demanda de hombro/rodilla; reevaluar cuando la rodilla
@@ -347,13 +379,20 @@ días de fuerza se sienten repetitivos, y la adaptación a un movimiento único
 sostenido durante meses deja de ser estímulo. A partir de aquí **lo fijo son los
 cinco patrones**, y el movimiento que los expresa rota de bloque a bloque:
 
-| patrón ancla | variantes legítimas |
+| patrón ancla | variantes legítimas (solo con el equipo que el atleta tiene) |
 |---|---|
-| Sentadilla / dominante de rodilla | Front Squat · Back Squat · Safety Bar Squat · Hack Squat · Zercher Squat |
+| Sentadilla / dominante de rodilla | Front Squat · Back Squat · Landmine Squat · Goblet Squat pesado · Front Squat con tempo o pausa |
 | Bisagra / dominante de cadera | Romanian Deadlift · Trap Bar Deadlift · Conventional Deadlift · Good Morning · Single-Leg RDL |
 | Unilateral de pierna | Bulgarian Split Squat · Reverse Lunge cargado · Step-Up cargado · Split Squat con déficit · Walking Lunge |
 | Jalón vertical | Pull-Up lastrado · Chin-Up lastrado · Neutral-Grip Pull-Up · Lat Pulldown pesado |
-| Empuje vertical | Overhead Press · Push Press · Z Press · Seated DB Press · Single-Arm KB Press |
+| Empuje vertical | Overhead Press · Push Press · Landmine Press · Seated DB Press (con respaldo) · Single-Arm KB Press |
+
+⚠️ **Equipo que NO existe y por tanto no es variante legítima (confirmado por el
+atleta 2026-10-06): Safety Bar, Hack Squat y Zercher Squat.** No programar
+ninguna de las tres. Tampoco el **Z Press** mientras el episodio de psoas/lumbar
+esté activo: sentado sin respaldo y con isquios tensos fuerza retroversión
+pélvica y carga el lumbar justo donde no conviene — para empuje vertical en ese
+contexto, usar Seated DB Press con respaldo o Single-Arm KB Press de pie.
 
 **Reglas de la rotación de fuerza (verificables):**
 
