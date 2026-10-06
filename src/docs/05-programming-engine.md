@@ -217,9 +217,15 @@ previos no es un movimiento no probado o riesgoso, es simplemente uno que el
 atleta todavía no registró: se programa igual que cualquier otro, empezando en
 carga/complejidad conservadora si es genuinamente nuevo.
 
-**Cuota mínima de variedad (regla verificable, no solo intención):** cada
-bloque de 4 semanas debe incluir al menos 3-4 movimientos del banco de
-vocabulario que no aparecieron en los logs del bloque anterior. Repetir bloque
+**Cuota mínima de variedad (regla verificable, no solo intención — subida el
+2026-10-06):** cada bloque de 4 semanas debe incluir al menos **6-8**
+movimientos del banco de vocabulario que no aparecieron en los logs del bloque
+anterior (antes eran 3-4; el atleta reportó que el conditioning seguía
+sintiéndose repetitivo cumpliendo la cuota vieja, así que la cuota vieja era
+demasiado baja). Además: **ninguna pieza de conditioning repite su composición
+completa de un bloque al siguiente** — un circuito puede conservar una o dos
+estaciones, nunca las cuatro; si las cuatro coinciden con una pieza del bloque
+anterior, es el mismo entrenamiento con otro nombre. Repetir bloque
 tras bloque solo lo que ya tiene logs estanca el conditioning exactamente en
 lo que "Programación strength-biased hybrid" pide evitar.
 
@@ -332,22 +338,56 @@ define cómo individualizar y reevaluar semana a semana con evidencia real
 (quién es el limitante actual). Ninguno de los tres dicta qué movimientos usar
 en el conditioning — eso lo cubren el banco de vocabulario y esta rotación.
 
-**Importante — la rotación/variedad de esta sección NO aplica a los 5
-movimientos ancla de fuerza (Front Squat, RDL, Bulgarian Split Squat, Pull-Up,
-Overhead Press).** Ahí rige Oreb al revés de como rige aquí: la consistencia
-del movimiento es lo que permite medir progreso real bloque a bloque — esos 5
-patrones se mantienen fijos y progresan en carga/reps, no se rotan ni se
-sustituyen por variedad. La rotación semanal es exclusivamente del
-conditioning/athletic (KB finishers, circuitos, engine) — un eje aparte que no
-contradice ni compite con la consistencia de los movimientos ancla.
+**Importante — la rotación de esta sección es la del conditioning. La fuerza
+tiene su propio eje de rotación: distinto, más lento y acotado (enmienda
+2026-10-06).** Hasta esta enmienda los cinco ancla eran cinco *movimientos*
+fijos que no se rotaban nunca, para que la consistencia permitiera medir
+progreso. El costo apareció medido: tras seis bloques el atleta reportó que los
+días de fuerza se sienten repetitivos, y la adaptación a un movimiento único
+sostenido durante meses deja de ser estímulo. A partir de aquí **lo fijo son los
+cinco patrones**, y el movimiento que los expresa rota de bloque a bloque:
 
-**Los ancla tampoco se omiten por falta de tiempo.** Cada día de fuerza debe
-incluir los ancla que le corresponden — inferior: Front Squat, RDL y Bulgarian
-Split Squat; superior: Pull-Up y Overhead Press. Dos funciones específicas se
-pierden si desaparecen y ningún accesorio las cubre: el Front Squat es el
-principal estímulo de core bajo carga axial (más que cualquier plancha o
-anti-extensión), y el Bulgarian Split Squat es la fuente principal de
-hipertrofia de cuádriceps además de trabajo unilateral.
+| patrón ancla | variantes legítimas |
+|---|---|
+| Sentadilla / dominante de rodilla | Front Squat · Back Squat · Safety Bar Squat · Hack Squat · Zercher Squat |
+| Bisagra / dominante de cadera | Romanian Deadlift · Trap Bar Deadlift · Conventional Deadlift · Good Morning · Single-Leg RDL |
+| Unilateral de pierna | Bulgarian Split Squat · Reverse Lunge cargado · Step-Up cargado · Split Squat con déficit · Walking Lunge |
+| Jalón vertical | Pull-Up lastrado · Chin-Up lastrado · Neutral-Grip Pull-Up · Lat Pulldown pesado |
+| Empuje vertical | Overhead Press · Push Press · Z Press · Seated DB Press · Single-Arm KB Press |
+
+**Reglas de la rotación de fuerza (verificables):**
+
+1. **Un patrón nunca desaparece.** Cada día de fuerza cubre los patrones que le
+   corresponden, sin importar qué variante se elija. Rotar no es omitir.
+2. **Máximo 2 de los 5 patrones cambian de variante por bloque.** Cambiar los
+   cinco a la vez deja el bloque entero sin punto de comparación: eso no es
+   variedad, es empezar de cero cada mes.
+3. **Movimiento testigo.** Cada patrón tiene una variante designada testigo —por
+   defecto la que más historial de logs acumula— que vuelve **al menos cada dos
+   bloques**, en condiciones comparables. Es lo que permite responder "¿estoy
+   más fuerte que hace dos meses?". Si el testigo de un patrón no aparece en dos
+   bloques consecutivos, ese patrón quedó sin medición y hay que declararlo en
+   `focus_notes`.
+4. **Variante nueva se recalibra, no se traduce.** Una variante sin logs arranca
+   buscando el RPE objetivo, no un porcentaje de la carga de la anterior, y el
+   summary declara que es primera exposición.
+5. **La rotación es entre bloques, nunca dentro.** La variante elegida se
+   mantiene las 4 semanas para poder progresar carga dentro de ella. Un
+   movimiento distinto cada semana no es periodización, es ruido.
+
+La rotación semanal del conditioning sigue siendo un eje aparte, más rápido, y
+no compite con esto.
+
+**Los patrones ancla tampoco se omiten por falta de tiempo.** Cada día de
+fuerza debe incluir los patrones que le corresponden — inferior: sentadilla,
+bisagra y unilateral de pierna; superior: jalón vertical y empuje vertical —
+cualquiera que sea la variante vigente del bloque. Dos funciones específicas se
+pierden si el patrón desaparece y ningún accesorio las cubre: la sentadilla es
+el principal estímulo de core bajo carga axial (más que cualquier plancha o
+anti-extensión), y el unilateral de pierna es la fuente principal de
+hipertrofia de cuádriceps además del trabajo de estabilidad en una pierna. Al
+elegir variante, preferir las que conservan esas funciones: una sentadilla con
+barra las conserva, una prensa de pierna no.
 
 **Orden de recorte cuando la sesión se alarga:** a medida que se acumulan
 rehab, accesorios, hipertrofia dirigida y finishers de 4-6 movimientos, las
