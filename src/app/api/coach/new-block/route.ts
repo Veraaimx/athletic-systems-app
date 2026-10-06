@@ -43,7 +43,42 @@ interface SessionHistoryRow {
 // included) and reports the heaviest set per exercise as plain evidence. It
 // carries no session context and no ordering, so it can't act as a "repeat
 // this workout" anchor — it's a list of numbers, not a list of ideas.
-function buildLoadReference(sessions: SessionHistoryRow[]): string {
+//
+// Second bug, found generating Block 8 (2026-10-06): the table originally read
+// only the PREVIOUS block, so any exercise the athlete logged without a weight
+// in those four weeks lost its history entirely. Incline DB Press came out at
+// 35 lbs/dumbbell because the 60 lbs sits in Block 6 — one block out of reach.
+// A four-week window is the wrong memory for load: the athlete's ceiling in a
+// movement doesn't expire because he skipped it for a month. Now it reads the
+// athlete's whole logged history and marks each entry as recent (last block) or
+// historical, with its date — so the engine can tell "this is where he is" from
+// "this is where he has been" instead of being handed one number with no age.
+// Logged exercise names drift: the same movement shows up as "Cross-Body High
+// Pull", "Cross-Body High Pull (KB Finisher — Circuit)" and "Cross-Body High
+// Pull (KB Finisher — AMRAP)", and "Tricep"/"Triceps Overhead Extension" split
+// one movement into two ceilings (50 and 60 lbs). Reading the full history
+// surfaced ~75 rows where ~50 movements exist. Without this, the table hands the
+// engine the same exercise twice with contradictory loads — worse than the bug
+// it fixes. Strips parenthetical qualifiers and trailing "— ..." descriptors,
+// then folds the variants onto the heaviest set of the group.
+function canonicalExerciseName(raw: string): string {
+  return raw
+    .replace(/\s*\([^)]*\)/g, "")
+    .replace(/\s*—.*$/, "")
+    .replace(/\bTriceps\b/gi, "Tricep")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+// Some logged "exercises" are whole conditioning blocks, not movements — e.g.
+// "KB Conditioning — EMOM 12 min: Farmer Carry + Swing" or "Benchmark S1 —
+// AMRAP 12 min: ...". Their weight belongs to whatever station happened to be
+// heaviest, so as a load reference they're meaningless.
+function isBlockNameNotExercise(name: string): boolean {
+  return /EMOM|AMRAP|Benchmark|Conditioning|Ventana|\d+\s*min/i.test(name);
+}
+
+function buildLoadReference(sessions: SessionHistoryRow[], recentSince: string | null): string {
   const best = new Map<string, { weight: number; unit: string; reps: number; date: string }>();
   for (const session of sessions) {
     const logs = Array.isArray(session.session_logs)
@@ -54,7 +89,10 @@ function buildLoadReference(sessions: SessionHistoryRow[]): string {
     for (const log of logs) {
       const perf = log.actual_performance as { exercises?: LoggedExercise[] } | null | undefined;
       for (const exercise of perf?.exercises ?? []) {
-        const name = exercise?.name?.trim();
+        const rawName = exercise?.name?.trim();
+        if (!rawName) continue;
+        if (isBlockNameNotExercise(rawName)) continue;
+        const name = canonicalExerciseName(rawName);
         if (!name) continue;
         const unit = exercise.unit === "kg" ? "kg" : "lbs";
         for (const set of exercise.sets ?? []) {
@@ -68,10 +106,14 @@ function buildLoadReference(sessions: SessionHistoryRow[]): string {
       }
     }
   }
-  if (!best.size) return "No hay cargas registradas en los logs del bloque anterior.";
+  if (!best.size) return "No hay cargas registradas en el historial del atleta.";
   return [...best.entries()]
     .sort(([a], [b]) => a.localeCompare(b))
-    .map(([name, r]) => `- ${name}: ${r.weight} ${r.unit}${r.reps ? ` × ${r.reps} reps` : ""} (registrado ${r.date})`)
+    .map(([name, r]) => {
+      const reps = r.reps ? ` × ${r.reps} reps` : "";
+      const edad = recentSince && r.date >= recentSince ? "bloque más reciente" : "histórico";
+      return `- ${name}: ${r.weight} ${r.unit}${reps} (${edad}, ${r.date})`;
+    })
     .join("\n");
 }
 
@@ -212,7 +254,23 @@ export async function POST() {
       focus_notes: lastBlock.focus_notes,
       sessions: curatedSessions,
     };
-    loadReference = buildLoadReference((sessionsWithLogs ?? []) as unknown as SessionHistoryRow[]);
+    // Loads come from the athlete's ENTIRE logged history, not just the block
+    // that's closing — see the note on buildLoadReference. Capped so a long
+    // history can't blow up the query; the table itself stays small either way
+    // because it keeps one row per exercise, not per session.
+    const { data: allSessionsWithLogs } = await supabase
+      .from("sessions")
+      .select("date, week_number, type, status, justification, session_logs(*)")
+      .order("date", { ascending: false })
+      .limit(400);
+    const recentSince = (sessionsWithLogs ?? []).reduce<string | null>(
+      (min, row) => (!min || row.date < min ? row.date : min),
+      null
+    );
+    loadReference = buildLoadReference(
+      (allSessionsWithLogs ?? []) as unknown as SessionHistoryRow[],
+      recentSince
+    );
   }
 
   // Blocks always start on Monday — keeps "Semana N" as a clean Mon-Sun calendar
@@ -250,9 +308,11 @@ real para decidir progresión, mantenimiento o regresión de carga — no asumas
 bloque anterior salió como se planeó si los logs dicen lo contrario:
 ${JSON.stringify(blockHistory, null, 2)}
 
-CARGAS DE REFERENCIA REGISTRADAS — el peso más alto que el atleta movió en cada
-ejercicio, sacado de TODOS los logs del bloque anterior, incluidos los días de
-yoga cuyo detalle se omitió arriba:
+CARGAS DE REFERENCIA REGISTRADAS — el peso más alto que el atleta ha movido en
+cada ejercicio, sacado de TODO su historial de logs (no solo del bloque
+anterior), incluidos los días de yoga cuyo detalle se omitió arriba. Cada
+entrada dice si el registro viene del bloque más reciente o es histórico, con su
+fecha:
 ${loadReference}
 
 Esta lista es evidencia de carga, NO un menú de ejercicios a repetir: que un
@@ -264,6 +324,14 @@ debajo del peso registrado sin decir en el summary de esa sesión por qué bajas
 accesorio que el atleta ya movió a 16 kg no se programa a 12 kg en silencio.
 Ojo con las unidades: la lista dice kg o lbs para cada ejercicio, y un peso de
 mancuerna es por mancuerna, no el par.
+
+Una entrada marcada "histórico" NO es una carga caducada: el techo del atleta en
+un movimiento no expira porque dejó de hacerlo un mes. Es el punto de partida
+igual que una reciente — lo que cambia es que conviene declarar en el summary
+que se retoma un movimiento sin logs recientes, y dejar margen en la primera
+serie. Lo que NUNCA es correcto es programar por debajo del histórico tratándolo
+como "primera exposición": si el atleta ya movió ese peso, no es primera
+exposición.
 
 ${adjustmentsNote}
 
